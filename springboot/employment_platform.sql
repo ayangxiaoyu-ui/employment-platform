@@ -181,3 +181,17 @@ CREATE TABLE `browsing_history` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='浏览历史表';
 
 SET FOREIGN_KEY_CHECKS = 1;
+-- ----------------------------
+-- 11. 初始化管理员账号
+-- ----------------------------
+-- 默认管理员账号：
+-- 用户名: admin
+-- 密码: admin123
+-- 角色: ADMIN
+-- 
+-- 如需修改密码，请使用以下方法生成BCrypt哈希：
+-- 1. 在Java代码中运行: BCrypt.hashpw("你的密码")
+-- 2. 或使用在线BCrypt工具生成
+-- 3. 替换下面的password字段值
+INSERT IGNORE INTO `sys_user` (`username`, `password`, `role`, `status`) 
+VALUES ('admin', '$2a$10$ipNCTTJXqmhCif31hcybWOaPaqc4UGhPKT4gyP3aObt7jqNPLVLuS', 'ADMIN', 1);

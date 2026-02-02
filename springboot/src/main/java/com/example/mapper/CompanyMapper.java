@@ -1,4 +1,9 @@
 package com.example.mapper;
 
-public interface CompanyMapper {
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.example.entity.Company;
+import org.apache.ibatis.annotations.Mapper;
+
+@Mapper
+public interface CompanyMapper extends BaseMapper<Company> {
 }

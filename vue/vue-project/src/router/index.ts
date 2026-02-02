@@ -1,23 +1,89 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import { getDefaultRouteLocation, getRoleFromToken, getToken } from '@/utils/auth'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: HomeView,
+      name: 'root',
+      redirect: '/login',
     },
     {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue'),
+      path: '/login',
+      name: 'login',
+      component: () => import('../views/LoginView.vue'),
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: () => import('../views/RegisterView.vue'),
+    },
+    {
+      path: '/student',
+      name: 'student',
+      component: () => import('../views/DashboardView.vue'),
+      props: { role: 'STUDENT' },
+      meta: { requiresAuth: true, role: 'STUDENT' },
+    },
+    {
+      path: '/student/profile',
+      name: 'studentProfile',
+      component: () => import('../views/student/ProfileView.vue'),
+      meta: { requiresAuth: true, role: 'STUDENT' },
+    },
+    {
+      path: '/company',
+      name: 'company',
+      component: () => import('../views/DashboardView.vue'),
+      props: { role: 'COMPANY' },
+      meta: { requiresAuth: true, role: 'COMPANY' },
+    },
+    {
+      path: '/company/profile',
+      name: 'companyProfile',
+      component: () => import('../views/company/ProfileView.vue'),
+      meta: { requiresAuth: true, role: 'COMPANY' },
+    },
+    {
+      path: '/admin',
+      name: 'admin',
+      component: () => import('../views/DashboardView.vue'),
+      props: { role: 'ADMIN' },
+      meta: { requiresAuth: true, role: 'ADMIN' },
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      redirect: '/login',
     },
   ],
+})
+
+router.beforeEach((to, from) => {
+  const token = getToken()
+  const toMeta = to.meta as { requiresAuth?: boolean; role?: string } | undefined
+
+  if ((to.name === 'login' || to.name === 'register') && token) {
+    return getDefaultRouteLocation(token)
+  }
+
+  if (toMeta?.requiresAuth && !token) {
+    return { name: 'login' }
+  }
+
+  if (toMeta?.requiresAuth && token && toMeta?.role) {
+    const role = getRoleFromToken(token)
+    if (!role || role !== toMeta.role) {
+      return getDefaultRouteLocation(token)
+    }
+  }
+
+  if (to.name === 'root') {
+    if (!token) return { name: 'login' }
+    return getDefaultRouteLocation(token)
+  }
+
+  return true
 })
 
 export default router
