@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { getToken, getUsernameFromToken } from '@/utils/auth'
+import { getToken } from '@/utils/auth'
+import { House } from '@element-plus/icons-vue'
 
 interface CompanyProfile {
   id?: number
@@ -20,7 +21,6 @@ interface CompanyProfile {
 const router = useRouter()
 const isEditing = ref(false)
 const loading = ref(false)
-const username = computed(() => getUsernameFromToken(getToken() || '') || '未知用户')
 
 const form = ref<CompanyProfile>({
   name: '',
@@ -35,8 +35,10 @@ const form = ref<CompanyProfile>({
 
 const formBackup = ref<CompanyProfile>({ ...form.value })
 
+// Logo 预览和上传相关
+const logoPreview = ref<string>('')
+
 onMounted(() => {
-  // 检查认证状态
   if (!getToken()) {
     router.push({ name: 'login' })
     return
@@ -72,6 +74,8 @@ async function fetchCompanyProfile() {
         contactPerson: result.data.contactPerson || '',
         contactPhone: result.data.contactPhone || '',
       }
+      // 设置 Logo 预览
+      logoPreview.value = result.data.logo ? `http://localhost:9999${result.data.logo}` : ''
       formBackup.value = { ...form.value }
     }
   } catch (error) {
@@ -88,6 +92,7 @@ function startEdit() {
 
 function cancelEdit() {
   form.value = { ...formBackup.value }
+  logoPreview.value = form.value.logo ? `http://localhost:9999${form.value.logo}` : ''
   isEditing.value = false
 }
 
@@ -113,6 +118,7 @@ async function saveProfile() {
       ElMessage.success('保存成功')
       isEditing.value = false
       formBackup.value = { ...form.value }
+      logoPreview.value = form.value.logo ? `http://localhost:9999${form.value.logo}` : ''
     } else {
       ElMessage.error(result.msg || '保存失败')
     }
@@ -122,17 +128,98 @@ async function saveProfile() {
     loading.value = false
   }
 }
+
+// 返回主页
+function goToHome() {
+  router.push('/')
+}
+
+// 触发 Logo 文件选择
+function triggerLogoInput() {
+  const input = document.getElementById('logo-upload') as HTMLInputElement
+  if (input) input.click()
+}
+
+// 处理 Logo 文件上传
+async function handleLogoChange(e: Event) {
+  const target = e.target as HTMLInputElement
+  const file = target.files?.[0]
+
+  if (!file) return
+
+  // 校验
+  if (!file.type.startsWith('image')) {
+    ElMessage.error('只允许上传图片文件')
+    return
+  }
+  if (file.size > 3 * 1024 * 1024) {
+    ElMessage.error('文件大小不能超过 3MB')
+    return
+  }
+
+  // 本地预览
+  const reader = new FileReader()
+  reader.onload = (ev) => {
+    logoPreview.value = ev.target?.result as string
+  }
+  reader.readAsDataURL(file)
+
+  // 立即上传到后端
+  loading.value = true
+  try {
+    const formData = new FormData()
+    formData.append('file', file)
+    formData.append('userId', form.value.userId?.toString() || '1') // 替换为真实 userId 来源
+
+    const response = await fetch('http://localhost:9999/file/upload/logo', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${getToken()}`,
+      },
+      body: formData,
+    })
+
+    if (!response.ok) {
+      throw new Error('上传失败')
+    }
+
+    const result = await response.json()
+    if (result.code === '200') {
+      ElMessage.success('Logo 上传成功')
+      // 更新 form.logo 为相对路径（存数据库用）
+      form.value.logo = result.data.replace('http://localhost:9999', '')
+    } else {
+      ElMessage.error(result.msg || '上传失败')
+      logoPreview.value = '' // 上传失败，清除预览
+    }
+  } catch (error) {
+    ElMessage.error('上传出错：' + (error instanceof Error ? error.message : '未知错误'))
+    logoPreview.value = '' // 出错清除预览
+  } finally {
+    loading.value = false
+    target.value = '' // 清空 input
+  }
+}
 </script>
 
 <template>
   <div class="company-profile">
     <div class="container">
-      <h1>企业个人中心</h1>
+      <h1 class="title">企业个人中心</h1>
 
       <div v-loading="loading" class="profile-card">
         <div class="header">
           <h2>企业信息</h2>
-          <div>
+          <div class="actions">
+            <el-button 
+              type="info" 
+              plain 
+              :icon="House" 
+              @click="goToHome"
+            >
+              返回主页
+            </el-button>
+
             <el-button v-if="!isEditing" type="primary" @click="startEdit">编辑</el-button>
             <template v-else>
               <el-button type="primary" @click="saveProfile">保存</el-button>
@@ -142,27 +229,56 @@ async function saveProfile() {
         </div>
 
         <div class="form-container">
-          <div class="form-item">
-            <span class="label">用户名</span>
-            <span class="value">{{ username }}</span>
+          <!-- Logo 上传区域 -->
+          <div class="form-item avatar-item">
+            <span class="label">企业 Logo</span>
+            <div class="avatar-preview">
+              <img
+                v-if="logoPreview"
+                :src="logoPreview"
+                alt="Logo 预览"
+                class="avatar-img"
+              />
+              <div v-else class="avatar-placeholder">暂无 Logo</div>
+            </div>
+
+            <input
+              id="logo-upload"
+              type="file"
+              accept="image/*"
+              style="display: none"
+              @change="handleLogoChange"
+            />
+
+            <el-button
+              v-if="isEditing"
+              type="primary"
+              plain
+              size="small"
+              @click="triggerLogoInput"
+            >
+              上传 Logo
+            </el-button>
           </div>
 
+          <!-- 企业名称 -->
           <div class="form-item">
             <span class="label">企业名称</span>
             <input
               v-model="form.name"
-              :readonly="!isEditing"
+              :disabled="!isEditing"
               class="input"
               :class="{ 'input-edit': isEditing }"
               placeholder="请输入企业名称"
             />
           </div>
 
+          <!-- 企业简介 -->
           <div class="form-item">
             <span class="label">企业简介</span>
             <textarea
               v-model="form.description"
-              :readonly="!isEditing"
+              :disabled="!isEditing"
               class="input textarea"
               :class="{ 'input-edit': isEditing }"
               placeholder="请输入企业简介"
@@ -170,46 +286,37 @@ async function saveProfile() {
             ></textarea>
           </div>
 
-          <div class="form-item">
-            <span class="label">企业Logo</span>
-            <input
-              v-model="form.logo"
-              :readonly="!isEditing"
-              type="url"
-              class="input"
-              :class="{ 'input-edit': isEditing }"
-              placeholder="请输入Logo URL"
-            />
-          </div>
-
+          <!-- 详细地址 -->
           <div class="form-item">
             <span class="label">详细地址</span>
             <input
               v-model="form.address"
-              :readonly="!isEditing"
+              :disabled="!isEditing"
               class="input"
               :class="{ 'input-edit': isEditing }"
               placeholder="请输入详细地址"
             />
           </div>
 
+          <!-- 所属行业 -->
           <div class="form-item">
             <span class="label">所属行业</span>
             <input
               v-model="form.industry"
-              :readonly="!isEditing"
+              :disabled="!isEditing"
               class="input"
               :class="{ 'input-edit': isEditing }"
               placeholder="请输入所属行业"
             />
           </div>
 
+          <!-- 人员规模 -->
           <div class="form-item">
             <span class="label">人员规模</span>
             <select
               v-model="form.scale"
               :disabled="!isEditing"
-              class="input"
+              class="input select"
               :class="{ 'input-edit': isEditing }"
             >
               <option value="">请选择人员规模</option>
@@ -221,22 +328,24 @@ async function saveProfile() {
             </select>
           </div>
 
+          <!-- 联系人 -->
           <div class="form-item">
             <span class="label">联系人</span>
             <input
               v-model="form.contactPerson"
-              :readonly="!isEditing"
+              :disabled="!isEditing"
               class="input"
               :class="{ 'input-edit': isEditing }"
               placeholder="请输入联系人"
             />
           </div>
 
+          <!-- 联系电话 -->
           <div class="form-item">
             <span class="label">联系电话</span>
             <input
               v-model="form.contactPhone"
-              :readonly="!isEditing"
+              :disabled="!isEditing"
               type="tel"
               class="input"
               :class="{ 'input-edit': isEditing }"
@@ -250,120 +359,146 @@ async function saveProfile() {
 </template>
 
 <style scoped>
+/* 与学生版完全一致的样式 */
 .company-profile {
-  padding: 40px 20px;
-  background: #f5f7fa;
-  min-height: 100vh;
+  min-height: calc(100vh - 80px);
+  padding: 32px 16px;
+  background: linear-gradient(135deg, #f0f4ff 0%, #e6f0ff 100%);
+  display: flex;
+  justify-content: center;
 }
 
 .container {
+  width: 100%;
   max-width: 600px;
-  margin: 0 auto;
 }
 
-h1 {
-  text-align: center;
-  margin-bottom: 30px;
-  color: #333;
+.title {
+  margin: 0 0 32px;
   font-size: 28px;
+  font-weight: 700;
+  color: #0168d1;
+  text-align: center;
 }
 
 .profile-card {
   background: white;
-  border-radius: 8px;
-  padding: 30px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  padding: 32px 24px;
+  box-shadow: 0 10px 30px rgba(1, 104, 209, 0.12);
+  border: 1px solid rgba(1, 104, 209, 0.06);
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid #e0e0e0;
+  margin-bottom: 32px;
 }
 
 .header h2 {
   margin: 0;
-  font-size: 20px;
-  color: #333;
+  font-size: 24px;
+  color: #2c3e50;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
 }
 
 .form-container {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 28px;
 }
 
 .form-item {
   display: flex;
-  align-items: flex-start;
-  gap: 15px;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.avatar-item {
+  align-items: center;
+}
+
+.avatar-preview {
+  width: 120px;
+  height: 120px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #f0f4ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+  border: 2px dashed #0168d1;
+}
+
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar-placeholder {
+  color: #a0c4ff;
+  font-size: 14px;
+  text-align: center;
 }
 
 .label {
-  min-width: 100px;
-  font-weight: 600;
-  color: #333;
-  flex-shrink: 0;
-  padding-top: 10px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #34495e;
 }
 
-.value {
-  flex: 1;
-  padding: 10px 12px;
-  color: #666;
-  background: #f9f9f9;
-  border-radius: 4px;
-  word-break: break-all;
-}
-
-.input {
-  flex: 1;
-  padding: 10px 12px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 14px;
-  background: white;
-  transition: border-color 0.3s;
+.input,
+.select,
+.textarea {
+  padding: 0 16px;
+  border-radius: 10px;
+  border: 1px solid #d1d9e6;
+  background: #f9fcff;
+  color: #2c3e50;
+  font-size: 15px;
+  transition: all 0.3s ease;
   font-family: inherit;
 }
 
+.input,
+.select {
+  height: 50px;
+}
+
 .textarea {
-  resize: vertical;
   min-height: 100px;
+  resize: vertical;
+  padding: 12px 16px;
 }
 
-.input:readonly {
-  background: #f9f9f9;
-  cursor: not-allowed;
-  border-color: transparent;
-}
-
-.input:disabled {
-  background: #f9f9f9;
-  cursor: not-allowed;
-  border-color: transparent;
-}
-
-.input-edit {
+.input:focus,
+.select:focus,
+.textarea:focus {
   border-color: #0168d1;
+  box-shadow: 0 0 0 3px rgba(1, 104, 209, 0.12);
+  outline: none;
   background: white;
 }
 
-.input:not(:readonly):focus,
-.input-edit:focus {
-  outline: none;
+.input-edit,
+.textarea.input-edit {
+  background: white;
   border-color: #0168d1;
-  box-shadow: 0 0 0 2px rgba(1, 104, 209, 0.2);
 }
 
-:deep(.el-button) {
-  margin-left: 10px;
-}
-
-:deep(.el-button:first-child) {
-  margin-left: 0;
+.select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%230168d1' d='M6 9L2 5h8z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  padding-right: 40px;
 }
 </style>

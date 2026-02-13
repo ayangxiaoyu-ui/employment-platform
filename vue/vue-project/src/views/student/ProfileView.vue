@@ -3,6 +3,7 @@ import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { getToken, getUsernameFromToken } from '@/utils/auth'
+import { House } from '@element-plus/icons-vue'
 
 interface StudentProfile {
   id?: number
@@ -37,6 +38,10 @@ const form = ref<StudentProfile>({
 
 const formBackup = ref<StudentProfile>({ ...form.value })
 
+// 用于头像文件预览和上传
+const avatarFile = ref<File | null>(null)
+const avatarPreview = ref<string>('')
+
 onMounted(() => {
   if (!getToken()) {
     router.push({ name: 'login' })
@@ -56,19 +61,18 @@ async function fetchStudentProfile() {
 
     if (!response.ok) {
       ElMessage.error('获取学生信息失败')
-      // 如果后端没返回数据，至少把 token 的用户名作为默认姓名
       form.value.name = usernameFromToken.value
       return
     }
 
-   const result = await response.json()
-console.log('后端完整响应:', result)
+    const result = await response.json()
+    console.log('后端完整响应:', result)
+
     if (result.code === '200' && result.data) {
       const data = result.data
       form.value = {
         id: data.id,
         userId: data.userId,
-        // 优先使用后端返回的 name，如果后端没存 name，则用 token 中的用户名
         name: data.name || usernameFromToken.value || '',
         gender: data.gender || '',
         phone: data.phone || '',
@@ -78,17 +82,86 @@ console.log('后端完整响应:', result)
         graduationYear: data.graduationYear || null,
         avatar: data.avatar || '',
       }
+      // 设置预览图
+      avatarPreview.value = data.avatar ? `http://localhost:9999${data.avatar}` : ''
       formBackup.value = { ...form.value }
     } else {
-      // 后端返回异常时，也至少显示 token 中的用户名
       form.value.name = usernameFromToken.value
     }
   } catch (error) {
     ElMessage.error('网络错误：' + (error instanceof Error ? error.message : '未知错误'))
-    // 出错时也显示 token 用户名
     form.value.name = usernameFromToken.value
   } finally {
     loading.value = false
+  }
+}
+
+// 触发文件选择
+function triggerFileInput() {
+  const input = document.getElementById('avatar-upload') as HTMLInputElement
+  if (input) input.click()
+}
+
+// 处理文件选择并立即上传
+async function handleAvatarChange(e: Event) {
+  const target = e.target as HTMLInputElement
+  const file = target.files?.[0]
+
+  if (!file) return
+
+  // 校验文件类型和大小
+  if (!file.type.startsWith('image')) {
+    ElMessage.error('只允许上传图片文件')
+    return
+  }
+  if (file.size > 5 * 1024 * 1024) { // 5MB
+    ElMessage.error('文件大小不能超过 5MB')
+    return
+  }
+
+  avatarFile.value = file
+
+  // 本地预览
+  const reader = new FileReader()
+  reader.onload = (e) => {
+    avatarPreview.value = e.target?.result as string
+  }
+  reader.readAsDataURL(file)
+
+  // 立即上传到后端
+  loading.value = true
+  try {
+    const formData = new FormData()
+    formData.append('file', file)
+    formData.append('userId', form.value.userId?.toString() || '1') // 请替换为真实 userId 来源
+
+    const response = await fetch('http://localhost:9999/file/upload/avatar', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${getToken()}`,
+      },
+      body: formData,
+    })
+
+    if (!response.ok) {
+      ElMessage.error('头像上传失败')
+      return
+    }
+
+    const result = await response.json()
+    if (result.code === '200') {
+      ElMessage.success('头像上传成功')
+      // 更新 form.avatar 为后端返回的路径
+      form.value.avatar = result.data.replace('http://localhost:9999', '') // 存相对路径
+    } else {
+      ElMessage.error(result.msg || '上传失败')
+    }
+  } catch (error) {
+    ElMessage.error('上传出错：' + (error instanceof Error ? error.message : '未知错误'))
+  } finally {
+    loading.value = false
+    // 清空 input
+    target.value = ''
   }
 }
 
@@ -99,6 +172,7 @@ function startEdit() {
 
 function cancelEdit() {
   form.value = { ...formBackup.value }
+  avatarPreview.value = form.value.avatar ? `http://localhost:9999${form.value.avatar}` : ''
   isEditing.value = false
 }
 
@@ -124,6 +198,8 @@ async function saveProfile() {
       ElMessage.success('保存成功')
       isEditing.value = false
       formBackup.value = { ...form.value }
+      // 更新预览
+      avatarPreview.value = form.value.avatar ? `http://localhost:9999${form.value.avatar}` : ''
     } else {
       ElMessage.error(result.msg || '保存失败')
     }
@@ -133,17 +209,30 @@ async function saveProfile() {
     loading.value = false
   }
 }
+// 新增：返回主页
+function goToHome() {
+  router.push({ name: 'student' })  // 修改为你的主页路由名称
+  // 或者写死路径：router.push('/')
+}
 </script>
 
 <template>
   <div class="student-profile">
     <div class="container">
-      <h1>学生个人中心</h1>
+      <h1 class="title">学生个人中心</h1>
 
       <div v-loading="loading" class="profile-card">
         <div class="header">
           <h2>个人信息</h2>
-          <div>
+          <div class="actions">
+            <el-button 
+              type="info" 
+              plain 
+              :icon="House" 
+              @click="goToHome"
+            >
+              返回主页
+            </el-button>
             <el-button v-if="!isEditing" type="primary" @click="startEdit">编辑</el-button>
             <template v-else>
               <el-button type="primary" @click="saveProfile">保存</el-button>
@@ -153,25 +242,57 @@ async function saveProfile() {
         </div>
 
         <div class="form-container">
-          <!-- 已移除原来的用户名显示行 -->
+          <!-- 头像上传区域 -->
+          <div class="form-item avatar-item">
+            <span class="label">头像</span>
+            <div class="avatar-preview">
+              <img
+                v-if="avatarPreview"
+                :src="avatarPreview"
+                alt="头像预览"
+                class="avatar-img"
+              />
+              <div v-else class="avatar-placeholder">暂无头像</div>
+            </div>
 
+            <input
+              id="avatar-upload"
+              type="file"
+              accept="image/*"
+              style="display: none"
+              @change="handleAvatarChange"
+            />
+
+            <el-button
+              v-if="isEditing"
+              type="primary"
+              plain
+              size="small"
+              @click="triggerFileInput"
+            >
+              上传新头像
+            </el-button>
+          </div>
+
+          <!-- 姓名 -->
           <div class="form-item">
             <span class="label">姓名</span>
             <input
               v-model="form.name"
-              :readonly="!isEditing"
+              :disabled="!isEditing"
               class="input"
               :class="{ 'input-edit': isEditing }"
               placeholder="请输入姓名"
             />
           </div>
 
+          <!-- 性别 -->
           <div class="form-item">
             <span class="label">性别</span>
             <select
               v-model="form.gender"
               :disabled="!isEditing"
-              class="input"
+              class="input select"
               :class="{ 'input-edit': isEditing }"
             >
               <option value="">请选择性别</option>
@@ -181,11 +302,12 @@ async function saveProfile() {
             </select>
           </div>
 
+          <!-- 联系电话 -->
           <div class="form-item">
             <span class="label">联系电话</span>
             <input
               v-model="form.phone"
-              :readonly="!isEditing"
+              :disabled="!isEditing"
               type="tel"
               class="input"
               :class="{ 'input-edit': isEditing }"
@@ -193,11 +315,12 @@ async function saveProfile() {
             />
           </div>
 
+          <!-- 邮箱 -->
           <div class="form-item">
             <span class="label">邮箱</span>
             <input
               v-model="form.email"
-              :readonly="!isEditing"
+              :disabled="!isEditing"
               type="email"
               class="input"
               :class="{ 'input-edit': isEditing }"
@@ -205,49 +328,40 @@ async function saveProfile() {
             />
           </div>
 
+          <!-- 毕业院校 -->
           <div class="form-item">
             <span class="label">毕业院校</span>
             <input
               v-model="form.university"
-              :readonly="!isEditing"
+              :disabled="!isEditing"
               class="input"
               :class="{ 'input-edit': isEditing }"
               placeholder="请输入毕业院校"
             />
           </div>
 
+          <!-- 专业 -->
           <div class="form-item">
             <span class="label">专业</span>
             <input
               v-model="form.major"
-              :readonly="!isEditing"
+              :disabled="!isEditing"
               class="input"
               :class="{ 'input-edit': isEditing }"
               placeholder="请输入专业"
             />
           </div>
 
+          <!-- 毕业年份 -->
           <div class="form-item">
             <span class="label">毕业年份</span>
             <input
               v-model.number="form.graduationYear"
-              :readonly="!isEditing"
+              :disabled="!isEditing"
               type="number"
               class="input"
               :class="{ 'input-edit': isEditing }"
               placeholder="请输入毕业年份"
-            />
-          </div>
-
-          <div class="form-item">
-            <span class="label">头像URL</span>
-            <input
-              v-model="form.avatar"
-              :readonly="!isEditing"
-              type="url"
-              class="input"
-              :class="{ 'input-edit': isEditing }"
-              placeholder="请输入头像URL"
             />
           </div>
         </div>
@@ -267,7 +381,7 @@ async function saveProfile() {
 
 .container {
   width: 100%;
-  max-width: 600px; /* 手机端更友好，宽度不要太宽 */
+  max-width: 600px;
 }
 
 .title {
@@ -307,13 +421,42 @@ async function saveProfile() {
 .form-container {
   display: flex;
   flex-direction: column;
-  gap: 28px; /* 每行之间更大间距，看起来更舒服 */
+  gap: 28px;
 }
 
 .form-item {
   display: flex;
   flex-direction: column;
   gap: 8px;
+}
+
+.avatar-item {
+  align-items: center;
+}
+
+.avatar-preview {
+  width: 120px;
+  height: 120px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #f0f4ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+  border: 2px dashed #0168d1;
+}
+
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar-placeholder {
+  color: #a0c4ff;
+  font-size: 14px;
+  text-align: center;
 }
 
 .label {

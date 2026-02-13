@@ -33,6 +33,8 @@ file:
     # avatar-path: classpath:static/uploads/avatar/
     avatar-path: /Users/pae-uneon/Desktop/code/springboot/src/main/resources/static/uploads/avatar/
     avatar-url-prefix: /uploads/avatar/
+    logo-path: /Users/pae-uneon/Desktop/code/springboot/src/main/resources/static/uploads/logo/
+    logo-url-prefix: /uploads/logo/
     # 访问前缀
     # 如果放在 static 目录下，且没有额外配置 ResourceHandler，访问路径应该是 /uploads/avatar/xxx.jpg
     # 所以 avatar-url-prefix 应该改为：

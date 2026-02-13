@@ -195,3 +195,207 @@ SET FOREIGN_KEY_CHECKS = 1;
 -- 3. 替换下面的password字段值
 INSERT IGNORE INTO `sys_user` (`username`, `password`, `role`, `status`) 
 VALUES ('admin', '$2a$10$ipNCTTJXqmhCif31hcybWOaPaqc4UGhPKT4gyP3aObt7jqNPLVLuS', 'ADMIN', 1);
+
+
+-- ----------------------------
+-- 12. 行业分类表插入数据
+-- ----------------------------
+-- 1. 清空表（如果需要重新插入，取消注释执行）
+-- TRUNCATE TABLE category;
+
+-- ================================
+--          行业分类 (type = 2)
+-- ================================
+
+-- 互联网 / 科技大类
+INSERT INTO category (name, type, parent_id) VALUES ('互联网/电子商务', 2, 0);
+SET @internet_id = LAST_INSERT_ID();
+
+INSERT INTO category (name, type, parent_id) VALUES
+('社交媒体平台', 2, @internet_id),
+('短视频/直播平台', 2, @internet_id),
+('在线电商平台', 2, @internet_id),
+('在线教育平台', 2, @internet_id),
+('本地生活服务(O2O)', 2, @internet_id),
+('内容社区/知识付费', 2, @internet_id),
+('Web3/元宇宙平台', 2, @internet_id);
+
+-- 软件与信息技术服务
+INSERT INTO category (name, type, parent_id) VALUES ('计算机软件', 2, 0);
+SET @software_id = LAST_INSERT_ID();
+
+INSERT INTO category (name, type, parent_id) VALUES
+('企业级 SaaS 服务', 2, @software_id),
+('AI 大模型平台', 2, @software_id),
+('云计算/大数据服务', 2, @software_id),
+('区块链/智能合约平台', 2, @software_id),
+('低代码/无代码开发平台', 2, @software_id);
+
+-- 金融业
+INSERT INTO category (name, type, parent_id) VALUES ('金融业', 2, 0);
+SET @finance_id = LAST_INSERT_ID();
+
+INSERT INTO category (name, type, parent_id) VALUES
+('传统商业银行', 2, @finance_id),
+('互联网银行/直销银行', 2, @finance_id),
+('证券/期货/基金公司', 2, @finance_id),
+('保险/再保险', 2, @finance_id),
+('第三方支付/数字货币', 2, @finance_id),
+('消费金融/小额贷款', 2, @finance_id),
+('财富管理/私募股权', 2, @finance_id);
+
+-- 房地产与建筑业
+INSERT INTO category (name, type, parent_id) VALUES ('房地产与建筑业', 2, 0);
+SET @real_id = LAST_INSERT_ID();
+
+INSERT INTO category (name, type, parent_id) VALUES
+('住宅/商业地产开发', 2, @real_id),
+('物业管理/社区服务', 2, @real_id),
+('建筑施工/工程总包', 2, @real_id),
+('建筑设计/规划设计', 2, @real_id),
+('室内设计/软装设计', 2, @real_id),
+('智能建筑/楼宇自动化', 2, @real_id);
+
+-- 制造业
+INSERT INTO category (name, type, parent_id) VALUES ('制造业', 2, 0);
+SET @manufact_id = LAST_INSERT_ID();
+
+INSERT INTO category (name, type, parent_id) VALUES
+('汽车及新能源汽车制造', 2, @manufact_id),
+('半导体/集成电路制造', 2, @manufact_id),
+('消费电子/智能硬件', 2, @manufact_id),
+('高端装备制造', 2, @manufact_id),
+('光伏/风电新能源设备', 2, @manufact_id),
+('锂电池/储能系统', 2, @manufact_id);
+
+-- 其他主流行业（简要）
+INSERT INTO category (name, type, parent_id) VALUES
+('教育培训', 2, 0),
+('医疗健康', 2, 0),
+('文化娱乐/传媒', 2, 0),
+('旅游/酒店餐饮', 2, 0),
+('物流/供应链', 2, 0),
+('人力资源服务', 2, 0),
+('环保/新能源', 2, 0),
+('农业/食品', 2, 0);
+
+-- 小众/冷门行业示例
+INSERT INTO category (name, type, parent_id) VALUES
+('文物修复与古籍保护', 2, 0),
+('深海探测与海洋工程', 2, 0),
+('太空旅游与商业航天', 2, 0),
+('传统香料与调香工艺', 2, 0),
+('昆虫养殖与生物技术', 2, 0),
+('菌菇培育与食用菌产业', 2, 0);
+
+-- ================================
+--          职位分类 (type = 1)
+-- ================================
+
+-- 前端开发大类
+INSERT INTO category (name, type, parent_id) VALUES ('前端开发', 1, 0);
+SET @frontend_id = LAST_INSERT_ID();
+
+-- 二级
+INSERT INTO category (name, type, parent_id) VALUES
+('React 技术栈', 1, @frontend_id),
+('Vue 技术栈', 1, @frontend_id),
+('Angular 技术栈', 1, @frontend_id),
+('小程序/跨端开发', 1, @frontend_id),
+('Web3/区块链前端', 1, @frontend_id);
+
+-- 三级 - React
+SET @react_id = (SELECT id FROM category WHERE name = 'React 技术栈' AND parent_id = @frontend_id LIMIT 1);
+INSERT INTO category (name, type, parent_id) VALUES
+('React + TypeScript', 1, @react_id),
+('Next.js 全栈开发', 1, @react_id),
+('React Native 移动端', 1, @react_id),
+('Remix / React Router 专家', 1, @react_id),
+('Redux / Zustand / Recoil 状态管理', 1, @react_id),
+('React 三维可视化 (Three.js)', 1, @react_id);
+
+-- 三级 - Vue
+SET @vue_id = (SELECT id FROM category WHERE name = 'Vue 技术栈' AND parent_id = @frontend_id LIMIT 1);
+INSERT INTO category (name, type, parent_id) VALUES
+('Vue 3 + Composition API', 1, @vue_id),
+('Nuxt 3 服务端渲染', 1, @vue_id),
+('Vite + Vue 工程化', 1, @vue_id),
+('Pinia / Vuex 状态管理', 1, @vue_id),
+('uni-app / Taro 跨端小程序', 1, @vue_id);
+
+-- 后端开发大类
+INSERT INTO category (name, type, parent_id) VALUES ('后端开发', 1, 0);
+SET @backend_id = LAST_INSERT_ID();
+
+-- 二级
+INSERT INTO category (name, type, parent_id) VALUES
+('Java 后端', 1, @backend_id),
+('Python 后端', 1, @backend_id),
+('Go 后端', 1, @backend_id),
+('Node.js 后端', 1, @backend_id);
+
+-- 三级 - Java
+SET @java_id = (SELECT id FROM category WHERE name = 'Java 后端' AND parent_id = @backend_id LIMIT 1);
+INSERT INTO category (name, type, parent_id) VALUES
+('Spring Boot 微服务', 1, @java_id),
+('Spring Cloud 分布式系统', 1, @java_id),
+('Dubbo + Zookeeper 服务治理', 1, @java_id),
+('JVM 调优 / 高并发专家', 1, @java_id);
+
+-- 三级 - Python
+SET @python_id = (SELECT id FROM category WHERE name = 'Python 后端' AND parent_id = @backend_id LIMIT 1);
+INSERT INTO category (name, type, parent_id) VALUES
+('FastAPI 高性能服务', 1, @python_id),
+('Django / Django REST', 1, @python_id),
+('Flask + Celery 异步任务', 1, @python_id),
+('Python 爬虫 / 反爬专家', 1, @python_id);
+
+-- 算法 / AI 类
+INSERT INTO category (name, type, parent_id) VALUES ('算法/AI工程师', 1, 0);
+SET @ai_id = LAST_INSERT_ID();
+
+INSERT INTO category (name, type, parent_id) VALUES
+('大模型微调工程师', 1, @ai_id),
+('多模态模型工程师', 1, @ai_id),
+('推荐系统算法工程师', 1, @ai_id),
+('计算机视觉工程师', 1, @ai_id),
+('NLP / 对话系统工程师', 1, @ai_id);
+
+-- 测试 / QA
+INSERT INTO category (name, type, parent_id) VALUES ('测试/QA', 1, 0);
+SET @test_id = LAST_INSERT_ID();
+
+INSERT INTO category (name, type, parent_id) VALUES
+('自动化测试工程师', 1, @test_id),
+('接口测试工程师', 1, @test_id),
+('性能测试工程师', 1, @test_id),
+('安全渗透测试', 1, @test_id);
+
+-- 运维 / DevOps
+INSERT INTO category (name, type, parent_id) VALUES ('运维/DevOps', 1, 0);
+SET @ops_id = LAST_INSERT_ID();
+
+INSERT INTO category (name, type, parent_id) VALUES
+('Kubernetes 运维', 1, @ops_id),
+('云原生架构师', 1, @ops_id),
+('SRE 工程师', 1, @ops_id);
+
+-- 产品类
+INSERT INTO category (name, type, parent_id) VALUES ('产品类岗位', 1, 0);
+SET @product_id = LAST_INSERT_ID();
+
+INSERT INTO category (name, type, parent_id) VALUES
+('ToC 增长产品', 1, @product_id),
+('ToB 企业级产品', 1, @product_id),
+('AI 产品经理', 1, @product_id);
+
+-- 冷门岗位（直接一级）
+INSERT INTO category (name, type, parent_id) VALUES
+('文物修复师', 1, 0),
+('古籍数字化专员', 1, 0),
+('鲸豚行为研究员', 1, 0),
+('深海探测数据分析师', 1, 0),
+('太空葬礼策划师', 1, 0),
+('传统香料调配师', 1, 0),
+('昆虫养殖技术员', 1, 0),
+('菌菇培育专家', 1, 0);
