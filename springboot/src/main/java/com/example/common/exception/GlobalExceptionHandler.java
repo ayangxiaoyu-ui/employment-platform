@@ -8,7 +8,11 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-
+    private final String test = "hello";
+    public void testLombok() {
+        log.info("测试 Lombok 是否生效");
+        System.out.println(test);
+    }
     @ExceptionHandler(Exception.class)
     public Result<?> handleException(Exception e) {
         log.error("系统异常", e);
