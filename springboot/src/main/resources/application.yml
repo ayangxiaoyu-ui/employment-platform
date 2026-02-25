@@ -1,13 +1,20 @@
 server:
   port: 9999
 
+#spring:
+#  datasource:
+#    url: jdbc:mysql://localhost:3306/employment_platform?useSSL=false&serverTimezone=Asia/Shanghai
+#    username: root
+#    password: root
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/employment_platform?useSSL=false&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://localhost:3306/employment_platform?useUnicode=true&characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
-
+    
   # 建议加上文件上传大小限制（默认值较小）
   servlet:
     multipart:
