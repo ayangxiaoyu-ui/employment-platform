@@ -399,3 +399,31 @@ INSERT INTO category (name, type, parent_id) VALUES
 ('传统香料调配师', 1, 0),
 ('昆虫养殖技术员', 1, 0),
 ('菌菇培育专家', 1, 0);
+
+
+INSERT INTO sys_user (username, password, role, status, create_time, update_time) VALUES
+('huawei_hr',     '$2b$10$SyXM2bnG5LpgjYal37SbfuT0X4Q8IrD4jzwmo9xN04p4fd8I/wD/m', 'COMPANY', 1, NOW(), NOW()),
+('tencent_hr',    '$2b$10$BLnKLq9OwFyxBpPUq14dMOxLihGcseSfVCafO6KFP329P5QcIIixO', 'COMPANY', 1, NOW(), NOW()),
+('bytedance_hr',  '$2b$10$H3cSv5q6qbgKgcgKbphhNu293eLdIwOWdSHk0Q30YFofyQmzND6ES', 'COMPANY', 1, NOW(), NOW()),
+('alibaba_hr',    '$2b$10$r94KwT50UN6aA4UUGe9Cx.iH2OedinwKQIzDD6LSkxqCh.LXHCs.u', 'COMPANY', 1, NOW(), NOW()),
+('catl_hr',       '$2b$10$LPqrsVOwcRY2nXNXazTJpOhWYA5eU2GXLD/0qSTWk6Q07frz8cqc6', 'COMPANY', 1, NOW(), NOW()),
+('byd_hr',        '$2b$10$yVuo0ELuL51/VEFDMEDv/.NdCwDx81tBC.oRQKgY/TfsVEVH1Pl2e', 'COMPANY', 1, NOW(), NOW()),
+('smic_hr',       '$2b$10$HGinz0tlHOFd7buYfRjsIuewIsLImVwvOqKmIqjsx9ASqCyEEKAym', 'COMPANY', 1, NOW(), NOW()),
+('sgcc_hr',       '$2b$10$mW5VNALkISFXDX4XBlSw/e9V4ItjQeok2HFn0tM4vsQdcY/hXOnRi', 'COMPANY', 1, NOW(), NOW()),
+('icbc_hr',       '$2b$10$JSi14wBPPbUt4OfdRC5RCe90JADY4gPANBmIw6i22mjNo97zkPO0i', 'COMPANY', 1, NOW(), NOW()),
+('cnpc_hr',       '$2b$10$9rti7e8sYD4hMCFDpTNe0O220.sKBpXxZ1yqsMjKeZLBB4TFNX.TK', 'COMPANY', 1, NOW(), NOW()),
+('xiaomi_hr',     '$2b$10$XTmA3ZMwbN/sgoVBHy2mxeyKQ2BBsuxMPJSN6eHsxo6FJTV/Hn1Ce', 'COMPANY', 1, NOW(), NOW()),
+('dji_hr',        '$2b$10$ly8iRXYeieJa4hJ1/lBB5ujO3yW5N6v8kZpuXz7JenB/wGkjOo1g6', 'COMPANY', 1, NOW(), NOW()),
+('baidu_hr',      '$2b$10$GnaHSGSzsq2lNfe520ebfu.meR8a5ufaD4zcVLtesBo/sERun.YVe', 'COMPANY', 1, NOW(), NOW()),
+('sensetime_hr',  '$2b$10$j9JDK.019ongTERYc7PcT.ipNNdzA49.O679doTZiCONwPCOQkxOK', 'COMPANY', 1, NOW(), NOW()),
+('petrochina_hr', '$2b$10$mJyLLKfPJe2ucLyrq6JeqeWluM5VijLI9xh7wIVdzh5XnwGFsdzCa', 'COMPANY', 1, NOW(), NOW()),
+('sinopec_hr',    '$2b$10$.Hd6xl0X2lMGfTgtteMCx.EmGEJGTfSzZRSoyrF7zbfmCMsUFN/oy', 'COMPANY', 1, NOW(), NOW()),
+('citicbank_hr',  '$2b$10$m1GN9kD7zwsnVMTOHrdshuEBktnhs3f6hydkHUCrATCiFJ1u4BAdy', 'COMPANY', 1, NOW(), NOW()),
+('cicc_hr',       '$2b$10$UQV/T9/2MA2B6yeMtZBgme2oLskAgQYRkFzP9digIZ1akxkCit5h.', 'COMPANY', 1, NOW(), NOW()),
+('pwc_hr',        '$2b$10$tAHBN8K.Oy43X7/lwqSKs.79JHuvbfYXqXaw97i1OKr70qotSeKU.', 'COMPANY', 1, NOW(), NOW()),
+('ymtc_hr',       '$2b$10$m4rFLB9YHXfi7kG1mD2Gu.32Jaz31kzWkIfDr.I.UqU.1iCzu/HRG', 'COMPANY', 1, NOW(), NOW()),
+('hisilicon_hr',  '$2b$10$kUapkYgNpMmLO4lAsM0kc.n6mz6XTc4PiWZeNaEi3dB.rTl7/eOee', 'COMPANY', 1, NOW(), NOW()),
+('longi_hr',      '$2b$10$gThGLO.9miZxjAY4xOdrmO4ulwCzSxLOknp.cdEF0tYzipSYF.HoC', 'COMPANY', 1, NOW(), NOW()),
+('lixiang_hr',    '$2b$10$n.cGs7w.5NrL5MfmLof9sOTJXmsL1OL25z6TSkBiBtUx7AY1vlaeq', 'COMPANY', 1, NOW(), NOW()),
+('jd_hr',         '$2b$10$us0mTF.GU9v6vo6TyLUWuuNzsVTL1xy.RhHlSSYT81FseJbmCp3C6', 'COMPANY', 1, NOW(), NOW()),
+('netease_hr',    '$2b$10$58vkNMjRlM.zq3FUPiG5bei2hPTOBPjzP6YKQJfEG9AC2E2idPJ1K', 'COMPANY', 1, NOW(), NOW());

@@ -9,11 +9,6 @@ public interface StudentService {
     Student getByUserId(Long userId);
 
     /**
-     * 根据ID获取学生信息
-     */
-    Student getById(Long id);
-
-    /**
      * 保存或更新学生信息
      */
     boolean saveOrUpdate(Student student);

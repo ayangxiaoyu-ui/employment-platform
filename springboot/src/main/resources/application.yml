@@ -31,20 +31,40 @@ mybatis-plus:
       logic-delete-field: deleted   # 如果你的表有逻辑删除字段
 
 # 文件上传相关配置
-file:
-  upload:
+#file:
+#  upload:
+#    avatar-path: /Users/pae-uneon/uploads/avatar/           # ← 改成项目外的目录
+#    avatar-url-prefix: /uploads/avatar/
+#    logo-path: /Users/pae-uneon/uploads/logo/
+#    logo-url-prefix: /uploads/logo/
     # 开发环境放在 static 目录下时，推荐使用相对路径
     # 注意：从项目根目录算起，而不是从 src 目录算起
-#    avatar-path: src/main/resources/static/uploads/avatar/
+    #    avatar-path: src/main/resources/static/uploads/avatar/
     # 或者更推荐：使用 classpath: 前缀（Spring Boot 更熟悉这种写法）
     # avatar-path: classpath:static/uploads/avatar/
-    avatar-path: /Users/pae-uneon/Desktop/code/springboot/src/main/resources/static/uploads/avatar/
-    avatar-url-prefix: /uploads/avatar/
-    logo-path: /Users/pae-uneon/Desktop/code/springboot/src/main/resources/static/uploads/logo/
-    logo-url-prefix: /uploads/logo/
+
+#    avatar-path: /Users/pae-uneon/Desktop/code/springboot/src/main/resources/static/uploads/avatar/
+#    avatar-url-prefix: /uploads/avatar/
+#    logo-path: /Users/pae-uneon/Desktop/code/springboot/src/main/resources/static/uploads/logo/
+#    logo-url-prefix: /uploads/logo/
+
     # 访问前缀
     # 如果放在 static 目录下，且没有额外配置 ResourceHandler，访问路径应该是 /uploads/avatar/xxx.jpg
     # 所以 avatar-url-prefix 应该改为：
-#    avatar-url-prefix: http://localhost:9999/uploads/avatar/
+    #    avatar-url-prefix: http://localhost:9999/uploads/avatar/
     # 或者更灵活，只存相对路径，实际使用时拼接域名
     # avatar-url-prefix: /uploads/avatar/
+
+file:
+  upload:
+    # 开发阶段最方便：直接用项目内的 static 目录
+    base-path: ${user.dir}/src/main/resources/static/uploads/
+    # 或者写死绝对路径（Mac 示例）
+    # base-path: /Users/晓钰/Documents/GitHub/employment-platform/springboot/src/main/resources/static/uploads/
+
+    avatar-sub-path: avatar/
+    logo-sub-path: logo/
+
+    # URL 前缀（前端访问时用的路径）
+    avatar-url-prefix: /uploads/avatar/
+    logo-url-prefix: /uploads/logo/

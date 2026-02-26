@@ -19,12 +19,6 @@ public class StudentServiceImpl implements StudentService {
         wrapper.eq("user_id", userId);
         return studentMapper.selectOne(wrapper);
     }
-
-    @Override
-    public Student getById(Long id) {
-        return studentMapper.selectById(id);
-    }
-
     @Override
     public boolean saveOrUpdate(Student student) {
         if (student.getId() != null) {

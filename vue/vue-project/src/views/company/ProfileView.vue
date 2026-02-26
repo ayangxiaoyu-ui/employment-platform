@@ -46,6 +46,30 @@ onMounted(() => {
   fetchCompanyProfile()
 })
 
+const scaleNormalizeMap: Record<string, string> = {
+  // 超大企业
+  '100万人以上': '50万人以上',
+  '90万人以上': '50万人以上',
+  '70万人以上': '50万人以上',
+  '50万人以上': '50万人以上',
+  '40万人以上': '30-50万人',
+  '20万人以上': '10-30万人',
+
+  // 大型
+  '10万人以上': '10-30万人',
+  '5-10万人': '5-10万人',
+
+  // 中型
+  '6万人以上': '5-10万人',
+  '4万人以上': '1-5万人',
+  '3万人以上': '1-5万人',
+
+  // 小中型
+  '1-5万人': '1-5万人',
+  '1-2万人': '1-5万人',
+  '2万人以上（中国区）': '1-5万人',
+  '5000-10000人': '5000-9999人',
+}
 async function fetchCompanyProfile() {
   loading.value = true
   try {
@@ -62,6 +86,7 @@ async function fetchCompanyProfile() {
 
     const result = await response.json()
     if (result.code === '200' && result.data) {
+      const rawScale = result.data.scale || ''
       form.value = {
         id: result.data.id,
         userId: result.data.userId,
@@ -70,13 +95,16 @@ async function fetchCompanyProfile() {
         logo: result.data.logo || '',
         address: result.data.address || '',
         industry: result.data.industry || '',
-        scale: result.data.scale || '',
+       scale: scaleNormalizeMap[rawScale] || rawScale || '',
         contactPerson: result.data.contactPerson || '',
         contactPhone: result.data.contactPhone || '',
       }
       // 设置 Logo 预览
       logoPreview.value = result.data.logo ? `http://localhost:9999${result.data.logo}` : ''
       formBackup.value = { ...form.value }
+      console.log(form.value.scale);
+      console.log('原始规模:', rawScale, '→ 标准化后:', form.value.scale)
+      
     }
   } catch (error) {
     ElMessage.error('网络错误：' + (error instanceof Error ? error.message : '未知错误'))
@@ -320,11 +348,13 @@ async function handleLogoChange(e: Event) {
               :class="{ 'input-edit': isEditing }"
             >
               <option value="">请选择人员规模</option>
-              <option value="50人以下">50人以下</option>
-              <option value="50-100人">50-100人</option>
-              <option value="100-500人">100-500人</option>
-              <option value="500-1000人">500-1000人</option>
-              <option value="1000人以上">1000人以上</option>
+              <option value="5000人以下">5000人以下</option>
+              <option value="5000-9999人">5000-9999人</option>
+              <option value="1-5万人">1-5万人</option>
+              <option value="5-10万人">5-10万人</option>
+              <option value="10-30万人">10-30万人</option>
+              <option value="30-50万人">30-50万人</option>
+              <option value="50万人以上">50万人以上</option>
             </select>
           </div>
 
