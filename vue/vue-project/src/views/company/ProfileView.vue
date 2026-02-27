@@ -46,30 +46,7 @@ onMounted(() => {
   fetchCompanyProfile()
 })
 
-const scaleNormalizeMap: Record<string, string> = {
-  // 超大企业
-  '100万人以上': '50万人以上',
-  '90万人以上': '50万人以上',
-  '70万人以上': '50万人以上',
-  '50万人以上': '50万人以上',
-  '40万人以上': '30-50万人',
-  '20万人以上': '10-30万人',
 
-  // 大型
-  '10万人以上': '10-30万人',
-  '5-10万人': '5-10万人',
-
-  // 中型
-  '6万人以上': '5-10万人',
-  '4万人以上': '1-5万人',
-  '3万人以上': '1-5万人',
-
-  // 小中型
-  '1-5万人': '1-5万人',
-  '1-2万人': '1-5万人',
-  '2万人以上（中国区）': '1-5万人',
-  '5000-10000人': '5000-9999人',
-}
 async function fetchCompanyProfile() {
   loading.value = true
   try {
@@ -95,7 +72,7 @@ async function fetchCompanyProfile() {
         logo: result.data.logo || '',
         address: result.data.address || '',
         industry: result.data.industry || '',
-       scale: scaleNormalizeMap[rawScale] || rawScale || '',
+        scale: result.data.scale || '',
         contactPerson: result.data.contactPerson || '',
         contactPhone: result.data.contactPhone || '',
       }
