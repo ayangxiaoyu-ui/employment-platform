@@ -560,3 +560,300 @@ INSERT INTO company (
 
 -- id 62
 (62, 'StepFun（阶跃星辰）', '国产多模态大模型，海归视觉/语音/多模态融合工程师首选。', '/uploads/logo/stepfun-icon-logo.png', '北京市海淀区', 'AI 大模型平台', '5000-9999人', '人才中心', '010-12345678', 1);
+
+
+INSERT INTO job (company_id, title, category_id, description, requirements, salary_min, salary_max, location, status) VALUES
+(22, '2026届大模型应用实习生', 82, '基于通义千问大模型的ToB/ToC应用开发与优化实习', '计算机、人工智能相关专业本科/硕士在读\n熟练掌握Python及大模型应用开发框架（LangChain、LlamaIndex等）\n熟悉RAG、Agent、Function Calling、Tool Use等高级应用技术\n有构建过完整大模型应用（知识库问答、智能助手、企业Copilot等）经验优先\n了解大模型评估、Prompt Engineering、模型压缩/量化技巧加分\n具备较好的产品思维，能与业务/产品团队协作\n英语阅读能力强，能查阅英文技术资料和论文\n实习期间表现优秀可获得转正机会或校招优先', 8, 15, '杭州', 1),
+(22, '高级前端开发工程师 (社招)', 58, '淘宝/天猫高性能前端开发与优化', '本科及以上，4年以上前端经验\n精通React/Next.js/Vue，SSR/SSG熟练\n掌握性能优化、Web Vitals、可访问性\n有大型电商/复杂交互项目经验\n代码规范强，工程化能力优秀\n能带新人或负责模块', 28, 50, '杭州/北京', 1),
+(22, '供应链算法工程师 (社招)', 84, '菜鸟智能调度/预测/路由优化', '数学/计算机相关硕士及以上\n3年以上运筹优化/机器学习经验\n熟悉强化学习/时序预测/GNN\n有物流/供应链算法实战优先\n数据敏感，业务理解强', 25, 45, '杭州', 1),
+(22, '2026届云原生实习生', 94, '阿里云容器平台实习', '计算机相关专业在读\n熟悉Kubernetes、Docker基础\n有云原生项目或开源贡献加分\n英语四级以上，学习能力强', 7, 14, '杭州', 1);
+
+-- 23 宁德时代新能源科技股份有限公司
+INSERT INTO job (company_id, title, category_id, description, requirements, salary_min, salary_max, location, status) VALUES
+(23, '2026届电池材料研发实习生', 36, '新型电池材料合成、表征与测试实习', '材料科学、化学、物理、能源与动力工程等相关专业本科/硕士在读\n熟悉电化学基本原理，了解电池材料合成、表征、测试方法（循环伏安、充放电测试、阻抗谱等）\n有参与过实验室电池材料相关实验或项目经验优先\n掌握常见材料表征仪器使用（XRD、SEM、XPS、BET、Raman、TEM等）加分\n具备较强的实验动手能力、数据分析与处理能力（Origin、Excel高级功能）\n安全意识强，遵守实验室规范与操作规程\n英语四级及以上，能独立阅读英文文献与技术报告\n实习期需穿戴防护装备，细心认真，责任心强，表现优异可转正', 5, 10, '宁德/上海', 1),
+(23, '锂电池BMS算法工程师 (社招)', 36, '下一代BMS状态估计、均衡策略及热管理算法开发', '控制工程、电气工程、计算机相关硕士及以上\n3年以上电池管理系统算法开发经验，熟悉EKF/UKF/PF等状态估计算法\n熟练MATLAB/Simulink/Python，熟悉电池模型建立与参数辨识\n有新能源汽车BMS量产经验或实际车辆验证经验优先\n数学建模能力强，熟悉锂电池电化学特性与衰退机理\n具备优秀的团队协作与文档撰写能力，英语六级以上\n能适应实验室与现场测试环境，能处理复杂问题', 22, 40, '上海/宁德', 1),
+(23, '2026届储能系统集成实习生', 36, '大型储能电站系统集成与测试实习', '电力电子、电气工程相关专业在读\n了解储能系统架构、BMS、PCS、EMS基本原理\n有电力电子或储能项目经验加分\n动手能力强，安全意识高', 5, 9, '宁德', 1);
+
+-- 24 比亚迪股份有限公司
+INSERT INTO job (company_id, title, category_id, description, requirements, salary_min, salary_max, location, status) VALUES
+(24, '2026届自动驾驶感知算法实习生', 85, '参与激光雷达/视觉/多传感器融合算法实习，可转正', '计算机、车辆工程、人工智能相关专业在读\n熟练掌握Python/PyTorch，熟悉YOLO系列、Transformer、Point Cloud处理（PointNet/PointPillars等）\n有计算机视觉或传感器融合课程项目/竞赛经验优先\n了解BEV感知或端到端自动驾驶框架（如UniAD、ST-P3）加分\n数据清洗、标注、模型训练调试能力强，英语四级以上\n实习期需保证较高出勤率，表现优秀优先校招', 6, 13, '深圳', 1),
+(24, '新能源汽车三电系统工程师 (社招)', 31, '电池/电机/电控系统集成与验证', '车辆工程/电气工程相关本科及以上\n3年以上新能源汽车三电系统开发经验\n熟悉BMS、电机控制、DCDC/充电系统\n有整车集成或台架测试经验优先\n熟练使用CANoe/CANalyzer、MATLAB/Simulink\n责任心强，能适应出差和加班', 22, 42, '深圳/西安', 1),
+(24, '2026届车载域控嵌入式实习生', 69, '智能驾驶域控制器底层软件开发实习', '嵌入式/计算机/电子相关专业在读\n熟练C/C++，熟悉RTOS/FreeRTOS/AUTOSAR\n了解汽车功能安全（ISO26262）加分\n有STM32/高通/地平线芯片开发经验优先\n代码规范好，调试问题能力强\n每周至少4天到岗', 5, 11, '西安', 1),
+(24, '电池测试工程师 (社招)', 36, '动力电池性能测试与可靠性验证', '材料/化学/电气相关本科及以上\n2年以上电池测试经验，熟悉充放电循环、热失控测试\n熟练使用Arbin/Neware等测试设备\n有电池安全标准（GB/T、UN38.3）了解优先\n数据分析能力强，报告撰写规范', 20, 38, '深圳', 1);
+
+-- 25 中芯国际集成电路制造（北京）有限公司
+INSERT INTO job (company_id, title, category_id, description, requirements, salary_min, salary_max, location, status) VALUES
+(25, '2026届半导体工艺实习生', 32, '先进节点制程工艺开发与优化实习', '微电子/材料/物理相关专业在读\n了解半导体工艺流程（光刻、刻蚀、沉积、离子注入等）\n有洁净室实习或Fab相关课程经验优先\n熟悉工艺设备基本操作和故障排查\n安全意识强，细心耐心，英语四级以上\n需遵守严格洁净室规范，穿戴防护服', 5, 11, '上海/北京', 1),
+(25, '芯片物理设计工程师 (社招)', 32, 'SoC后端物理设计（Floorplan/P&R/STA/DFM）', '微电子/集成电路相关本科及以上\n3年以上物理设计经验，熟练ICC2/Innovus/PrimeTime\n熟悉7nm/5nm及以下节点物理实现流程\n有低功耗/高性能设计或Tapeout经验优先\n时序收敛能力强，能独立解决复杂问题\n抗压能力好，能适应高峰期加班', 25, 48, '上海/北京', 1),
+(25, '2026届芯片验证实习生', 32, '数字IC功能验证与仿真实习', '集成电路/电子工程相关专业在读\n熟悉SystemVerilog/UVM验证方法学\n有Verilog/VHDL RTL设计或验证项目经验优先\n了解SoC验证流程、覆盖率分析\n代码能力强，调试耐心，英语阅读良好', 5, 12, '北京', 1),
+(25, '工艺设备工程师 (社招)', 32, '光刻/刻蚀设备维护与工艺优化', '电子/自动化/物理相关本科及以上\n3年以上半导体设备维护经验\n熟悉ASML光刻机或Lam刻蚀设备优先\n具备设备故障诊断与预防性维护能力\n团队协作好，能值班支持生产', 22, 45, '上海', 1);
+
+-- 26 国家电网有限公司
+INSERT INTO job (company_id, title, category_id, description, requirements, salary_min, salary_max, location, status) VALUES
+(26, '2026届智能电网算法实习生', 12, '新能源接入/负荷预测/优化调度算法实习', '电力系统/自动化/计算机相关专业在读\n熟悉电力系统基本原理和仿真工具（MATLAB/PSCAD）\n了解机器学习在负荷预测中的应用加分\n有电网调度或新能源项目经验优先\n数据处理能力强，英语四级以上\n实习需遵守保密要求', 5, 10, '北京', 1),
+(26, '新能源数字孪生工程师 (社招)', 43, '风光储一体化场站数字孪生建模与应用', '电力/控制/计算机相关本科及以上\n3年以上数字孪生或仿真建模经验\n熟练Unity/Unreal Engine或专业电力仿真软件\n有新能源场站数据采集/建模经验优先\n系统架构思维强，跨团队沟通能力好', 20, 38, '北京/上海', 1),
+(26, '2026届电力大数据实习生', 12, '电网大数据平台分析与可视化实习', '计算机/统计/电力相关专业在读\n熟练Python/SQL，熟悉Hadoop/Spark基础\n有电力数据分析或可视化项目经验加分\n数据敏感度高，报告撰写能力强', 5, 10, '北京', 1);
+
+-- 27 中国工商银行股份有限公司
+INSERT INTO job (company_id, title, category_id, description, requirements, salary_min, salary_max, location, status) VALUES
+(27, '2026届金融科技开发实习生', 69, '银行核心系统/移动银行/支付系统开发实习', '计算机/金融科技/软件工程相关专业在读\n熟练Java/Python，熟悉Spring Boot或Django框架\n了解金融业务场景（支付、清结算、信贷）加分\n有银行/互联网金融项目经验优先\n安全意识强，代码规范好，英语四级以上', 5, 10, '北京', 1),
+(27, '大数据开发工程师 (社招)', 12, '金融大数据平台建设、ETL与分析', '计算机/统计相关本科及以上\n3年以上大数据开发经验，精通Spark/Flink/Hadoop\n熟悉银行数据仓库模型和风控/反欺诈场景优先\nSQL/Hive熟练，数据质量意识强\n能独立负责数据链路优化', 22, 40, '北京', 1),
+(27, '2026届前端开发实习生 (React)', 57, '网银/手机银行前端界面开发实习', '计算机相关专业在读\n熟练React + TypeScript，熟悉Ant Design或类似UI库\n有移动端H5或小程序开发经验加分\n交互设计敏感度高，性能优化意识强', 5, 11, '北京', 1);
+
+-- 28 中国石油天然气集团有限公司
+INSERT INTO job (company_id, title, category_id, description, requirements, salary_min, salary_max, location, status) VALUES
+(28, '2026届能源数字化实习生', 43, '油气勘探/生产数字化转型项目实习', '石油工程/计算机/自动化相关专业在读\n了解油气行业基本知识，熟悉Python数据处理\n有能源大数据或AI应用项目经验加分\n学习意愿强，英语四级以上\n能适应出差或现场环境', 5, 9, '北京', 1),
+(28, '海外项目IT工程师 (社招)', 68, '海外油气项目信息化系统建设与维护', '计算机/通信相关本科及以上\n3年以上IT系统实施或运维经验\n熟悉海外项目环境，能适应出国工作\n有油气行业信息化经验优先\n英语流利（口语+技术文档）', 20, 38, '北京/海外', 1);
+
+-- 29 小米科技有限责任公司
+INSERT INTO job (company_id, title, category_id, description, requirements, salary_min, salary_max, location, status) VALUES
+(29, '2026届AIoT算法实习生', 84, '智能家居/穿戴设备推荐与预测算法实习', '计算机/AI相关专业在读\n熟练Python，熟悉推荐系统或时序预测模型\n有IoT设备数据项目经验加分\n数据分析能力强，英语四级以上', 6, 13, '北京', 1),
+(29, '消费电子嵌入式工程师 (社招)', 33, '手机/平板/智能硬件底层软件开发', '电子/计算机相关本科及以上\n3年以上嵌入式开发经验，精通C/C++/RTOS\n熟悉高通/联发科平台优先\n有量产经验，熟悉硬件调试工具\n代码质量高，抗压能力强', 22, 42, '北京', 1),
+(29, '2026届前端开发实习生 (React Native)', 59, '小米APP/跨境电商移动端开发实习', '计算机相关专业在读\n熟练React Native，了解iOS/Android原生交互\n有App开发或跨平台项目经验优先\nUI还原能力强，性能优化意识好', 5, 12, '北京', 1);
+
+-- 30 大疆创新科技有限公司
+INSERT INTO job (company_id, title, category_id, description, requirements, salary_min, salary_max, location, status) VALUES
+(30, '2026届计算机视觉算法实习生', 85, '无人机影像识别/避障/跟踪算法实习', '计算机视觉/AI相关专业在读\n熟练OpenCV/PyTorch，熟悉目标检测/跟踪算法\n有无人机或机器人视觉项目经验优先\n数学基础扎实，英语六级以上', 7, 14, '深圳', 1),
+(30, '无人机嵌入式软件工程师 (社招)', 69, '飞行控制与图像传输底层开发', '嵌入式/计算机相关本科及以上\n3年以上嵌入式Linux或RTOS开发经验\n熟悉ARM架构，了解无人机飞控原理加分\n有产品量产经验优先\n调试能力强，能适应高压项目节奏', 25, 45, '深圳', 1),
+(30, '2026届产品实习生 (无人机方向)', 96, '消费级/行业级无人机产品规划实习', '工业设计/电子/市场相关专业在读\n对无人机生态有兴趣，了解用户需求\n有产品实习或竞品分析经验加分\n沟通表达能力好，英语良好', 5, 11, '深圳', 1);
+
+-- 31 百度集团
+INSERT INTO job (company_id, title, category_id, description, requirements, salary_min, salary_max, location, status) VALUES
+(31, '2026届大模型应用实习生', 82, '参与文心一言大模型的ToC/ToB应用开发、Agent/RAG优化实习，可转正通道', '人工智能、计算机科学相关专业本科/硕士在读（2026届优先）\n熟练掌握Python及大模型应用生态（LangChain、LlamaIndex、Haystack等），熟悉Prompt Engineering、Chain of Thought、ReAct等高级技巧\n有构建过完整大模型应用项目经验（如智能助手、知识库问答、企业Copilot、垂直领域Agent）或开源贡献优先\n理解大模型评估体系（BLEU/ROUGE/BERTScore/Human Eval等），熟悉模型压缩、量化、蒸馏、LoRA/PEFT等高效微调方法至少一种\n熟悉大模型部署框架（vLLM、TGI、FastChat、TensorRT-LLM）基础，能处理推理加速、batch处理、KV Cache优化等常见问题\n具备较强的工程能力，能独立调试训练/推理问题，熟悉分布式训练调试（DeepSpeed/FSDP）加分\n数学基础扎实（线性代数、概率统计、最优化），代码能力强，追求稳定性与效率\n英语六级及以上，能跟踪阅读Arxiv最新LLM应用论文，快速复现社区SOTA方法\n实习期间需每周5天以上到岗，能适应高强度研发节奏，责任心强、团队协作主动、乐于分享', 8, 15, '北京', 1),
+(31, '自动驾驶感知工程师 (社招)', 85, 'Apollo平台多传感器融合、BEV感知模型迭代与量产落地', '计算机视觉、人工智能、车辆工程相关硕士及以上学历\n3–8年自动驾驶感知算法开发经验，精通PyTorch/TensorFlow，熟悉YOLOv8/DETR/Transformer-based检测、BEVFormer/TPVFormer等主流感知架构\n有激光雷达、摄像头、毫米波雷达等多传感器融合经验，熟悉点云处理（PointPillars、VoxelNet、CenterPoint等）\n有端到端感知或多模态融合项目量产经验优先（如城市/高速NOA场景）\n熟练使用Apollo/nuScenes/OpenDataLab等数据集，掌握数据清洗、标注、增强、模型评估全链路\n代码工程能力强，熟悉模型压缩/量化/部署（TensorRT/ONNX），能独立解决复杂场景召回/漏检问题\n数学建模能力扎实，熟悉概率滤波、卡尔曼、匈牙利匹配等\n英语六级以上，能阅读英文论文和技术文档，具备较强的抗压能力和团队协作精神\n能适应高强度项目节奏，愿意参与路测、夜间/恶劣天气验证及OnCall支持', 30, 55, '北京', 1),
+(31, '2026届前端开发实习生 (React)', 57, '百度APP/搜索/文心一言前端界面开发实习', '计算机/软件工程相关专业在读\n熟练React + TypeScript + Zustand/Redux Toolkit，熟悉Hooks、Suspense、Concurrent Mode等高级特性\n有Next.js/Remix经验，了解SSR/SSG/Streaming Rendering加分\n熟悉前端工程化（Vite/Webpack、ESLint、Prettier、Tailwind CSS、Storybook等），能独立处理性能瓶颈\n有大型Web/App项目经验（如搜索结果页、聊天界面、内容推荐页）优先\n性能优化意识强，熟悉Web Vitals、Lighthouse、虚拟列表、懒加载、骨架屏等技术\n英语四级以上，能阅读React官方文档及社区讨论\n每周至少4天到岗，实习期能适应快速迭代与代码审查环境', 5, 12, '北京', 1);
+
+-- 32 商汤科技
+INSERT INTO job (company_id, title, category_id, description, requirements, salary_min, salary_max, location, status) VALUES
+(32, '2026届计算机视觉实习生', 85, 'SenseCore平台CV模型（检测/分割/姿态/3D重建）研发实习', '计算机视觉、人工智能相关专业硕士/本科高年级在读\n熟练PyTorch，熟悉主流检测（YOLOv8/RT-DETR）、分割（SAM/Mask2Former）、姿态（RTMPose/HRNet）、3D重建（NeRF/3DGS）等模型\n有CV方向项目经验（如Kaggle竞赛、开源仓库、论文复现、学校实验）优先\n理解模型训练全流程（数据增强、损失函数、优化器、调度器、混合精度等），能独立调试收敛问题\n熟悉模型压缩/量化（INT8/FP16）、加速（TensorRT/NCNN/OpenVINO）基础加分\n数学基础扎实（线性代数、概率论、几何变换），代码能力强，追求精度与效率平衡\n英语六级及以上，能阅读CVPR/ICCV/ECCV最新论文，快速跟进社区进展\n实习需每周5天以上到岗，能适应高强度实验迭代，责任心强、团队协作好', 7, 14, '上海', 1),
+(32, '多模态大模型工程师 (社招)', 83, '视觉+语言多模态模型训练、对齐与应用开发', '计算机视觉/自然语言处理相关硕士及以上\n3–7年多模态模型经验，熟悉CLIP、BLIP、LLaVA、Kosmos、Qwen-VL、InternVL等系列\n有图像/视频理解、生成、跨模态检索、视觉问答、文档理解等方向量产或研究经验优先\n熟练PyTorch分布式训练（DeepSpeed、FSDP、Megatron），熟悉长序列处理、位置编码优化\n有RLHF/DPO对齐、Prompt Tuning、Adapter/LoRA等高效微调经验加分\n具备优秀的工程能力，能处理海量多模态数据清洗、训练稳定性、推理加速等问题\n数学与算法功底扎实，能独立设计实验验证新方法\n英语六级以上，能跟踪多模态领域最新进展，具备较强的抗压与协作能力', 30, 55, '上海/北京', 1),
+(32, '2026届测试开发实习生', 88, 'AI模型/平台自动化测试框架搭建与执行实习', '计算机/软件测试相关专业在读\n熟练Python + Pytest/Unittest，熟悉自动化测试设计原则\n有AI模型测试、接口测试、性能测试经验加分\n了解大模型评测指标（BLEU/ROUGE/Human Eval/Perplexity）优先\n能编写稳定、可复用的测试用例与脚本，熟悉CI/CD集成\n责任心强，细致耐心，英语四级以上', 5, 11, '上海', 1);
+
+-- 33 中国石油天然气股份有限公司（中石油）
+INSERT INTO job (company_id, title, category_id, description, requirements, salary_min, salary_max, location, status) VALUES
+(33, '2026届能源大数据实习生', 12, '油气勘探生产大数据分析与可视化实习', '石油工程/计算机/统计相关专业在读\n熟练Python/SQL，熟悉Pandas/Numpy/Matplotlib/Seaborn/Echarts\n了解油气行业数据类型（地震、测井、生产曲线）加分\n有大数据项目或能源数据分析经验优先\n数据敏感度高，报告撰写规范\n英语四级以上，能阅读英文技术报告', 5, 10, '北京', 1),
+(33, '数字化转型工程师 (社招)', 43, '海外油气项目数字化系统建设与运维', '计算机/石油工程/自动化相关本科及以上\n3年以上数字化转型或信息化项目经验\n熟悉云平台（阿里云/华为云/AWS）、大数据（Hadoop/Spark）、IoT平台\n有油气行业SCADA/ERP/MES系统实施经验优先\n能适应海外出差与现场支持，英语流利（口语+技术文档）\n项目管理能力强，责任心强，能处理跨部门协调', 20, 38, '北京/海外', 1),
+(33, '2026届后端开发实习生', 69, '能源管理系统后端服务开发实习', '计算机相关专业在读\n熟练Java/Go，熟悉Spring Boot或Gin框架\n了解分布式系统、微服务基础加分\n有能源/工业互联网项目经验优先\n代码规范好，学习能力强', 5, 11, '北京', 1);
+
+-- 34 中国石油化工股份有限公司（中石化）
+INSERT INTO job (company_id, title, category_id, description, requirements, salary_min, salary_max, location, status) VALUES
+(34, '2026届化工材料实习生', 36, '新能源材料/催化剂/聚合物工艺研发实习', '化学工程/材料科学/高分子相关专业在读\n熟悉催化反应、聚合反应、材料合成基本原理\n有实验室合成/表征实验经验优先\n掌握XRD/FTIR/SEM/TGA/DSC等仪器操作加分\n实验记录规范，安全意识强\n英语四级以上，能阅读化工文献', 5, 10, '北京', 1),
+(34, '炼化数字化工程师 (社招)', 43, '智能炼厂数字孪生、预测维护与优化系统开发', '化工/计算机/自动化相关本科及以上\n3年以上工业数字化或智能制造经验\n熟悉工业互联网平台、数字孪生（Unity/仿真软件）、AI预测模型\n有炼化/石化MES/SCADA系统经验优先\n系统思维强，能跨专业协作，英语良好\n能适应现场出差与调试', 20, 38, '北京/上海', 1),
+(34, '2026届数据分析实习生', 12, '化工生产数据清洗、可视化与异常检测实习', '统计/计算机相关专业在读\n熟练Python（Pandas/NumPy/Plotly）、SQL\n有工业数据分析或异常检测项目经验加分\n数据敏感度高，报告呈现能力强', 5, 9, '北京', 1);
+
+-- 35 中信银行股份有限公司
+INSERT INTO job (company_id, title, category_id, description, requirements, salary_min, salary_max, location, status) VALUES
+(35, '2026届金融科技开发实习生', 69, '跨境支付、科技金融、零售银行系统开发实习', '计算机/金融科技/软件工程相关专业在读\n熟练Java/Python，熟悉Spring Boot/Django/FastAPI\n了解金融业务场景（支付、信贷、风控、反洗钱）加分\n有银行/支付/互联网金融项目经验优先\n安全意识强，代码规范好，英语四级以上\n每周至少4天到岗，实习表现优异可转正', 5, 10, '北京', 1),
+(35, '风控模型工程师 (社招)', 84, '消费金融/信用卡/小微贷款风控模型开发与迭代', '统计学/数学/计算机相关硕士及以上\n3年以上风控模型开发经验，熟练XGBoost/LightGBM/CatBoost/深度学习风控模型\n熟悉A/B实验、KS/PSI/AUC/KS等评估指标，了解变量筛选、WOE/IV、评分卡开发全流程\n有银行/消费金融/互联网信贷风控实战经验优先\n数据敏感度高，业务理解强，能与风控/业务团队高效协作\n英语六级以上，能阅读英文风控论文与报告\n责任心强，能适应模型上线后监控与迭代需求', 22, 40, '北京', 1),
+(35, '2026届前端实习生', 57, '手机银行/网银/企业金融前端开发实习', '计算机相关专业在读\n熟练React/Vue + TypeScript，熟悉Ant Design或Element Plus\n有移动端H5或小程序开发经验加分\n交互设计敏感度高，性能优化意识强', 5, 11, '北京', 1);
+
+-- 36 中国国际金融股份有限公司（中金公司）
+INSERT INTO job (company_id, title, category_id, description, requirements, salary_min, salary_max, location, status) VALUES
+(36, '2026届量化研究实习生', 84, '跨境并购、股权融资、衍生品量化模型与策略研究实习', '金融工程/数学/计算机相关硕士在读优先\n熟练Python/R/Matlab，熟悉量化交易框架（Backtrader/QuantConnect/Zipline）\n了解股票/债券/衍生品定价模型、统计套利、多因子模型、机器学习在量化中的应用\n有量化策略回测、实盘模拟或竞赛经验优先\n数学功底扎实（随机过程、时间序列、凸优化），代码能力强\n英语六级以上，能阅读量化金融论文与英文报告\n实习需每周5天到岗，能适应高强度研究节奏', 7, 14, '北京', 1),
+(36, '投行系统工程师 (社招)', 68, '投行核心交易系统、CRM、路演系统开发与维护', '计算机相关本科及以上\n3年以上金融系统开发经验，精通Java/Go/Python\n熟悉分布式系统、高并发交易处理、数据安全合规\n有投行/券商系统实施经验优先\n项目管理能力强，能适应高峰期加班\n英语流利，能与海外客户/团队沟通', 25, 45, '北京', 1);
+
+-- 37 普华永道（PwC）中国
+INSERT INTO job (company_id, title, category_id, description, requirements, salary_min, salary_max, location, status) VALUES
+(37, '2026届审计科技实习生', 15, '数字化审计/税务合规/风险管理系统开发实习', '会计/审计/计算机/信息系统相关专业在读\n熟练Python/SQL，熟悉Power BI/Tableau数据可视化\n了解财务报表、内部控制、税务合规基本知识加分\n有审计软件或ERP系统实习经验优先\n细心严谨，数据分析能力强，英语四级以上\n每周至少4天到岗，实习表现优异可转正', 5, 10, '上海', 1),
+(37, '数字化转型顾问 (社招)', 98, '企业数字化转型、云ERP、RPA、智能财务咨询与实施', '本科及以上，3年以上咨询/数字化转型经验\n熟悉SAP S/4HANA、Oracle Cloud、阿里云/腾讯云企业服务\n有财务共享中心、智能财务、RPA实施经验优先\n项目管理能力强（PMP或同等证书加分），英文流利\n优秀的沟通协调与文档撰写能力，能适应出差', 25, 45, '上海', 1);
+
+-- 38 长江存储科技有限责任公司
+INSERT INTO job (company_id, title, category_id, description, requirements, salary_min, salary_max, location, status) VALUES
+(38, '2026届存储芯片工艺实习生', 32, '3D NAND闪存制程工艺开发与优化实习', '微电子/材料科学/物理相关专业在读\n了解NAND闪存工艺流程（沉积、刻蚀、光刻、离子注入、清洗等）\n有半导体实验室或Fab实习经验优先\n熟悉洁净室操作规范、安全要求与工艺设备基本原理\n数据分析能力强，能使用JMP/Origin处理工艺数据\n英语四级以上，能阅读英文工艺文献\n需遵守严格洁净室纪律，穿戴全套防护服', 5, 11, '武汉', 1),
+(38, '芯片设计工程师 (社招)', 32, '存储控制器/IP/接口设计与验证', '集成电路/微电子相关本科及以上\n3年以上数字IC设计经验，熟练Verilog/SystemVerilog\n熟悉UVM验证方法学、覆盖率分析、形式验证\n有DDR/LPDDR/NAND接口或控制器设计经验优先\n时序/功耗优化能力强，能独立完成RTL到GDS全流程\n抗压能力好，能适应Tapeout高压期', 25, 48, '武汉', 1),
+(38, '2026届测试工程师实习生', 90, '存储芯片性能/可靠性测试实习', '电子/计算机相关专业在读\n熟悉ATE测试平台、ATE编程（Teradyne/Cohu等）\n有半导体测试或可靠性测试经验加分\n细心耐心，数据分析能力强', 5, 10, '武汉', 1);
+
+-- 39 华为海思半导体有限公司
+INSERT INTO job (company_id, title, category_id, description, requirements, salary_min, salary_max, location, status) VALUES
+(39, '2026届AI芯片设计实习生', 32, '昇腾/麒麟AI加速器架构与RTL设计实习', '微电子/集成电路/计算机相关专业在读\n熟悉Verilog/SystemVerilog，了解数字电路/计算机体系结构\n有NPU/GPU/Tensor Core相关课程项目或竞赛经验优先\n熟悉高性能计算、并行计算、数据流架构加分\n代码能力强，数学基础好（线性代数、概率论）\n英语六级以上，能阅读芯片设计英文文档与论文', 6, 13, '深圳', 1),
+(39, '芯片架构师 (社招)', 32, 'AI芯片/SoC架构设计与性能建模', '微电子/计算机体系结构相关硕士及以上\n5年以上芯片架构经验，熟悉NPU/GPU/TPU设计\n熟练C++建模、SystemC、Gem5/Sniper模拟器\n有流片经验或高性能AI芯片项目优先\n系统思维强，能跨团队协作，英语良好', 35, 60, '深圳', 1),
+(39, '2026届后端开发实习生', 69, '芯片设计EDA工具链后端服务开发实习', '计算机相关专业在读\n熟练Java/Go/Python，熟悉Spring Boot或FastAPI\n了解EDA工具链或芯片设计流程加分\n分布式系统基础好，学习能力强', 5, 12, '深圳', 1);
+
+-- 40 隆基绿能科技股份有限公司
+INSERT INTO job (company_id, title, category_id, description, requirements, salary_min, salary_max, location, status) VALUES
+(40, '2026届光伏材料实习生', 35, '硅片/电池/组件材料研发与工艺优化实习', '材料科学/化学/物理/能源相关专业在读\n熟悉光伏材料（单晶硅、多晶硅、钙钛矿、TOPCon/HJT）基本原理与表征方法\n有实验室光伏材料合成/测试经验优先\n掌握XRD/SEM/PL/EQE/LIF等仪器操作加分\n实验动手能力强，数据分析规范\n英语四级以上，能阅读光伏领域英文文献\n安全意识强，遵守实验室规范', 5, 10, '西安', 1),
+(40, '光伏设备工程师 (社招)', 35, '光伏生产线设备维护、改造与工艺优化', '机械工程/自动化/电子相关本科及以上\n3年以上光伏/半导体设备维护经验\n熟悉PECVD、扩散炉、丝印机、激光设备等优先\n具备设备故障诊断、预防性维护、备件管理能力\n项目执行力强，能适应生产线轮班与出差', 20, 38, '西安', 1),
+(40, '2026届工艺工程师实习生', 35, '硅片切割/电池制备工艺实习', '材料/化学工程相关在读\n了解光伏工艺流程（铸锭、切片、扩散、PECVD、金属化等）\n有工艺实验或数据分析经验加分\n细心负责，学习意愿强', 5, 9, '西安', 1);
+
+-- 41 理想汽车科技有限公司
+INSERT INTO job (company_id, title, category_id, description, requirements, salary_min, salary_max, location, status) VALUES
+(41, '2026届端到端自动驾驶实习生', 85, '城市NOA端到端规划/控制/预测算法实习', '人工智能/车辆工程/计算机相关专业在读\n熟悉模仿学习、强化学习、Diffusion/Transformer-based规划模型\n有轨迹预测/规划/控制项目经验或竞赛优先\n熟练PyTorch，了解nuScenes/Argoverse/OpenDrive等数据集\n数学基础扎实（控制论、最优化、概率论）\n英语六级以上，能阅读端到端自动驾驶论文\n实习需每周5天到岗，能适应高强度研发', 7, 14, '北京', 1),
+(41, '智能驾驶感知工程师 (社招)', 85, 'BEV/多模态感知模型量产与优化', '计算机视觉/AI相关硕士及以上\n3年以上自动驾驶感知经验，精通PyTorch\n熟悉BEVFormer/TPV/UniAD等端到端感知架构\n有量产经验（城市/高速NOA）优先\n性能优化与部署能力强（TensorRT/ONNX）\n抗压能力强，能参与路测验证', 30, 55, '北京', 1),
+(41, '2026届三电系统实习生', 31, '电池/电机/电控集成测试实习', '电气/车辆工程相关专业在读\n熟悉MATLAB/Simulink，了解BMS/电机控制原理\n有新能源汽车三电项目经验加分\n动手能力强，安全意识高', 5, 11, '北京', 1);
+
+-- 42 京东集团
+INSERT INTO job (company_id, title, category_id, description, requirements, salary_min, salary_max, location, status) VALUES
+(42, '2026届供应链算法实习生', 84, '智能仓储/路由/预测/库存优化算法实习', '运筹优化/计算机/工业工程相关专业在读\n熟悉强化学习、时序预测、运筹优化（MILP/CPLEX/Gurobi）\n有物流/供应链项目或竞赛经验加分\nPython熟练，数据分析能力强\n英语四级以上，学习能力强', 6, 13, '北京', 1),
+(42, '后端开发工程师 (社招)', 69, '电商核心交易/订单/支付系统开发', '本科及以上，4年以上后端经验，精通Java/Go\n熟悉高并发分布式系统设计\n有亿级交易系统经验优先\n代码规范强，抗压能力好', 25, 45, '北京', 1),
+(42, '2026届前端实习生', 58, '京东APP/网页/小程序前端实习', '计算机相关专业在读\n熟练React/Next.js或Vue/Nuxt\n有电商前端经验加分\n性能优化意识强', 5, 12, '北京', 1);
+
+-- 43 网易集团
+INSERT INTO job (company_id, title, category_id, description, requirements, salary_min, salary_max, location, status) VALUES
+(43, '2026届游戏前端实习生', 52, '网易游戏Web/移动端/H5前端开发实习', '计算机/游戏设计相关专业在读\n熟练React/Three.js或Cocos Creator\n有游戏前端或互动H5项目经验优先\n创意能力强，审美好', 5, 12, '杭州', 1),
+(43, '游戏服务器开发工程师 (社招)', 71, '高并发MMO/手游服务器开发与优化', '本科及以上，4年以上游戏后端经验，精通C++/Go\n熟悉Netty/gRPC/Kafka等高性能框架\n有大型游戏服务器经验优先\n代码能力强，抗压能力好', 25, 48, '杭州', 1),
+(43, '2026届推荐算法实习生', 84, '游戏内容/玩家推荐系统实习', 'AI/计算机相关专业在读\n熟悉推荐系统召回/排序模型\n有游戏数据项目经验加分', 7, 14, '杭州', 1);
+
+-- 44 美团
+INSERT INTO job (company_id, title, category_id, description, requirements, salary_min, salary_max, location, status) VALUES
+(44, '2026届增长产品实习生', 97, '外卖/到店/酒旅业务用户增长与留存策略实习', '计算机/市场/运营相关专业在读\n熟悉数据分析工具（SQL/Python/Excel/Tableau）\n有增长项目或A/B实验经验加分\n业务敏感度高，逻辑清晰\n英语四级以上，沟通能力强', 5, 11, '北京', 1),
+(44, '推荐算法工程师 (社招)', 84, '本地生活推荐模型迭代与优化', '计算机/数学相关硕士及以上\n3年以上推荐系统经验，熟悉召回/排序/重排全链路\n有亿级流量推荐实战优先\nPython/PyTorch熟练，业务理解强', 28, 50, '北京', 1),
+(44, '2026届前端实习生 (Vue)', 63, '美团APP/小程序/到店业务前端实习', '计算机相关专业在读\n熟练Vue3 + Composition API + Pinia/Vuex\n有小程序或H5经验加分\n性能优化意识强', 5, 12, '北京', 1);
+
+-- 45 快手科技
+INSERT INTO job (company_id, title, category_id, description, requirements, salary_min, salary_max, location, status) VALUES
+(45, '2026届多模态实习生', 83, '短视频/直播内容理解与生成实习', 'AI/CV/NLP相关专业在读\n熟悉视频多模态模型（VideoMAE/CLIP-ViT等）\n有短视频相关项目优先\nPyTorch基础好，英语六级以上', 8, 15, '北京', 1),
+(45, '直播推荐工程师 (社招)', 84, '直播间实时推荐与内容分发优化', '3年以上推荐/搜索经验\n熟悉实时推荐、冷启动、多目标优化\n有直播/短视频平台经验优先\n数学建模能力强，抗压能力好', 30, 55, '北京', 1),
+(45, '2026届后端实习生', 71, '高并发直播服务开发实习', '计算机相关专业在读\n熟练Go语言，高并发编程基础\n熟悉微服务/Kafka/Redis加分\n学习能力强', 5, 12, '北京', 1);
+
+-- 46 哔哩哔哩（B站）
+INSERT INTO job (company_id, title, category_id, description, requirements, salary_min, salary_max, location, status) VALUES
+(46, '2026届内容社区产品实习生', 97, 'UP主生态/用户增长/社区运营策略实习，可转正通道', '产品/运营/市场/计算机相关专业本科/硕士在读（2026届优先）\n熟悉社区产品逻辑，了解内容创作者（UP主）与消费者双边增长模型\n熟练使用数据分析工具（SQL、Python/Pandas、Excel、Tableau/Looker）进行用户行为分析、漏斗拆解、留存/活跃指标监控\n有社区/内容平台产品实习经验或参与过校园社团/兴趣社区运营项目优先\n对ACG、知识区、生活区等B站核心内容生态有较深理解，能独立提出增长策略与实验方案\n具备优秀的产品文档撰写能力（PRD/MRD/需求文档）、原型设计能力（Axure/Figma/Mockplus）\n英语四级及以上，能阅读英文社区产品案例与增长论文\n逻辑清晰、沟通表达强，能与运营/内容/算法团队高效协作\n每周至少到岗4天以上，实习期3–6个月，能适应快节奏迭代与数据驱动决策环境，责任心强、主动性高', 5, 11, '上海', 1),
+(46, '视频推荐工程师 (社招)', 84, '动画/知识/生活区推荐模型迭代与优化', '计算机/数学/统计相关硕士及以上\n3–7年推荐系统经验，精通召回（双塔/多路召回）、排序（DeepFM/DIN/DCIN/Transformer-based）、重排（MMoE/Multi-Task Learning）\n熟悉内容理解模型（文本/视频多模态预训练，如CLIP、VideoMAE）在推荐中的应用\n有亿级DAU内容平台推荐实战经验优先（短视频/长视频/直播均可），熟悉冷启动、多目标优化、探索-利用平衡\n熟练Python/PyTorch/TensorFlow，掌握A/B实验设计、离线/在线评估指标体系、因果推断基础\n具备较强的业务理解与数据敏感度，能独立从业务问题提炼算法方案并推动落地\n英语六级及以上，能阅读推荐系统领域最新论文（RecSys/KDD/WSDM）\n抗压能力强，能适应高强度上线迭代与线上问题排查，团队协作主动', 25, 45, '上海', 1),
+(46, '2026届前端实习生', 57, 'B站Web/移动端/弹幕互动前端开发实习', '计算机/软件工程相关专业在读\n熟练React + TypeScript，熟悉Hooks、Context、Suspense、Concurrent Mode等高级特性\n有Next.js/Remix经验，了解SSR/SSG/Streaming SSR加分\n熟悉前端工程化（Vite/Webpack、ESLint/Prettier、Tailwind CSS、Storybook等），能独立处理构建/性能问题\n有视频播放器、弹幕系统、互动组件开发经验优先\n性能优化意识强，熟悉Web Vitals、虚拟列表、懒加载、骨架屏、WebSocket长连接等技术\n英语四级以上，能阅读React/Vue官方文档及社区讨论\n每周至少4天到岗，实习期能适应快速迭代与代码审查环境', 5, 12, '上海', 1);
+
+-- 47 SHEIN
+INSERT INTO job (company_id, title, category_id, description, requirements, salary_min, salary_max, location, status) VALUES
+(47, '2026届供应链算法实习生', 84, '跨境电商供应链预测/库存/路由优化算法实习', '运筹优化/计算机/工业工程/物流相关专业在读\n熟练Python，熟悉时序预测（Prophet/DeepAR/TFT）、运筹优化（MILP/Gurobi/CPLEX/OR-Tools）、强化学习在供应链中的应用\n有电商/物流供应链项目或竞赛经验（如Kaggle供应链预测赛）优先\n了解快时尚/跨境电商业务场景（需求预测、多仓调拨、海外物流）加分\n数据处理与特征工程能力强，熟悉Pandas/NumPy/Spark\n英语六级及以上，能阅读供应链优化领域英文论文与报告\n实习需每周5天到岗，能适应高强度数据实验与业务迭代节奏，责任心强', 6, 13, '南京', 1),
+(47, '海外业务后端工程师 (社招)', 71, '全球订单/库存/支付/物流核心系统开发与优化', '本科及以上，4年以上后端开发经验，精通Go/Java/Python\n熟悉高并发分布式系统设计、微服务架构、RPC/gRPC、分布式事务\n有跨境电商/海外订单系统经验优先（多币种、多语言、多时区、海外支付/税务合规）\n熟练Kafka/RocketMQ、Redis、MySQL/TiDB、Elasticsearch等基础设施\n代码质量高，熟悉单元测试、压测、混沌工程、监控告警体系\n英语流利，能与海外团队/供应商沟通技术需求\n抗压能力强，能适应跨境业务高峰期（如黑五/圣诞）加班与紧急响应', 25, 45, '南京', 1),
+(47, '2026届前端实习生', 58, 'SHEIN全球APP/网页前端开发实习', '计算机相关专业在读\n熟练React/Next.js或Vue/Nuxt，熟悉SSR/SSG/国际化（i18n）\n有跨境电商或多语言前端经验加分\n性能优化意识强，熟悉Web Vitals、懒加载、图片压缩等', 5, 12, '南京', 1);
+
+-- 48 唯品会
+INSERT INTO job (company_id, title, category_id, description, requirements, salary_min, salary_max, location, status) VALUES
+(48, '2026届特卖推荐实习生', 84, '品牌折扣/闪购推荐模型开发实习', '计算机/数学相关专业在读\n熟悉推荐系统召回/排序模型（双塔/DeepFM/DIN）\n有电商推荐项目或竞赛经验加分\nPython/PyTorch基础好，数据分析能力强\n英语四级以上', 6, 13, '广州', 1),
+(48, '大数据工程师 (社招)', 12, '电商大数据平台建设、实时ETL与分析', '本科及以上，3年以上大数据开发经验\n精通Spark/Flink/Hadoop/Hive/ClickHouse\n熟悉电商数据仓库分层模型、实时数仓建设\n有特卖/折扣电商数据处理经验优先\nSQL能力强，数据质量意识高，能独立负责链路优化', 22, 40, '广州', 1),
+(48, '2026届前端实习生', 57, '唯品会APP/网页前端开发实习', '计算机相关专业在读\n熟练React/Vue + TypeScript\n有电商前端经验加分\n性能与交互优化意识强', 5, 11, '广州', 1);
+
+-- 49 小红书
+INSERT INTO job (company_id, title, category_id, description, requirements, salary_min, salary_max, location, status) VALUES
+(49, '2026届社区增长实习生', 97, '种草社区用户增长、留存、内容分发策略实习', '产品/运营/市场/计算机相关专业在读\n熟练SQL/Python数据分析，熟悉增长漏斗、A/B实验设计\n对生活方式/种草社区有深刻理解，能独立提出增长方案\n有社区运营/内容增长实习经验或校园社群项目优先\n优秀的文档撰写与沟通表达能力，逻辑清晰\n英语四级以上，能阅读英文增长案例与论文\n每周至少4天到岗，实习期能适应数据驱动快节奏环境', 5, 11, '上海', 1),
+(49, '推荐算法工程师 (社招)', 84, '生活方式/种草笔记推荐模型迭代与优化', '计算机/数学相关硕士及以上\n3年以上推荐系统经验，熟悉内容理解（文本/图像多模态）、召回/排序/重排全链路\n有社区/内容平台推荐实战经验优先（冷启动、多目标优化、探索利用）\n熟练Python/PyTorch/TensorFlow，掌握A/B实验、因果推断基础\n业务敏感度高，能从用户笔记/收藏/点赞行为提炼特征\n英语六级及以上，能阅读推荐与多模态领域最新论文\n抗压能力强，能适应高频上线与线上问题排查', 28, 50, '上海', 1),
+(49, '2026届前端实习生 (React)', 57, '小红书Web/小程序/笔记编辑器前端开发实习', '计算机相关专业在读\n熟练React + TypeScript + Zustand/Recoil，熟悉Hooks、Suspense\n有Next.js经验，了解SSR/SSG加分\n熟悉富文本编辑器（Draft.js/Slate/TipTap）或笔记类交互组件优先\n性能优化意识强，熟悉虚拟列表、懒加载、图片压缩\n英语四级以上，能阅读React社区文档\n每周至少4天到岗，实习期适应快速迭代', 5, 12, '上海', 1),
+(49, '内容审核算法工程师 (社招)', 86, '社区笔记/评论内容安全模型开发与优化', 'NLP/CV相关硕士及以上\n3年以上内容审核/风控模型经验，熟悉文本分类/多模态审核（图像+文本）\n熟练BERT/RoBERTa/ERNIE/CLIP等预训练模型微调\n有社区/社交平台审核实战经验优先\n熟悉在线/离线审核链路、误判分析、人工审核协作\n英语六级以上，能阅读内容安全领域论文', 25, 45, '上海', 1);
+
+-- 50 OPPO
+INSERT INTO job (company_id, title, category_id, description, requirements, salary_min, salary_max, location, status) VALUES
+(50, '2026届影像算法实习生', 85, '手机相机AI算法（美颜/夜景/人像分割）研发实习', '计算机视觉/人工智能相关专业在读\n熟练OpenCV/PyTorch，熟悉图像增强、超分、去噪、RAW域处理\n有手机摄影/计算摄影项目或竞赛经验优先\n熟悉移动端部署（NCNN/TNN/MNN）加分\n数学基础扎实，代码能力强\n英语六级以上，能阅读CV领域论文', 7, 14, '东莞', 1),
+(50, '移动端开发工程师 (社招)', 59, 'ColorOS系统/相机APP底层与AI功能开发', '计算机/电子相关本科及以上\n3年以上Android系统/APP开发经验，熟悉AOSP/Framework层\n有影像算法集成或相机HAL层经验优先\n熟悉JNI/Native开发、性能优化\n抗压能力强，能适应手机项目节奏', 22, 42, '东莞', 1),
+(50, '2026届嵌入式实习生', 69, '手机SoC底层驱动开发实习', '嵌入式/电子相关专业在读\n熟练C/C++，熟悉Linux内核驱动\n有高通/联发科平台经验加分\n调试能力强', 5, 11, '东莞', 1);
+
+-- 51 vivo
+INSERT INTO job (company_id, title, category_id, description, requirements, salary_min, salary_max, location, status) VALUES
+(51, '2026届相机算法实习生', 85, '手机影像AI算法（人像/夜景/视频防抖）研发实习', '计算机视觉相关专业在读\n熟练PyTorch/OpenCV，熟悉图像分割/增强/防抖算法\n有手机相机项目经验优先\n熟悉移动端推理框架加分\n英语六级以上', 7, 14, '东莞', 1),
+(51, 'AI系统工程师 (社招)', 99, 'OriginOS AI功能规划与落地', '产品/计算机相关本科及以上\n3年以上AI产品或系统集成经验\n熟悉大模型在手机端的应用场景优先\n沟通协调能力强，业务理解深', 25, 45, '东莞', 1);
+
+-- 52 联想集团
+INSERT INTO job (company_id, title, category_id, description, requirements, salary_min, salary_max, location, status) VALUES
+(52, '2026届AI服务器实习生', 34, 'AI训练/推理服务器硬件测试与优化实习', '计算机/电子相关专业在读\n了解服务器架构、GPU集群基本原理\n有AI硬件测试或服务器项目经验加分\n动手能力强，英语四级以上', 5, 11, '北京', 1),
+(52, '云服务器架构师 (社招)', 94, '联想ThinkSystem云原生服务器设计与优化', '计算机/电子相关本科及以上\n5年以上服务器架构经验\n精通K8s、GPU虚拟化、RDMA\n有AI服务器量产经验优先\n系统设计能力强，英语良好', 30, 55, '北京', 1);
+
+-- 53 海尔智家
+INSERT INTO job (company_id, title, category_id, description, requirements, salary_min, salary_max, location, status) VALUES
+(53, '2026届AIoT实习生', 33, '智能家居场景感知与联动算法实习', '物联网/计算机相关专业在读\n熟悉设备互联协议（Matter/Zigbee/Wi-Fi）\n有智能家居项目经验加分\nPython基础好', 5, 11, '青岛', 1),
+(53, '智能家居产品经理 (社招)', 99, '智慧家庭场景产品规划与落地', '工业设计/电子/市场相关本科及以上\n3年以上IoT/智能家居产品经验\n熟悉用户需求挖掘与场景设计\n沟通能力强，英语良好', 22, 40, '青岛', 1);
+
+-- 54 美的集团
+INSERT INTO job (company_id, title, category_id, description, requirements, salary_min, salary_max, location, status) VALUES
+(54, '2026届机器人算法实习生', 85, '家电服务机器人路径规划/避障/抓取算法实习', '机器人/计算机相关专业在读\n熟悉SLAM、路径规划（A*/RRT/DWA）、机械臂运动学\n有ROS/ROS2项目经验优先\n数学基础好', 6, 13, '佛山', 1),
+(54, '智能制造工程师 (社招)', 34, '家电生产线自动化与机器人集成优化', '自动化/机械工程相关本科及以上\n3年以上智能制造/工业机器人经验\n熟悉PLC、工业视觉、MES系统\n项目执行力强，能适应现场调试', 20, 38, '佛山', 1);
+
+-- 55 广汽埃安
+INSERT INTO job (company_id, title, category_id, description, requirements, salary_min, salary_max, location, status) VALUES
+(55, '2026届自动驾驶实习生', 85, '纯电平台感知/规划/控制算法实习', 'AI/车辆工程相关专业在读\n熟悉端到端自动驾驶或传统模块化方案\n有仿真测试经验加分\nPyTorch/MATLAB基础', 7, 14, '广州', 1),
+(55, '三电系统工程师 (社招)', 31, '电池/电机/电控系统集成与标定', '电气/车辆相关本科及以上\n3年以上新能源汽车三电经验\n熟悉BMS/Motor Control/VCU\n有量产经验优先', 22, 42, '广州', 1);
+
+-- 56 小鹏汽车
+INSERT INTO job (company_id, title, category_id, description, requirements, salary_min, salary_max, location, status) VALUES
+(56, '2026届城市NOA实习生', 85, '端到端城市领航规划/控制/预测算法实习', '人工智能/车辆工程相关专业在读\n熟悉模仿学习/强化学习/Transformer-based规划\n有轨迹规划项目或竞赛经验优先\nPyTorch熟练，数学基础扎实\n英语六级以上\n实习需高强度参与', 8, 15, '广州', 1),
+(56, '自动驾驶规划工程师 (社招)', 85, '城市/高速NOA规划与决策优化', '计算机/AI相关硕士及以上\n3年以上自动驾驶规划经验\n熟悉行为规划、轨迹生成、MPC/IDM\n有量产经验优先\n抗压能力强', 30, 55, '广州', 1),
+(56, '2026届测试实习生', 90, '智能驾驶仿真与道路测试实习', '计算机相关专业在读\n熟悉Carla/LGSVL/SUMMIT仿真平台\n有自动驾驶测试脚本经验加分', 5, 11, '广州', 1);
+
+-- 57 零跑汽车
+INSERT INTO job (company_id, title, category_id, description, requirements, salary_min, salary_max, location, status) VALUES
+(57, '2026届电池管理实习生', 36, 'BMS算法开发与电池测试实习', '电气/控制相关专业在读\n熟悉SOC/SOH估算、均衡策略\n有电池测试经验加分\nMATLAB/Python基础', 5, 11, '金华', 1),
+(57, '智能驾驶工程师 (社招)', 85, '纯电平台自动驾驶感知/规划开发', 'AI/车辆相关本科及以上\n3年以上自动驾驶经验\n有量产车型经验优先\n代码与工程能力强', 25, 45, '金华', 1);
+
+-- 58 DeepSeek
+INSERT INTO job (company_id, title, category_id, description, requirements, salary_min, salary_max, location, status) VALUES
+(58, '2026届大模型训练实习生', 82, '国产开源大模型预训练/后训练/SFT/RLHF全流程实习', '人工智能/计算机/数学相关专业硕士/博士在读（2026届优先）\n熟练PyTorch生态，熟悉Transformer实现细节、混合精度训练、梯度累积、ZeRO-Offload/ZeRO-Infinity等显存优化技巧\n有参与亿参数以上模型训练经验，或成功复现LLaMA/Mistral/Yi/GLM/Qwen等开源模型优先\n熟悉分布式训练框架（DeepSpeed、Megatron-LM、FSDP、Colossal-AI、FlashAttention-2）至少2种以上，能独立配置多节点训练任务\n了解大模型数据处理全链路（去重、过滤、tokenization、packing、多模态数据混合、质量评估）\n具备较强的工程调试能力，能快速定位loss爆炸/NaN/梯度消失/收敛慢等问题，并提出解决方案\n数学基础扎实（最优化理论、概率论、线性代数），代码能力强，追求训练效率、稳定性与可复现性\n英语六级及以上，能阅读Arxiv最新大模型论文（NeurIPS/ICLR/ICML），快速跟进社区进展与复现代码\n实习期间需全职或每周5天以上到岗，能适应高强度、高压力研发环境，责任心极强、团队协作主动、乐于分享技术', 8, 16, '上海', 1),
+(58, '推理优化工程师 (社招)', 82, 'vLLM/TensorRT-LLM/自研推理引擎的高性能部署、量化、加速与服务化', '本科及以上学历，计算机/AI相关专业\n3–8年大模型推理优化经验，深入理解KV Cache管理、PagedAttention、FlashAttention-2、连续批处理、Speculative Decoding等技术\n熟练掌握TensorRT、vLLM、TGI、ONNX Runtime、TVM等主流推理框架，能独立完成模型转换、量化（INT8/INT4/AWQ/GPTQ/LLM.int8）、融合优化\n有生产环境部署千卡/万卡规模大模型经验，熟悉GPU/昇腾/昆仑芯等异构硬件推理加速优先\n具备优秀的性能分析与调优能力，能使用Nsight Systems/Compute、nvprof、TensorBoard等工具定位瓶颈并优化吞吐/延迟\n熟悉推理服务工程化（FastAPI/ Triton Inference Server、负载均衡、动态批处理、模型多版本管理、监控告警）\n代码工程能力强，熟悉CI/CD、容器化（Docker/K8s）、自动化测试\n英语良好，能阅读英文技术文档、参与国际社区讨论、跟踪最新推理论文\n抗压能力强，能应对紧急线上推理问题、快速响应业务需求，支持7×24值班', 28, 50, '上海', 1),
+(58, '2026届Python后端实习生', 70, '大模型服务化API网关、推理平台后端开发实习', '计算机相关专业在读\n熟练Python后端开发，精通FastAPI/Flask/Django，熟悉异步编程（asyncio）、WebSocket\n了解大模型推理服务常见需求（多模型加载、动态批处理、流式输出、Token限流）\n有高并发Web服务开发或API网关经验加分\n熟悉Docker、K8s基础，了解Prometheus/Grafana监控加分\n代码规范强，测试意识好，英语四级以上\n每周至少4天到岗，实习期能适应快速迭代', 5, 12, '上海', 1),
+(58, '大模型安全工程师 (社报)', 91, '大模型红队测试、对抗样本生成、安全防护与对齐实习/社招', '人工智能/网络安全相关专业硕士及以上\n3年以上大模型安全或红队测试经验\n熟悉Prompt Injection、Jailbreak、Data Poisoning、对抗攻击、后门植入等大模型安全攻击方式\n有LLM安全评估框架（Garak、LangChain Guardrails、NeMo Guardrails）使用或开发经验优先\n能设计自动化红队测试pipeline，生成高质量对抗样本并验证模型鲁棒性\n熟悉安全对齐技术（RLHF with safety reward、Constitutional AI、Self-Remind）\n代码能力强，熟悉PyTorch，能快速实现攻击/防御算法\n英语六级以上，能阅读安全领域最新论文（USENIX Security、CCS、arXiv安全专题）\n责任心极强，具备伦理意识，能适应高保密研发环境', 25, 45, '上海', 1);
+
+-- 59 Moonshot AI（Kimi）
+INSERT INTO job (company_id, title, category_id, description, requirements, salary_min, salary_max, location, status) VALUES
+(59, '2026届长上下文大模型实习生', 82, 'Kimi长文本/长上下文训练、位置编码优化、RoPE扩展实习', '人工智能/NLP相关专业硕士/博士在读\n熟练PyTorch，熟悉Transformer长序列处理（ALiBi、RoPE、NTK、PI、YaRN等）\n有长文档/长上下文模型训练或微调经验优先\n了解长序列训练稳定性问题（注意力稀疏化、梯度检查点、激活重计算）\n数学基础扎实，能独立设计实验验证新位置编码或注意力机制\n英语六级以上，能跟踪长上下文领域最新进展\n实习需高强度参与，抗压能力强', 8, 15, '北京', 1),
+(59, '多模态大模型工程师 (社招)', 83, 'Kimi视觉+语言长上下文融合、对齐与应用开发', '计算机视觉/NLP相关硕士及以上\n3年以上多模态大模型经验，熟悉LLaVA系列、Kosmos、Qwen-VL、InternVL等\n有长文本+视觉融合、文档理解、多页PDF/长视频理解经验优先\n熟练分布式训练与推理优化\n业务理解强，能推动产品落地\n英语良好', 30, 55, '北京', 1),
+(59, '2026届产品实习生', 99, 'Kimi长文本/多模态产品功能规划与用户体验优化实习', '产品/计算机相关专业在读\n对大模型产品有热情，了解长上下文应用场景\n有产品实习或竞品分析经验加分\n文档撰写与沟通能力强', 6, 12, '北京', 1);
+
+-- 60 智谱AI（GLM）
+INSERT INTO job (company_id, title, category_id, description, requirements, salary_min, salary_max, location, status) VALUES
+(60, '2026届GLM微调实习生', 82, 'GLM系列模型垂直领域SFT/LoRA/RLHF微调实习', '人工智能相关专业在读\n熟练PEFT/LoRA/QLoRA，熟悉指令微调与偏好对齐流程\n有垂直领域模型微调经验优先\nPyTorch工程能力强\n英语六级以上', 7, 14, '北京', 1),
+(60, '对话系统工程师 (社招)', 86, 'GLM智能体/多轮对话/工具调用系统开发与优化', 'NLP/AI相关硕士及以上\n3年以上对话系统经验，熟悉Agent框架（ReAct/Toolformer/LangChain）\n有开源对话模型贡献或复杂多轮对话项目优先\n熟悉RAG、记忆机制、长上下文管理\n代码与产品思维兼备', 28, 50, '北京', 1),
+(60, '2026届测试实习生', 88, '大模型自动化评测与红蓝队测试实习', '计算机相关专业在读\n熟练Python + 测试框架，了解大模型评测指标\n细心耐心，数据分析能力强', 5, 11, '北京', 1);
+
+-- 61 MiniMax
+INSERT INTO job (company_id, title, category_id, description, requirements, salary_min, salary_max, location, status) VALUES
+(61, '2026届多模态对话实习生', 86, '海螺AI/Talkie娱乐向多模态对话模型实习', 'NLP/AI相关专业在读\n熟悉多模态对话系统、角色扮演、情感对齐\n有娱乐/情感对话项目经验加分\nPyTorch基础好', 7, 14, '上海', 1),
+(61, '娱乐大模型工程师 (社招)', 83, 'Talkie等娱乐向多模态生成与交互开发', '3年以上生成模型经验\n熟悉Stable Diffusion/LLaVA在娱乐场景应用\n有角色扮演/情感陪伴模型经验优先\n创意与工程能力兼备', 28, 50, '上海', 1);
+
+-- 62 StepFun（阶跃星辰）
+INSERT INTO job (company_id, title, category_id, description, requirements, salary_min, salary_max, location, status) VALUES
+(62, '2026届多模态融合实习生', 83, '视觉/语音/文本多模态大模型融合训练实习', 'AI相关专业在读\n熟悉多模态预训练与融合架构\n有视觉+语音项目经验加分\nPyTorch熟练，数学基础好', 7, 14, '北京', 1),
+(62, '多模态大模型工程师 (社招)', 83, '阶跃星辰视觉/语音/文本统一多模态模型研发', '3年以上多模态经验\n熟悉端到端多模态Transformer\n有语音+视觉融合量产经验优先\n工程能力强，抗压', 30, 55, '北京', 1),
+(62, '2026届推理工程师实习生', 82, '多模态模型推理加速与服务化实习', '计算机相关专业在读\n熟悉vLLM/TensorRT/ONNX Runtime\n有大模型部署经验加分\n性能调优意识强', 6, 13, '北京', 1);
+
+
+
+
+
+INSERT INTO sys_user (username, password, role, status) VALUES
+('li_xiaoyu001', '$2b$10$SyXM2bnG5LpgjYal37SbfuT0X4Q8IrD4jzwmo9xN04p4fd8I/wD/m', 'STUDENT', 1),
+('wang_zhifan',  '$2b$10$SyXM2bnG5LpgjYal37SbfuT0X4Q8IrD4jzwmo9xN04p4fd8I/wD/m', 'STUDENT', 1),
+('zhang_ruiqi',  '$2b$10$SyXM2bnG5LpgjYal37SbfuT0X4Q8IrD4jzwmo9xN04p4fd8I/wD/m', 'STUDENT', 1),
+('chen_yuhan',   '$2b$10$SyXM2bnG5LpgjYal37SbfuT0X4Q8IrD4jzwmo9xN04p4fd8I/wD/m', 'STUDENT', 1),
+('liu_haoran',   '$2b$10$SyXM2bnG5LpgjYal37SbfuT0X4Q8IrD4jzwmo9xN04p4fd8I/wD/m', 'STUDENT', 1),
+('yang_xinyi',   '$2b$10$SyXM2bnG5LpgjYal37SbfuT0X4Q8IrD4jzwmo9xN04p4fd8I/wD/m', 'STUDENT', 1),
+('zhao_mengyao', '$2b$10$SyXM2bnG5LpgjYal37SbfuT0X4Q8IrD4jzwmo9xN04p4fd8I/wD/m', 'STUDENT', 1),
+('wu_jiaxin',    '$2b$10$SyXM2bnG5LpgjYal37SbfuT0X4Q8IrD4jzwmo9xN04p4fd8I/wD/m', 'STUDENT', 1),
+('zhou_tianyi',  '$2b$10$SyXM2bnG5LpgjYal37SbfuT0X4Q8IrD4jzwmo9xN04p4fd8I/wD/m', 'STUDENT', 1),
+('xu_chenxi',    '$2b$10$SyXM2bnG5LpgjYal37SbfuT0X4Q8IrD4jzwmo9xN04p4fd8I/wD/m', 'STUDENT', 1),
+('sun_yifei',    '$2b$10$SyXM2bnG5LpgjYal37SbfuT0X4Q8IrD4jzwmo9xN04p4fd8I/wD/m', 'STUDENT', 1),
+('ma_yuning',    '$2b$10$SyXM2bnG5LpgjYal37SbfuT0X4Q8IrD4jzwmo9xN04p4fd8I/wD/m', 'STUDENT', 1),
+('hu_jingyi',    '$2b$10$SyXM2bnG5LpgjYal37SbfuT0X4Q8IrD4jzwmo9xN04p4fd8I/wD/m', 'STUDENT', 1),
+('guo_zihan',    '$2b$10$SyXM2bnG5LpgjYal37SbfuT0X4Q8IrD4jzwmo9xN04p4fd8I/wD/m', 'STUDENT', 1),
+('lin_xuan',     '$2b$10$SyXM2bnG5LpgjYal37SbfuT0X4Q8IrD4jzwmo9xN04p4fd8I/wD/m', 'STUDENT', 1),
+('feng_yuxuan',  '$2b$10$SyXM2bnG5LpgjYal37SbfuT0X4Q8IrD4jzwmo9xN04p4fd8I/wD/m', 'STUDENT', 1),
+('deng_ziyue',   '$2b$10$SyXM2bnG5LpgjYal37SbfuT0X4Q8IrD4jzwmo9xN04p4fd8I/wD/m', 'STUDENT', 1),
+('cao_yuchen',   '$2b$10$SyXM2bnG5LpgjYal37SbfuT0X4Q8IrD4jzwmo9xN04p4fd8I/wD/m', 'STUDENT', 1),
+('peng_xiaohan', '$2b$10$SyXM2bnG5LpgjYal37SbfuT0X4Q8IrD4jzwmo9xN04p4fd8I/wD/m', 'STUDENT', 1),
+('jiang_mingze', '$2b$10$SyXM2bnG5LpgjYal37SbfuT0X4Q8IrD4jzwmo9xN04p4fd8I/wD/m', 'STUDENT', 1),
+('he_yutong',    '$2b$10$SyXM2bnG5LpgjYal37SbfuT0X4Q8IrD4jzwmo9xN04p4fd8I/wD/m', 'STUDENT', 1),
+('tang_junyi',   '$2b$10$SyXM2bnG5LpgjYal37SbfuT0X4Q8IrD4jzwmo9xN04p4fd8I/wD/m', 'STUDENT', 1),
+('song_xinyue',  '$2b$10$SyXM2bnG5LpgjYal37SbfuT0X4Q8IrD4jzwmo9xN04p4fd8I/wD/m', 'STUDENT', 1),
+('du_yifan',     '$2b$10$SyXM2bnG5LpgjYal37SbfuT0X4Q8IrD4jzwmo9xN04p4fd8I/wD/m', 'STUDENT', 1),
+('shen_chenyu',  '$2b$10$SyXM2bnG5LpgjYal37SbfuT0X4Q8IrD4jzwmo9xN04p4fd8I/wD/m', 'STUDENT', 1),
+('wei_zixuan',   '$2b$10$SyXM2bnG5LpgjYal37SbfuT0X4Q8IrD4jzwmo9xN04p4fd8I/wD/m', 'STUDENT', 1),
+('han_yutian',   '$2b$10$SyXM2bnG5LpgjYal37SbfuT0X4Q8IrD4jzwmo9xN04p4fd8I/wD/m', 'STUDENT', 1),
+('lv_xiaotong',  '$2b$10$SyXM2bnG5LpgjYal37SbfuT0X4Q8IrD4jzwmo9xN04p4fd8I/wD/m', 'STUDENT', 1),
+('jin_haoyu',    '$2b$10$SyXM2bnG5LpgjYal37SbfuT0X4Q8IrD4jzwmo9xN04p4fd8I/wD/m', 'STUDENT', 1),
+('shi_zimo',     '$2b$10$SyXM2bnG5LpgjYal37SbfuT0X4Q8IrD4jzwmo9xN04p4fd8I/wD/m', 'STUDENT', 1),
+('fu_yingrui',   '$2b$10$SyXM2bnG5LpgjYal37SbfuT0X4Q8IrD4jzwmo9xN04p4fd8I/wD/m', 'STUDENT', 1),
+('qian_zhihao',  '$2b$10$SyXM2bnG5LpgjYal37SbfuT0X4Q8IrD4jzwmo9xN04p4fd8I/wD/m', 'STUDENT', 1),
+('hong_xinran',  '$2b$10$SyXM2bnG5LpgjYal37SbfuT0X4Q8IrD4jzwmo9xN04p4fd8I/wD/m', 'STUDENT', 1),
+('yan_ziyi',     '$2b$10$SyXM2bnG5LpgjYal37SbfuT0X4Q8IrD4jzwmo9xN04p4fd8I/wD/m', 'STUDENT', 1),
+('cheng_yaowen', '$2b$10$SyXM2bnG5LpgjYal37SbfuT0X4Q8IrD4jzwmo9xN04p4fd8I/wD/m', 'STUDENT', 1),
+('luo_tianle',   '$2b$10$SyXM2bnG5LpgjYal37SbfuT0X4Q8IrD4jzwmo9xN04p4fd8I/wD/m', 'STUDENT', 1),
+('xie_jiahui',   '$2b$10$SyXM2bnG5LpgjYal37SbfuT0X4Q8IrD4jzwmo9xN04p4fd8I/wD/m', 'STUDENT', 1),
+('dai_yilin',    '$2b$10$SyXM2bnG5LpgjYal37SbfuT0X4Q8IrD4jzwmo9xN04p4fd8I/wD/m', 'STUDENT', 1),
+('qiao_zhiyuan', '$2b$10$SyXM2bnG5LpgjYal37SbfuT0X4Q8IrD4jzwmo9xN04p4fd8I/wD/m', 'STUDENT', 1),
+('bao_xuanxuan', '$2b$10$SyXM2bnG5LpgjYal37SbfuT0X4Q8IrD4jzwmo9xN04p4fd8I/wD/m', 'STUDENT', 1),
+('meng_zixuan',  '$2b$10$SyXM2bnG5LpgjYal37SbfuT0X4Q8IrD4jzwmo9xN04p4fd8I/wD/m', 'STUDENT', 1),
+('shi_yichen',   '$2b$10$SyXM2bnG5LpgjYal37SbfuT0X4Q8IrD4jzwmo9xN04p4fd8I/wD/m', 'STUDENT', 1),
+('ye_haoran',    '$2b$10$SyXM2bnG5LpgjYal37SbfuT0X4Q8IrD4jzwmo9xN04p4fd8I/wD/m', 'STUDENT', 1),
+('mo_yihan',     '$2b$10$SyXM2bnG5LpgjYal37SbfuT0X4Q8IrD4jzwmo9xN04p4fd8I/wD/m', 'STUDENT', 1),
+('pan_junhao',   '$2b$10$SyXM2bnG5LpgjYal37SbfuT0X4Q8IrD4jzwmo9xN04p4fd8I/wD/m', 'STUDENT', 1),
+('su_xinlei',    '$2b$10$SyXM2bnG5LpgjYal37SbfuT0X4Q8IrD4jzwmo9xN04p4fd8I/wD/m', 'STUDENT', 1),
+('ding_yuxuan',  '$2b$10$SyXM2bnG5LpgjYal37SbfuT0X4Q8IrD4jzwmo9xN04p4fd8I/wD/m', 'STUDENT', 1),
+('ren_chenxi',   '$2b$10$SyXM2bnG5LpgjYal37SbfuT0X4Q8IrD4jzwmo9xN04p4fd8I/wD/m', 'STUDENT', 1),
+('jin_zihan',    '$2b$10$SyXM2bnG5LpgjYal37SbfuT0X4Q8IrD4jzwmo9xN04p4fd8I/wD/m', 'STUDENT', 1),
+('cui_yutong',   '$2b$10$SyXM2bnG5LpgjYal37SbfuT0X4Q8IrD4jzwmo9xN04p4fd8I/wD/m', 'STUDENT', 1);

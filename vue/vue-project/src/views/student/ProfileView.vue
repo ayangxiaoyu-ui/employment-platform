@@ -22,7 +22,7 @@ const router = useRouter()
 const isEditing = ref(false)
 const loading = ref(false)
 
-// 从 token 获取用户名，作为默认姓名
+// 从 token 获取用户名，作为默认姓名 fallback
 const usernameFromToken = computed(() => getUsernameFromToken(getToken() || '') || '未知用户')
 
 const form = ref<StudentProfile>({
@@ -38,9 +38,23 @@ const form = ref<StudentProfile>({
 
 const formBackup = ref<StudentProfile>({ ...form.value })
 
-// 用于头像文件预览和上传
+// 头像文件 & 预览
 const avatarFile = ref<File | null>(null)
 const avatarPreview = ref<string>('')
+
+// 默认头像文字（姓氏首字母）
+const defaultAvatarText = computed(() => {
+  const name = (form.value.name || usernameFromToken.value || '').trim()
+  if (!name || name === '未知用户') return '匿'
+
+  // 优先取第一个中文字符
+  const chineseMatch = name.match(/^[\u4e00-\u9fa5]/)
+  if (chineseMatch) return chineseMatch[0]
+
+  // 英文或其他 → 取首字母大写（支持名字缩写如 John Smith → J）
+  const cleaned = name.replace(/\s+/g, '')
+  return cleaned[0]?.toUpperCase() || '?'
+})
 
 onMounted(() => {
   if (!getToken()) {
@@ -82,7 +96,6 @@ async function fetchStudentProfile() {
         graduationYear: data.graduationYear || null,
         avatar: data.avatar || '',
       }
-      // 设置预览图
       avatarPreview.value = data.avatar ? `http://localhost:9999${data.avatar}` : ''
       formBackup.value = { ...form.value }
     } else {
@@ -102,19 +115,17 @@ function triggerFileInput() {
   if (input) input.click()
 }
 
-// 处理文件选择并立即上传
+// 处理头像上传
 async function handleAvatarChange(e: Event) {
   const target = e.target as HTMLInputElement
   const file = target.files?.[0]
-
   if (!file) return
 
-  // 校验文件类型和大小
   if (!file.type.startsWith('image')) {
     ElMessage.error('只允许上传图片文件')
     return
   }
-  if (file.size > 5 * 1024 * 1024) { // 5MB
+  if (file.size > 5 * 1024 * 1024) {
     ElMessage.error('文件大小不能超过 5MB')
     return
   }
@@ -123,17 +134,17 @@ async function handleAvatarChange(e: Event) {
 
   // 本地预览
   const reader = new FileReader()
-  reader.onload = (e) => {
-    avatarPreview.value = e.target?.result as string
+  reader.onload = (ev) => {
+    avatarPreview.value = ev.target?.result as string
   }
   reader.readAsDataURL(file)
 
-  // 立即上传到后端
+  // 上传到服务器
   loading.value = true
   try {
     const formData = new FormData()
     formData.append('file', file)
-    formData.append('userId', form.value.userId?.toString() || '1') // 请替换为真实 userId 来源
+    formData.append('userId', form.value.userId?.toString() || '1') // ★ 请确保这里有正确的 userId 来源
 
     const response = await fetch('http://localhost:9999/file/upload/avatar', {
       method: 'POST',
@@ -151,8 +162,8 @@ async function handleAvatarChange(e: Event) {
     const result = await response.json()
     if (result.code === '200') {
       ElMessage.success('头像上传成功')
-      // 更新 form.avatar 为后端返回的路径
       form.value.avatar = result.data.replace('http://localhost:9999', '') // 存相对路径
+      avatarPreview.value = `http://localhost:9999${form.value.avatar}`
     } else {
       ElMessage.error(result.msg || '上传失败')
     }
@@ -160,7 +171,6 @@ async function handleAvatarChange(e: Event) {
     ElMessage.error('上传出错：' + (error instanceof Error ? error.message : '未知错误'))
   } finally {
     loading.value = false
-    // 清空 input
     target.value = ''
   }
 }
@@ -198,7 +208,6 @@ async function saveProfile() {
       ElMessage.success('保存成功')
       isEditing.value = false
       formBackup.value = { ...form.value }
-      // 更新预览
       avatarPreview.value = form.value.avatar ? `http://localhost:9999${form.value.avatar}` : ''
     } else {
       ElMessage.error(result.msg || '保存失败')
@@ -209,10 +218,9 @@ async function saveProfile() {
     loading.value = false
   }
 }
-// 新增：返回主页
+
 function goToHome() {
-  router.push({ name: 'student' })  // 修改为你的主页路由名称
-  // 或者写死路径：router.push('/')
+  router.push({ name: 'student' }) // 或写死路径：router.push('/')
 }
 </script>
 
@@ -242,17 +250,19 @@ function goToHome() {
         </div>
 
         <div class="form-container">
-          <!-- 头像上传区域 -->
+          <!-- 头像 -->
           <div class="form-item avatar-item">
             <span class="label">头像</span>
             <div class="avatar-preview">
               <img
                 v-if="avatarPreview"
                 :src="avatarPreview"
-                alt="头像预览"
+                alt="头像"
                 class="avatar-img"
               />
-              <div v-else class="avatar-placeholder">暂无头像</div>
+              <div v-else class="avatar-default">
+                {{ defaultAvatarText }}
+              </div>
             </div>
 
             <input
@@ -274,7 +284,7 @@ function goToHome() {
             </el-button>
           </div>
 
-          <!-- 姓名 -->
+          <!-- 其他字段 -->
           <div class="form-item">
             <span class="label">姓名</span>
             <input
@@ -286,7 +296,6 @@ function goToHome() {
             />
           </div>
 
-          <!-- 性别 -->
           <div class="form-item">
             <span class="label">性别</span>
             <select
@@ -302,7 +311,6 @@ function goToHome() {
             </select>
           </div>
 
-          <!-- 联系电话 -->
           <div class="form-item">
             <span class="label">联系电话</span>
             <input
@@ -315,7 +323,6 @@ function goToHome() {
             />
           </div>
 
-          <!-- 邮箱 -->
           <div class="form-item">
             <span class="label">邮箱</span>
             <input
@@ -328,7 +335,6 @@ function goToHome() {
             />
           </div>
 
-          <!-- 毕业院校 -->
           <div class="form-item">
             <span class="label">毕业院校</span>
             <input
@@ -340,7 +346,6 @@ function goToHome() {
             />
           </div>
 
-          <!-- 专业 -->
           <div class="form-item">
             <span class="label">专业</span>
             <input
@@ -352,7 +357,6 @@ function goToHome() {
             />
           </div>
 
-          <!-- 毕业年份 -->
           <div class="form-item">
             <span class="label">毕业年份</span>
             <input
@@ -437,14 +441,15 @@ function goToHome() {
 .avatar-preview {
   width: 120px;
   height: 120px;
-  border-radius: 12px;
+  border-radius: 50%;
   overflow: hidden;
-  background: #f0f4ff;
+  background: #e6f0ff;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 12px;
-  border: 2px dashed #0168d1;
+  border: 2px solid #a3d0ff;
+  position: relative;
 }
 
 .avatar-img {
@@ -453,10 +458,17 @@ function goToHome() {
   object-fit: cover;
 }
 
-.avatar-placeholder {
-  color: #a0c4ff;
-  font-size: 14px;
-  text-align: center;
+.avatar-default {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 52px;
+  font-weight: 500;
+  color: #409eff;
+  background: linear-gradient(135deg, #a3d0ff 0%, #e6f0ff 100%);
+  user-select: none;
 }
 
 .label {
