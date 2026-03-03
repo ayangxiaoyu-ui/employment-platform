@@ -10,6 +10,4 @@ public interface CompanyService extends IService<Company> {
      */
     Company getByUserId(Long userId);
 
-    // getById 和 saveOrUpdate 可以省略，因为 IService 已经提供了
-    // 但如果你想保留自定义签名，可以保留
 }

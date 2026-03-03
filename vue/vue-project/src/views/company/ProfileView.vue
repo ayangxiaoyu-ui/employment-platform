@@ -81,7 +81,7 @@ async function fetchCompanyProfile() {
       formBackup.value = { ...form.value }
       console.log(form.value.scale);
       console.log('原始规模:', rawScale, '→ 标准化后:', form.value.scale)
-      
+
     }
   } catch (error) {
     ElMessage.error('网络错误：' + (error instanceof Error ? error.message : '未知错误'))
@@ -216,12 +216,7 @@ async function handleLogoChange(e: Event) {
         <div class="header">
           <h2>企业信息</h2>
           <div class="actions">
-            <el-button 
-              type="info" 
-              plain 
-              :icon="House" 
-              @click="goToHome"
-            >
+            <el-button type="info" plain :icon="House" @click="goToHome">
               返回主页
             </el-button>
 
@@ -238,30 +233,13 @@ async function handleLogoChange(e: Event) {
           <div class="form-item avatar-item">
             <span class="label">企业 Logo</span>
             <div class="avatar-preview">
-              <img
-                v-if="logoPreview"
-                :src="logoPreview"
-                alt="Logo 预览"
-                class="avatar-img"
-              />
+              <img v-if="logoPreview" :src="logoPreview" alt="Logo 预览" class="avatar-img" />
               <div v-else class="avatar-placeholder">暂无 Logo</div>
             </div>
 
-            <input
-              id="logo-upload"
-              type="file"
-              accept="image/*"
-              style="display: none"
-              @change="handleLogoChange"
-            />
+            <input id="logo-upload" type="file" accept="image/*" style="display: none" @change="handleLogoChange" />
 
-            <el-button
-              v-if="isEditing"
-              type="primary"
-              plain
-              size="small"
-              @click="triggerLogoInput"
-            >
+            <el-button v-if="isEditing" type="primary" plain size="small" @click="triggerLogoInput">
               上传 Logo
             </el-button>
           </div>
@@ -269,61 +247,36 @@ async function handleLogoChange(e: Event) {
           <!-- 企业名称 -->
           <div class="form-item">
             <span class="label">企业名称</span>
-            <input
-              v-model="form.name"
-              :disabled="!isEditing"
-              class="input"
-              :class="{ 'input-edit': isEditing }"
-              placeholder="请输入企业名称"
-            />
+            <input v-model="form.name" :disabled="!isEditing" class="input" :class="{ 'input-edit': isEditing }"
+              placeholder="请输入企业名称" />
           </div>
 
           <!-- 企业简介 -->
           <div class="form-item">
             <span class="label">企业简介</span>
-            <textarea
-              v-model="form.description"
-              :disabled="!isEditing"
-              class="input textarea"
-              :class="{ 'input-edit': isEditing }"
-              placeholder="请输入企业简介"
-              rows="4"
-            ></textarea>
+            <textarea v-model="form.description" :disabled="!isEditing" class="input textarea"
+              :class="{ 'input-edit': isEditing }" placeholder="请输入企业简介" rows="4"></textarea>
           </div>
 
           <!-- 详细地址 -->
           <div class="form-item">
             <span class="label">详细地址</span>
-            <input
-              v-model="form.address"
-              :disabled="!isEditing"
-              class="input"
-              :class="{ 'input-edit': isEditing }"
-              placeholder="请输入详细地址"
-            />
+            <input v-model="form.address" :disabled="!isEditing" class="input" :class="{ 'input-edit': isEditing }"
+              placeholder="请输入详细地址" />
           </div>
 
           <!-- 所属行业 -->
           <div class="form-item">
             <span class="label">所属行业</span>
-            <input
-              v-model="form.industry"
-              :disabled="!isEditing"
-              class="input"
-              :class="{ 'input-edit': isEditing }"
-              placeholder="请输入所属行业"
-            />
+            <input v-model="form.industry" :disabled="!isEditing" class="input" :class="{ 'input-edit': isEditing }"
+              placeholder="请输入所属行业" />
           </div>
 
           <!-- 人员规模 -->
           <div class="form-item">
             <span class="label">人员规模</span>
-            <select
-              v-model="form.scale"
-              :disabled="!isEditing"
-              class="input select"
-              :class="{ 'input-edit': isEditing }"
-            >
+            <select v-model="form.scale" :disabled="!isEditing" class="input select"
+              :class="{ 'input-edit': isEditing }">
               <option value="">请选择人员规模</option>
               <option value="5000人以下">5000人以下</option>
               <option value="5000-9999人">5000-9999人</option>
@@ -338,26 +291,15 @@ async function handleLogoChange(e: Event) {
           <!-- 联系人 -->
           <div class="form-item">
             <span class="label">联系人</span>
-            <input
-              v-model="form.contactPerson"
-              :disabled="!isEditing"
-              class="input"
-              :class="{ 'input-edit': isEditing }"
-              placeholder="请输入联系人"
-            />
+            <input v-model="form.contactPerson" :disabled="!isEditing" class="input"
+              :class="{ 'input-edit': isEditing }" placeholder="请输入联系人" />
           </div>
 
           <!-- 联系电话 -->
           <div class="form-item">
             <span class="label">联系电话</span>
-            <input
-              v-model="form.contactPhone"
-              :disabled="!isEditing"
-              type="tel"
-              class="input"
-              :class="{ 'input-edit': isEditing }"
-              placeholder="请输入联系电话"
-            />
+            <input v-model="form.contactPhone" :disabled="!isEditing" type="tel" class="input"
+              :class="{ 'input-edit': isEditing }" placeholder="请输入联系电话" />
           </div>
         </div>
       </div>

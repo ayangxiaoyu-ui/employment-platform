@@ -7,7 +7,7 @@ import {
     getUsernameFromToken,
     type UserRole,
     clearToken,
-} from '@/utils/auth'
+} from '@/utils/auth';
 
 const router = useRouter()
 
@@ -109,7 +109,7 @@ async function handleLogout() {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    position: relative; 
+    position: relative;
     gap: 24px;
     border-bottom: 1px solid var(--color-border);
     background-color: #0168d1;
@@ -146,7 +146,8 @@ async function handleLogout() {
 }
 
 .nav {
-    position: absolute;     /* 👈 关键 */
+    position: absolute;
+    /* 👈 关键 */
     left: 50%;
     transform: translateX(-50%);
     display: flex;
@@ -158,8 +159,9 @@ async function handleLogout() {
     font-size: 16px;
     color: #fff;
     position: relative;
-    padding: 0 16px; /* 给分割线留空间 */
-    text-decoration: none;  
+    padding: 0 16px;
+    /* 给分割线留空间 */
+    text-decoration: none;
 }
 
 

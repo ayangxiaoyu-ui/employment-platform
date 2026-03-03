@@ -233,12 +233,7 @@ function goToHome() {
         <div class="header">
           <h2>个人信息</h2>
           <div class="actions">
-            <el-button 
-              type="info" 
-              plain 
-              :icon="House" 
-              @click="goToHome"
-            >
+            <el-button type="info" plain :icon="House" @click="goToHome">
               返回主页
             </el-button>
             <el-button v-if="!isEditing" type="primary" @click="startEdit">编辑</el-button>
@@ -252,58 +247,33 @@ function goToHome() {
         <div class="form-container">
           <!-- 头像 -->
           <div class="form-item avatar-item">
-            <span class="label">头像</span>
             <div class="avatar-preview">
-              <img
-                v-if="avatarPreview"
-                :src="avatarPreview"
-                alt="头像"
-                class="avatar-img"
-              />
+              <img v-if="avatarPreview" :src="avatarPreview" alt="头像" class="avatar-img" />
               <div v-else class="avatar-default">
                 {{ defaultAvatarText }}
               </div>
             </div>
 
-            <input
-              id="avatar-upload"
-              type="file"
-              accept="image/*"
-              style="display: none"
-              @change="handleAvatarChange"
-            />
+            <input id="avatar-upload" type="file" accept="image/*" style="display: none" @change="handleAvatarChange" />
 
-            <el-button
-              v-if="isEditing"
-              type="primary"
-              plain
-              size="small"
-              @click="triggerFileInput"
-            >
+            <el-button v-if="isEditing" type="primary" plain size="small" @click="triggerFileInput">
               上传新头像
             </el-button>
+            <span class="label">头像</span>
+
           </div>
 
           <!-- 其他字段 -->
           <div class="form-item">
             <span class="label">姓名</span>
-            <input
-              v-model="form.name"
-              :disabled="!isEditing"
-              class="input"
-              :class="{ 'input-edit': isEditing }"
-              placeholder="请输入姓名"
-            />
+            <input v-model="form.name" :disabled="!isEditing" class="input" :class="{ 'input-edit': isEditing }"
+              placeholder="请输入姓名" />
           </div>
 
           <div class="form-item">
             <span class="label">性别</span>
-            <select
-              v-model="form.gender"
-              :disabled="!isEditing"
-              class="input select"
-              :class="{ 'input-edit': isEditing }"
-            >
+            <select v-model="form.gender" :disabled="!isEditing" class="input select"
+              :class="{ 'input-edit': isEditing }">
               <option value="">请选择性别</option>
               <option value="男">男</option>
               <option value="女">女</option>
@@ -313,60 +283,32 @@ function goToHome() {
 
           <div class="form-item">
             <span class="label">联系电话</span>
-            <input
-              v-model="form.phone"
-              :disabled="!isEditing"
-              type="tel"
-              class="input"
-              :class="{ 'input-edit': isEditing }"
-              placeholder="请输入联系电话"
-            />
+            <input v-model="form.phone" :disabled="!isEditing" type="tel" class="input"
+              :class="{ 'input-edit': isEditing }" placeholder="请输入联系电话" />
           </div>
 
           <div class="form-item">
             <span class="label">邮箱</span>
-            <input
-              v-model="form.email"
-              :disabled="!isEditing"
-              type="email"
-              class="input"
-              :class="{ 'input-edit': isEditing }"
-              placeholder="请输入邮箱"
-            />
+            <input v-model="form.email" :disabled="!isEditing" type="email" class="input"
+              :class="{ 'input-edit': isEditing }" placeholder="请输入邮箱" />
           </div>
 
           <div class="form-item">
             <span class="label">毕业院校</span>
-            <input
-              v-model="form.university"
-              :disabled="!isEditing"
-              class="input"
-              :class="{ 'input-edit': isEditing }"
-              placeholder="请输入毕业院校"
-            />
+            <input v-model="form.university" :disabled="!isEditing" class="input" :class="{ 'input-edit': isEditing }"
+              placeholder="请输入毕业院校" />
           </div>
 
           <div class="form-item">
             <span class="label">专业</span>
-            <input
-              v-model="form.major"
-              :disabled="!isEditing"
-              class="input"
-              :class="{ 'input-edit': isEditing }"
-              placeholder="请输入专业"
-            />
+            <input v-model="form.major" :disabled="!isEditing" class="input" :class="{ 'input-edit': isEditing }"
+              placeholder="请输入专业" />
           </div>
 
           <div class="form-item">
             <span class="label">毕业年份</span>
-            <input
-              v-model.number="form.graduationYear"
-              :disabled="!isEditing"
-              type="number"
-              class="input"
-              :class="{ 'input-edit': isEditing }"
-              placeholder="请输入毕业年份"
-            />
+            <input v-model.number="form.graduationYear" :disabled="!isEditing" type="number" class="input"
+              :class="{ 'input-edit': isEditing }" placeholder="请输入毕业年份" />
           </div>
         </div>
       </div>

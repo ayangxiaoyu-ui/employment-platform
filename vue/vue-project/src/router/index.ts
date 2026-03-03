@@ -10,6 +10,11 @@ const router = createRouter({
       redirect: '/login',
     },
     {
+      path: "/companies",
+      name: "companies",
+      component: () => import('../views/CompanyList.vue'),
+    },
+    {
       path: '/login',
       name: 'login',
       component: () => import('../views/LoginView.vue'),
