@@ -58,10 +58,10 @@ mybatis-plus:
 file:
   upload:
     # 开发阶段最方便：直接用项目内的 static 目录
-    base-path: ${user.dir}/src/main/resources/static/uploads/
+#    base-path: ${user.dir}/src/main/resources/static/uploads/
     # 或者写死绝对路径（Mac 示例）
     # base-path: /Users/晓钰/Documents/GitHub/employment-platform/springboot/src/main/resources/static/uploads/
-#    base-path: C:/Users/杨晓钰/Documents/GitHub/employment-platform/springboot/src/main/resources/static/uploads/
+    base-path: C:/Users/杨晓钰/Documents/GitHub/employment-platform/springboot/src/main/resources/static/uploads/
     avatar-sub-path: avatar/
     logo-sub-path: logo/
 

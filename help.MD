@@ -46,3 +46,13 @@ npm run dev
 监督学生就业进程、填报毕业去向
 数据统计与上报（就业率等）
 对下级账号进行创建、管理、权限分配等
+
+
+# 1. 卸载 v4 相关包（防止冲突）
+npm uninstall @tailwindcss/vite tailwindcss
+
+# 2. 安装 Tailwind v3（推荐用最新 v3 版本 3.4.17 或 3.4.x）
+npm install -D tailwindcss@3.4.17 postcss autoprefixer
+
+# 3. （可选但强烈推荐）重新生成配置文件（会覆盖旧的）
+npx tailwindcss init -p

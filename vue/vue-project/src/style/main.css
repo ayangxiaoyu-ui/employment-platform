@@ -1,0 +1,4 @@
+/* src/style.css 或 src/assets/main.css 等 */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

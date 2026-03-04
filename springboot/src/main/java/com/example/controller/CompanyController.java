@@ -80,4 +80,13 @@ public class CompanyController {
         }
         return null;
     }
+    @GetMapping("/{id}")
+    public Result<Company> getById(@PathVariable Long id) {
+        Company company = companyService.getById(id);
+        if (company == null) {
+            return Result.error("企业不存在");
+        }
+        return Result.success(company);
+    }
+
 }
