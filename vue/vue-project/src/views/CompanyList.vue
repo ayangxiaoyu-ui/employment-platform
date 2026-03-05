@@ -15,21 +15,21 @@
                             <el-icon>
                                 <OfficeBuilding />
                             </el-icon>
-                            {{ item.industry || "未填写" }}
+                            所属行业:{{ item.industry || "未填写" }}
                         </p>
 
                         <p class="info-item">
                             <el-icon>
                                 <UserFilled />
                             </el-icon>
-                            {{ item.scale || "未填写" }}
+                            人员规模: {{ item.scale || "未填写" }}
                         </p>
 
                         <p class="info-item">
                             <el-icon>
                                 <Location />
                             </el-icon>
-                            {{ item.address || "未填写" }}
+                            地址: {{ item.address || "未填写" }}
                         </p>
                     </div>
                 </el-card>
