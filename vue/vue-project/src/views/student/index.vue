@@ -1,6 +1,6 @@
 
 <template>
-  <div class="w-full">
+  <div class="w-[800px]">
     <SlideShow />
   </div>
 </template>

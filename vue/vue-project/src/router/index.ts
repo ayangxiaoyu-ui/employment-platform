@@ -20,6 +20,26 @@ const router = createRouter({
       component: () => import('@/views/CompanyDetail.vue')
     },
     {
+      path: '/company/jobs',
+      name: 'companyJobs',
+      component: () => import('../views/company/jobs.vue'),
+    },
+    {
+      path: '/company/resumes',
+      name: 'companyResumes',
+      component: () => import('../views/company/resumes.vue'),
+    },
+    {
+      path: '/admin/users',
+      name: 'adminUsers',
+      component: () => import('../views/admin/users.vue'),
+    },
+    {
+      path: '/admin/settings',
+      name: 'adminSettings',
+      component: () => import('../views/admin/settings.vue'),
+    },
+    {
       path: '/login',
       name: 'login',
       component: () => import('../views/LoginView.vue'),

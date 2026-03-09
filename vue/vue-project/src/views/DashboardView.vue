@@ -17,7 +17,7 @@ const viewComponent = computed(() => {
 </script>
 
 <template>
-  <div class="w-[800px] mx-auto px-4 py-4">
+  <div class=" mx-auto px-4 py-4">
     <component :is="viewComponent" />
   </div>
 </template>
