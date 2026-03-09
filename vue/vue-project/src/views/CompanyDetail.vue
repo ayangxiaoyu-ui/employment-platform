@@ -45,6 +45,10 @@
                     <p class="text-gray-700 mt-2 leading-relaxed">
                         {{ job.description }}
                     </p>
+                    <button @click="applyJob(job.id)"
+                        class="mt-3 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                        申请职位
+                    </button>
                 </div>
             </div>
 
@@ -79,6 +83,23 @@ const loadJobs = () => {
         }
     });
 };
+const applyJob = (jobId) => {
+    const studentId = 1; // TODO: 从登录信息获取
+    const resumeId = 1;  // TODO: 从简历选择获取
+
+    axios.post("/api/application/apply", {
+        jobId,
+        studentId,
+        resumeId
+    }).then(res => {
+        if (res.data.code === "200") {
+            ElMessage.success("投递成功！");
+        } else {
+            ElMessage.error(res.data.msg);
+        }
+    });
+};
+
 
 onMounted(() => {
     loadDetail();
