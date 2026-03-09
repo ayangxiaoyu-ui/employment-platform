@@ -16,7 +16,7 @@ const isStudent = computed(() => {
 </script>
 
 <template>
-  <!-- <HeaderBar v-if="isStudent" /> -->
-  <HeaderBar  />
+  <HeaderBar v-if="isStudent" />
+  <!-- <Sidebar v-else /> -->
   <RouterView />
 </template>
