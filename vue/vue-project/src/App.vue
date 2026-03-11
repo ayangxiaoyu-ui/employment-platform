@@ -25,18 +25,13 @@ const isManagement = computed(() => role.value === 'ADMIN' || role.value === 'CO
 
     <!-- 管理/企业端：侧边栏 + 内容区 -->
     <div class="main-layout" v-if="isManagement || isStudent">
-      <SideBar
-        v-if="isManagement"
-        v-model:collapsed="collapsed"
-      />
+      <SideBar v-if="isManagement" v-model:collapsed="collapsed" />
 
-      <main
-        class="content"
-      >
+      <main class="content">
         <RouterView />
       </main>
     </div>
-
+    <RouterView />
     <!-- 如果既不是学生也不是管理角色，可以放一个 fallback 或 404 -->
   </div>
 </template>
@@ -56,6 +51,7 @@ const isManagement = computed(() => role.value === 'ADMIN' || role.value === 'CO
   flex: 1;
   overflow-y: auto;
   padding: 20px;
-  background: #f8f9fc; /* 浅底色，保持亮色感 */
+  background: #f8f9fc;
+  /* 浅底色，保持亮色感 */
 }
 </style>
