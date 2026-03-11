@@ -39,6 +39,12 @@ public class FileController {
     @Value("${file.upload.logo-url-prefix}")
     private String logoUrlPrefix;
 
+    @Value("${file.upload.resume-sub-path}")
+    private String resumeSubPath;
+
+    @Value("${file.upload.resume-url-prefix}")
+    private String resumeUrlPrefix;
+
     private static final long MAX_AVATAR_SIZE = 5 * 1024 * 1024L; // 5MB
     private static final long MAX_LOGO_SIZE   = 3 * 1024 * 1024L; // 3MB
 

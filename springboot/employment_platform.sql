@@ -181,6 +181,24 @@ CREATE TABLE `browsing_history` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='浏览历史表';
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+
+
+
+----------
+--11.我的收藏表
+
+DROP TABLE IF EXISTS `favorite`;
+CREATE TABLE `favorite` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `student_id` bigint(20) NOT NULL COMMENT '学生ID',
+  `job_id` bigint(20) NOT NULL COMMENT '职位ID',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '收藏时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_student_job` (`student_id`, `job_id`) COMMENT '同一个学生对同一个职位只存一条收藏记录'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='职位收藏表';
+
+
 -- ----------------------------
 -- 11. 初始化管理员账号
 -- ----------------------------
@@ -930,3 +948,129 @@ INSERT INTO student (user_id, name, gender, phone, email, university, major, gra
 (161, '任晨曦', '女', '13800001111', 'ren_chenxi@example.com', '北京工业大学', '软件工程', 2026, NULL),
 (162, '金子涵', '女', '13922223333', 'jin_zihan@example.com', '北京林业大学', '人工智能', 2026, NULL),
 (163, '崔雨桐', '女', '13044445555', 'cui_yutong@example.com', '中国农业大学', '数据科学与大数据技术', 2026, NULL);
+
+
+
+
+
+-- 第 1 批简历数据精简版 (1-10)
+-- 生成时间: 2026-03-10
+
+INSERT INTO `resume` (`student_id`, `title`, `content`, `file_url`, `is_public`) VALUES 
+(2, '李晓钰的求职简历', '{"name":"李晓钰","school":"清华大学","major":"计算机科学与技术","gpa":"3.7/4.0","rank":"前18%","tech":"Java/Go/Python/Spring Boot/Redis","intern":"阿里巴巴测试开发，优化接口响应降低59%，解决线上问题19个","project":"智能推荐系统(QPS 9548)、物联网平台(代码8k+行)","cert":"华为HCIP、系统架构设计师","eval":"热爱技术，具备扎实基础，有丰富的阿里实习经验"}', '/uploads/resume/resume_2_李晓钰.pdf', 1),
+
+(3, '王志凡的求职简历', '{"name":"王志凡","school":"北京大学","major":"软件工程","gpa":"3.9/4.0","rank":"前6%","tech":"Java/Go/Python/Spring Boot/Gin/Vue","intern":"快手数据分析工程师，完成5个需求迭代，接口优化降低57%","project":"实时数据处理平台(GitHub 468+ Stars)、云原生监控系统","cert":"华为HCIP、系统架构设计师","eval":"ACM-ICPC银牌，热爱技术，积极参与开源社区"}', '/uploads/resume/resume_3_王志凡.pdf', 1),
+
+(4, '张瑞琪的求职简历', '{"name":"张瑞琪","school":"复旦大学","major":"人工智能","gpa":"3.8/4.0","rank":"前26%","tech":"Python/C++/Java/PyTorch/Spring Boot","intern":"美团产品经理，完成5个需求迭代，解决线上问题6个","project":"在线教育直播平台(QPS 9847)、云原生监控告警系统","cert":"Oracle OCP、CKA","eval":"热爱AI技术，具备扎实基础，有丰富的美团实习经验"}', '/uploads/resume/resume_4_张瑞琪.pdf', 1),
+
+(5, '陈雨涵的求职简历', '{"name":"陈雨涵","school":"浙江大学","major":"数据科学与大数据技术","gpa":"3.6/4.0","rank":"前9%","tech":"Python/Java/SQL/Spark/Flink/Hadoop","intern":"网易测试开发，解决线上问题17个，接口优化降低55%","project":"实时数据处理平台(GitHub 137+ Stars)、供应链管理系统","cert":"系统架构设计师、PMP、软件设计师、华为HCIP","eval":"ACM-ICPC银牌，热爱大数据技术，有丰富的网易实习经验"}', '/uploads/resume/resume_5_陈雨涵.pdf', 1),
+
+(6, '刘浩然的求职简历', '{"name":"刘浩然","school":"上海交通大学","major":"信息安全","gpa":"3.6/4.0","rank":"前27%","tech":"Python/C/Go/Metasploit/Burp Suite","intern":"B站数据分析、美团测试开发，共解决线上问题34个","project":"智能推荐系统(GitHub 204+ Stars)、实时数据处理平台","cert":"CISP、系统架构设计师、CKA、华为HCIP","eval":"数学建模国赛二等奖，热爱安全技术，有丰富的B站和美团实习经验"}', '/uploads/resume/resume_6_刘浩然.pdf', 1),
+
+(7, '杨欣怡的求职简历', '{"name":"杨欣怡","school":"南京大学","major":"计算机科学与技术","gpa":"3.4/4.0","rank":"前10%","tech":"Java/Go/Python/Spring Boot/gRPC/TiDB","intern":"滴滴后端开发完成8个需求，华为客户端开发完成8个需求","project":"社交APP后端(微服务架构)、在线教育直播平台(GitHub 226+ Stars)","cert":"系统架构设计师、PMP、Oracle OCP","eval":"蓝桥杯国赛一等奖，热爱技术，有丰富的滴滴和华为实习经验"}', '/uploads/resume/resume_7_杨欣怡.pdf', 1),
+
+(8, '赵梦瑶的求职简历', '{"name":"赵梦瑶","school":"武汉大学","major":"软件工程","gpa":"3.4/4.0","rank":"前11%","tech":"Java/Go/Python/Spring Boot/Flink/HBase","intern":"滴滴数据分析+算法工程师，共解决线上问题22个，编写技术文档13篇","project":"金融风控系统(QPS 6734)、在线教育直播平台","cert":"AWS SAA、华为HCIP","eval":"互联网+金奖，热爱技术，有丰富的滴滴实习经验"}', '/uploads/resume/resume_8_赵梦瑶.pdf', 1),
+
+(9, '吴佳欣的求职简历', '{"name":"吴佳欣","school":"华中科技大学","major":"人工智能","gpa":"3.4/4.0","rank":"前9%","tech":"Python/C++/Java/PyTorch/TensorFlow","intern":"华为客户端开发解决线上问题20个，小红书算法工程师完成7个需求","project":"在线教育直播平台(代码1.4万行)、金融风控系统(GitHub 319+ Stars)","cert":"PMP、软件设计师、CKA","eval":"蓝桥杯国赛一等奖，热爱AI技术，有丰富的华为和小红书实习经验"}', '/uploads/resume/resume_9_吴佳欣.pdf', 1),
+
+(10, '周天一', '{"name":"周天一","school":"西安交通大学","major":"数据科学与大数据技术","gpa":"3.4/4.0","rank":"前25%","tech":"Python/SQL/Java/Spark/Flink/Hadoop","intern":"腾讯产品经理，解决线上问题7个，接口优化降低59%，编写技术文档10篇","project":"供应链管理系统(Serverless)、实时数据处理平台(GitHub 132+ Stars)","cert":"华为HCIP、软件设计师","eval":"蓝桥杯国赛一等奖，热爱大数据技术，有丰富的腾讯实习经验"}', '/uploads/resume/resume_10_周天一.pdf', 1);
+
+
+
+
+
+-- 第 2 批简历数据精简版 (11-20)
+-- 生成时间: 2026-03-10
+
+INSERT INTO `resume` (`student_id`, `title`, `content`, `file_url`, `is_public`) VALUES 
+(11, '徐晨曦的求职简历', '{"name":"徐晨曦","school":"哈尔滨工业大学","major":"计算机科学与技术","gpa":"3.5/4.0","rank":"前11%","tech":"Java/Go/Python/Spring Boot/Kubernetes","intern":"百度后端开发接口优化降低37%，阿里测试开发完成8个需求迭代","project":"供应链管理系统(GitHub 210+ Stars)、分布式电商系统(代码1万+行)","cert":"AWS SAA、CISP、软件设计师、PMP","eval":"CET-6 649分，热爱技术，有百度和阿里实习经验"}', '/uploads/resume/resume_11_徐晨曦.pdf', 1),
+
+(12, '孙怡菲的求职简历', '{"name":"孙怡菲","school":"同济大学","major":"信息安全","gpa":"3.7/4.0","rank":"前16%","tech":"Python/C/Go/Metasploit/Burp Suite","intern":"B站客户端开发完成4个需求，接口优化降低33%，编写技术文档5篇","project":"物联网平台(GitHub 64+ Stars, QPS 3392)、在线教育平台(QPS 4088)","cert":"CISP、华为HCIP、PMP、AWS SAA","eval":"国家奖学金，热爱安全技术，有丰富的B站实习经验"}', '/uploads/resume/resume_12_孙怡菲.pdf', 1),
+
+(13, '马宇宁的求职简历', '{"name":"马宇宁","school":"东南大学","major":"软件工程","gpa":"3.5/4.0","rank":"前19%","tech":"Java/Go/Python/Spring Boot/Gin","intern":"快手运维开发完成3个需求，美团算法工程师完成6个需求迭代","project":"智能推荐系统(GitHub 226+ Stars)、云原生监控系统(GitHub 448+ Stars)","cert":"CISP、AWS SAA、软件设计师","eval":"ACM-ICPC银牌，热爱技术，有快手和美团实习经验"}', '/uploads/resume/resume_13_马宇宁.pdf', 1),
+
+(14, '胡静怡的求职简历', '{"name":"胡静怡","school":"南开大学","major":"人工智能","gpa":"3.7/4.0","rank":"前18%","tech":"Python/C++/Java/PyTorch/Spring Boot","intern":"美团前端开发完成5个需求，华为客户端开发完成7个需求迭代","project":"供应链管理系统(GitHub 480+ Stars)、物联网平台(GitHub 367+ Stars)","cert":"CISP、Oracle OCP、软件设计师、CKA","eval":"数学建模国赛二等奖，热爱AI技术，有美团和华为实习经验"}', '/uploads/resume/resume_14_胡静怡.pdf', 1),
+
+(15, '郭子涵的求职简历', '{"name":"郭子涵","school":"天津大学","major":"数据科学与大数据技术","gpa":"3.3/4.0","rank":"前12%","tech":"Python/SQL/Java/Spark/Flink/Hadoop","intern":"B站算法工程师接口优化降低50%，滴滴运维开发解决线上问题12个","project":"物联网平台(GitHub 388+ Stars, QPS 9109)、金融风控系统(QPS 9629)","cert":"PMP、软件设计师","eval":"互联网+金奖，热爱大数据技术，有B站和滴滴实习经验"}', '/uploads/resume/resume_15_郭子涵.pdf', 1),
+
+(16, '林轩的求职简历', '{"name":"林轩","school":"厦门大学","major":"计算机科学与技术","gpa":"3.4/4.0","rank":"前6%","tech":"Java/Go/Python/Spring Boot/Prometheus","intern":"小米前端开发完成8个需求迭代，接口优化降低61%，解决线上问题11个","project":"云原生监控系统(QPS 9449, GitHub 340+ Stars)、供应链管理系统","cert":"AWS SAA、华为HCIP、软件设计师、系统架构设计师","eval":"蓝桥杯国赛一等奖，热爱技术，有丰富的小米实习经验"}', '/uploads/resume/resume_16_林轩.pdf', 1),
+
+(17, '冯宇轩的求职简历', '{"name":"冯宇轩","school":"山东大学","major":"软件工程","gpa":"3.6/4.0","rank":"前28%","tech":"Java/Go/Python/Spring Boot/Gin","intern":"百度客户端开发完成4个需求，接口优化降低64%，编写技术文档9篇","project":"物联网平台(QPS 9330)、智能客服机器人(GitHub 466+ Stars, QPS 8657)","cert":"AWS SAA、软件设计师、CISP","eval":"ACM-ICPC银牌，热爱技术，有丰富的百度实习经验"}', '/uploads/resume/resume_17_冯宇轩.pdf', 1),
+
+(18, '邓子悦的求职简历', '{"name":"邓子悦","school":"四川大学","major":"人工智能","gpa":"3.8/4.0","rank":"前24%","tech":"Python/C++/Java/PyTorch/TensorFlow","intern":"携程运维开发完成3个需求，美团客户端开发完成7个需求迭代","project":"分布式电商系统(GitHub 385+ Stars)、物联网平台(GitHub 234+ Stars)","cert":"华为HCIP、CISP","eval":"CET-6 640分，国家奖学金，热爱AI技术，有携程和美团实习经验"}', '/uploads/resume/resume_18_邓子悦.pdf', 1),
+
+(19, '曹雨晨的求职简历', '{"name":"曹雨晨","school":"电子科技大学","major":"信息安全","gpa":"3.8/4.0","rank":"前5%","tech":"Python/C/Go/Metasploit/Burp Suite","intern":"快手运维开发完成7个需求，拼多多运维开发解决线上问题7个","project":"社交APP后端(QPS 7816, 代码1万+行)、金融风控系统(QPS 1894)","cert":"软件设计师、华为HCIP、CKA、CISP","eval":"CET-6 647分，数学建模国赛二等奖，热爱安全技术，有快手和拼多多实习经验"}', '/uploads/resume/resume_19_曹雨晨.pdf', 1),
+
+(20, '彭晓涵的求职简历', '{"name":"彭晓涵","school":"北京邮电大学","major":"数据科学与大数据技术","gpa":"3.7/4.0","rank":"前5%","tech":"Python/SQL/Java/Spark/Flink/Go","intern":"小米数据分析工程师完成6个需求迭代，接口优化降低51%，编写文档10篇","project":"分布式电商系统(GitHub 321+ Stars)、社交APP后端(代码1.4万+行)","cert":"PMP、AWS SAA、软件设计师","eval":"CET-6 632分，互联网+金奖，热爱大数据技术，有丰富的小米实习经验"}', '/uploads/resume/resume_20_彭晓涵.pdf', 1);
+
+-- 第 3 批简历数据精简版 (21-30)
+-- 生成时间: 2026-03-10
+
+INSERT INTO `resume` (`student_id`, `title`, `content`, `file_url`, `is_public`) VALUES 
+(21, '蒋明泽的求职简历', '{"name":"蒋明泽","school":"北京理工大学","major":"计算机科学与技术","gpa":"3.4/4.0","rank":"前8%","tech":"Java/Go/Python/Spring Boot/PyTorch","intern":"美团算法工程师完成6个需求，解决线上问题19个，接口优化降低50%","project":"智能推荐系统(代码6661行)、在线教育直播平台(GitHub 355+ Stars, 代码1.4万行)","cert":"CKA、Oracle OCP","eval":"CET-6 618分，数学建模国赛二等奖，热爱技术，有丰富的美团实习经验"}', '/uploads/resume/resume_21_蒋明泽.pdf', 1),
+
+(22, '何雨桐的求职简历', '{"name":"何雨桐","school":"西北工业大学","major":"软件工程","gpa":"3.7/4.0","rank":"前26%","tech":"Java/Go/Python/Spring Boot/Django","intern":"腾讯测试开发完成7个需求，滴滴数据分析完成8个需求，接口优化降低60%","project":"供应链管理系统(GitHub 349+ Stars, QPS 4188)、物联网平台(GitHub 191+ Stars)","cert":"PMP、软件设计师","eval":"数学建模国赛二等奖，热爱技术，有腾讯和滴滴实习经验"}', '/uploads/resume/resume_22_何雨桐.pdf', 1),
+
+(23, '唐俊逸的求职简历', '{"name":"唐俊逸","school":"大连理工大学","major":"人工智能","gpa":"3.5/4.0","rank":"前5%","tech":"Python/C++/Java/PyTorch/TensorFlow","intern":"快手数据分析完成7个需求，解决线上问题9个，编写技术文档7篇","project":"金融风控系统(GitHub 314+ Stars, 代码1.4万行)、云原生监控系统(GitHub 139+ Stars)","cert":"系统架构设计师、AWS SAA、Oracle OCP","eval":"ACM-ICPC银牌，热爱AI技术，有丰富的快手实习经验"}', '/uploads/resume/resume_23_唐俊逸.pdf', 1),
+
+(24, '宋欣悦的求职简历', '{"name":"宋欣悦","school":"重庆大学","major":"数据科学与大数据技术","gpa":"3.5/4.0","rank":"前21%","tech":"Python/SQL/Java/Spark/Flink","intern":"小米客户端开发完成6个需求，接口优化降低55%，编写技术文档10篇","project":"在线教育直播平台(GitHub 376+ Stars, QPS 3929)、供应链管理系统(QPS 3321)","cert":"Oracle OCP、软件设计师、华为HCIP、CKA","eval":"国家奖学金，热爱大数据技术，有丰富的小米实习经验"}', '/uploads/resume/resume_24_宋欣悦.pdf', 1),
+
+(25, '杜一凡的求职简历', '{"name":"杜一凡","school":"吉林大学","major":"计算机科学与技术","gpa":"3.6/4.0","rank":"前10%","tech":"Java/Go/Python/Spring Boot/Flink","intern":"华为产品经理完成8个需求，接口优化降低33%，编写技术文档9篇","project":"实时数据处理平台(GitHub 325+ Stars, QPS 5188)、分布式电商系统(GitHub 461+ Stars)","cert":"华为HCIP、CISP","eval":"国家奖学金，热爱技术，有丰富的华为实习经验"}', '/uploads/resume/resume_25_杜一凡.pdf', 1),
+
+(26, '沈晨宇的求职简历', '{"name":"沈晨宇","school":"中山大学","major":"信息安全","gpa":"3.4/4.0","rank":"前17%","tech":"Python/C/Go/Metasploit/Flink","intern":"美团数据分析解决线上问题13个，接口优化降低37%，编写技术文档10篇","project":"实时数据处理平台(QPS 5894)、物联网平台(QPS 1962, 代码1.3万行)","cert":"PMP、CISP、CKA","eval":"国家奖学金，热爱安全技术，有丰富的美团实习经验"}', '/uploads/resume/resume_26_沈晨宇.pdf', 1),
+
+(27, '魏子轩的求职简历', '{"name":"魏子轩","school":"华南理工大学","major":"软件工程","gpa":"3.4/4.0","rank":"前7%","tech":"Java/Go/Python/Spring Boot/Gin","intern":"拼多多客户端开发完成4个需求，接口优化降低60%，解决线上问题11个","project":"智能推荐系统(GitHub 132+ Stars, QPS 3483)、金融风控系统(GitHub 184+ Stars)","cert":"CISP、Oracle OCP、CKA、软件设计师","eval":"互联网+金奖，热爱技术，有丰富的拼多多实习经验"}', '/uploads/resume/resume_27_魏子轩.pdf', 1),
+
+(28, '韩宇天的求职简历', '{"name":"韩宇天","school":"中国科学技术大学","major":"人工智能","gpa":"3.5/4.0","rank":"前29%","tech":"Python/C++/Java/PyTorch/TensorFlow","intern":"网易后端开发完成7个需求，接口优化降低68%，解决线上问题10个","project":"智能推荐系统(QPS 3640)、物联网平台(QPS 3330, 优秀项目奖)","cert":"Oracle OCP、AWS SAA","eval":"蓝桥杯国赛一等奖，热爱AI技术，有丰富的网易实习经验"}', '/uploads/resume/resume_28_韩宇天.pdf', 1),
+
+(29, '吕晓彤的求职简历', '{"name":"吕晓彤","school":"北京航空航天大学","major":"数据科学与大数据技术","gpa":"3.8/4.0","rank":"前5%","tech":"Python/SQL/Java/Spark/Go","intern":"美团前端开发完成3个需求，接口优化降低58%，解决线上问题13个","project":"社交APP后端(GitHub 197+ Stars, 代码1.3万行)、在线教育平台(GitHub 409+ Stars)","cert":"PMP、CKA","eval":"CET-6 627分，ACM-ICPC银牌，热爱大数据技术，有丰富的美团实习经验"}', '/uploads/resume/resume_29_吕晓彤.pdf', 1),
+
+(30, '金浩宇的求职简历', '{"name":"金浩宇","school":"北京师范大学","major":"计算机科学与技术","gpa":"3.8/4.0","rank":"前9%","tech":"Java/Go/Python/Spring Boot/Spring Cloud","intern":"快手运维开发完成8个需求解决线上问题20个，滴滴数据分析接口优化降低33%","project":"分布式电商系统(GitHub 383+ Stars)、供应链管理系统(QPS 1694, 技术创新奖)","cert":"CKA、CISP","eval":"热爱技术，有快手和滴滴实习经验"}', '/uploads/resume/resume_30_金浩宇.pdf', 1);
+
+-- 第 4 批简历数据精简版 (31-40)
+-- 生成时间: 2026-03-10
+
+INSERT INTO `resume` (`student_id`, `title`, `content`, `file_url`, `is_public`) VALUES 
+(31, '石子墨的求职简历', '{"name":"石子墨","school":"中央财经大学","major":"软件工程","gpa":"3.6/4.0","rank":"前29%","tech":"Java/Go/Python/Spring Boot/Gin","intern":"网易测试开发完成4个需求，携程数据分析完成8个需求，接口优化降低62%","project":"智能推荐系统(GitHub 301+ Stars, 代码7963行)、在线教育平台(QPS 6247, 代码1.2万行)","cert":"CKA、软件设计师、PMP、华为HCIP","eval":"ACM-ICPC银牌，热爱技术，有网易和携程实习经验"}', '/uploads/resume/resume_31_石子墨.pdf', 1),
+
+(32, '付颖睿的求职简历', '{"name":"付颖睿","school":"对外经济贸易大学","major":"人工智能","gpa":"3.5/4.0","rank":"前22%","tech":"Python/C++/Java/PyTorch/TensorFlow","intern":"快手客户端开发完成8个需求，拼多多算法工程师完成3个需求，解决线上问题18个","project":"金融风控系统(GitHub 457+ Stars, QPS 1496)、物联网平台(代码7842行)","cert":"系统架构设计师、AWS SAA、CISP、软件设计师","eval":"热爱AI技术，有快手和拼多多实习经验"}', '/uploads/resume/resume_32_付颖睿.pdf', 1),
+
+(33, '钱志豪的求职简历', '{"name":"钱志豪","school":"上海财经大学","major":"数据科学与大数据技术","gpa":"3.8/4.0","rank":"前6%","tech":"Python/SQL/Java/Spark/Flink","intern":"滴滴前端开发完成3个需求，腾讯客户端开发完成4个需求，解决线上问题19个","project":"智能客服机器人(代码6834行)、智能推荐系统(GitHub 56+ Stars, 代码1.1万行)","cert":"PMP、Oracle OCP、CKA、软件设计师","eval":"CET-6 621分，国家奖学金，热爱大数据技术，有滴滴和腾讯实习经验"}', '/uploads/resume/resume_33_钱志豪.pdf', 1),
+
+(34, '洪欣然的求职简历', '{"name":"洪欣然","school":"西南财经大学","major":"计算机科学与技术","gpa":"3.4/4.0","rank":"前15%","tech":"Java/Go/Python/Spring Boot/Gin","intern":"小红书前端开发接口优化降低60%，解决线上问题14个，编写技术文档7篇","project":"云原生监控系统(GitHub 213+ Stars, QPS 8042)、供应链管理系统(GitHub 446+ Stars)","cert":"Oracle OCP、软件设计师","eval":"CET-6 619分，蓝桥杯国赛一等奖，热爱技术，有丰富的小红书实习经验"}', '/uploads/resume/resume_34_洪欣然.pdf', 1),
+
+(35, '闫子怡的求职简历', '{"name":"闫子怡","school":"中南财经政法大学","major":"信息安全","gpa":"3.5/4.0","rank":"前24%","tech":"Python/C/Go/Metasploit/Burp Suite","intern":"滴滴前端开发接口优化降低33%，解决线上问题5个，编写技术文档3篇","project":"云原生监控系统(代码1.1万行)、在线教育平台(GitHub 419+ Stars, QPS 1599)","cert":"软件设计师、华为HCIP","eval":"蓝桥杯国赛一等奖，热爱安全技术，有滴滴实习经验"}', '/uploads/resume/resume_35_闫子怡.pdf', 1),
+
+(36, '程耀文的求职简历', '{"name":"程耀文","school":"东北大学","major":"软件工程","gpa":"3.6/4.0","rank":"前27%","tech":"Java/Go/Python/Spring Boot/Gin","intern":"京东运维开发完成8个需求，阿里客户端开发完成3个需求，共解决线上问题26个","project":"金融风控系统(GitHub 141+ Stars, 代码1.2万行)、在线教育平台(QPS 2163, 代码1.2万行)","cert":"AWS SAA、华为HCIP","eval":"CET-6 645分，ACM-ICPC银牌，热爱技术，有京东和阿里实习经验"}', '/uploads/resume/resume_36_程耀文.pdf', 1),
+
+(37, '罗天乐的求职简历', '{"name":"罗天乐","school":"湖南大学","major":"人工智能","gpa":"3.4/4.0","rank":"前13%","tech":"Python/C++/Java/PyTorch/TensorFlow","intern":"网易运维开发完成6个需求，接口优化降低54%，编写技术文档6篇","project":"智能推荐系统(GitHub 62+ Stars, 代码5241行)、分布式电商系统(GitHub 186+ Stars)","cert":"系统架构设计师、PMP、Oracle OCP","eval":"ACM-ICPC银牌，互联网+金奖，热爱AI技术，有丰富的网易实习经验"}', '/uploads/resume/resume_37_罗天乐.pdf', 1),
+
+(38, '谢佳慧的求职简历', '{"name":"谢佳慧","school":"兰州大学","major":"数据科学与大数据技术","gpa":"3.8/4.0","rank":"前16%","tech":"Python/SQL/Java/Spark/Flink","intern":"小红书测试开发完成3个需求，解决线上问题5个，编写技术文档3篇","project":"供应链管理系统(GitHub 289+ Stars, QPS 2414)、云原生监控系统(GitHub 397+ Stars)","cert":"AWS SAA、软件设计师、CISP、华为HCIP","eval":"CET-6 607分，数学建模国赛二等奖，热爱大数据技术，有小红书实习经验"}', '/uploads/resume/resume_38_谢佳慧.pdf', 1),
+
+(39, '戴怡琳的求职简历', '{"name":"戴怡琳","school":"中国海洋大学","major":"计算机科学与技术","gpa":"3.8/4.0","rank":"前16%","tech":"Java/Go/Python/Spring Boot/PyTorch","intern":"网易算法工程师接口优化降低64%，解决线上问题6个，编写技术文档5篇","project":"智能推荐系统(QPS 6754, 优秀项目奖)、智能客服机器人(代码1万+行, 技术创新奖)","cert":"AWS SAA、PMP、系统架构设计师、软件设计师","eval":"CET-6 641分，蓝桥杯国赛一等奖，热爱技术，有丰富的网易实习经验"}', '/uploads/resume/resume_39_戴怡琳.pdf', 1),
+
+(40, '乔志远的求职简历', '{"name":"乔志远","school":"中国地质大学","major":"软件工程","gpa":"3.3/4.0","rank":"前22%","tech":"Java/Go/Python/Spring Boot/Spring Cloud","intern":"B站测试开发接口优化降低61%，完成3个需求迭代，编写技术文档5篇","project":"社交APP后端(GitHub 184+ Stars, QPS 7468)、分布式电商系统(GitHub 381+ Stars, QPS 9996)","cert":"PMP、AWS SAA、CISP、Oracle OCP","eval":"CET-6 616分，数学建模国赛二等奖，热爱技术，有丰富的B站实习经验"}', '/uploads/resume/resume_40_乔志远.pdf', 1);
+
+-- 第 5 批简历数据精简版 (41-50)
+-- 生成时间: 2026-03-10
+
+INSERT INTO `resume` (`student_id`, `title`, `content`, `file_url`, `is_public`) VALUES 
+(41, '鲍萱萱的求职简历', '{"name":"鲍萱萱","school":"中国石油大学","major":"人工智能","gpa":"3.5/4.0","rank":"前23%","tech":"Python/C++/Java/PyTorch/TensorFlow","intern":"小米数据分析完成6个需求，阿里后端开发完成7个需求，共解决线上问题25个","project":"社交APP后端(GitHub 294+ Stars, 代码7725行)、智能推荐系统(技术创新奖)","cert":"华为HCIP、CKA、系统架构设计师、Oracle OCP","eval":"国家奖学金，热爱AI技术，有小米和阿里实习经验"}', '/uploads/resume/resume_41_鲍萱萱.pdf', 1),
+
+(42, '孟子轩的求职简历', '{"name":"孟子轩","school":"中国矿业大学","major":"数据科学与大数据技术","gpa":"3.5/4.0","rank":"前15%","tech":"Python/SQL/Java/Spark/Flink","intern":"腾讯数据分析完成8个需求，接口优化降低49%，编写技术文档6篇","project":"物联网平台(GitHub 228+ Stars, QPS 7252)、实时数据处理平台(GitHub 317+ Stars, 代码1.4万行)","cert":"AWS SAA、系统架构设计师","eval":"互联网+金奖，热爱大数据技术，有丰富的腾讯实习经验"}', '/uploads/resume/resume_42_孟子轩.pdf', 1),
+
+(43, '史奕辰的求职简历', '{"name":"史奕辰","school":"河海大学","major":"计算机科学与技术","gpa":"3.5/4.0","rank":"前7%","tech":"Java/Go/Python/Spring Boot/Gin","intern":"美团算法工程师解决线上问题10个，接口优化降低35%，编写技术文档4篇","project":"在线教育直播平台(代码1.1万行)、实时数据处理平台(QPS 5740, 代码8596行)","cert":"CKA、Oracle OCP","eval":"CET-6 618分，ACM-ICPC银牌，热爱技术，有丰富的美团实习经验"}', '/uploads/resume/resume_43_史奕辰.pdf', 1),
+
+(44, '叶浩然的求职简历', '{"name":"叶浩然","school":"南京航空航天大学","major":"信息安全","gpa":"3.7/4.0","rank":"前5%","tech":"Python/C/Go/Metasploit/Burp Suite","intern":"京东前端开发完成6个需求，美团后端开发完成8个需求，共解决线上问题28个","project":"分布式电商系统(代码6232行, 优秀项目奖)、金融风控系统(GitHub 401+ Stars, 代码1万行)","cert":"软件设计师、CKA","eval":"蓝桥杯国赛一等奖，热爱安全技术，有京东和美团实习经验"}', '/uploads/resume/resume_44_叶浩然.pdf', 1),
+
+(45, '莫逸涵的求职简历', '{"name":"莫逸涵","school":"南京理工大学","major":"软件工程","gpa":"3.9/4.0","rank":"前8%","tech":"Java/Go/Python/Spring Boot/Gin","intern":"京东客户端开发完成4个需求，百度客户端开发完成6个需求，共解决线上问题7个","project":"分布式电商系统(代码8114行, 优秀项目奖)、社交APP后端(GitHub 57+ Stars, QPS 3374)","cert":"CKA、系统架构设计师","eval":"蓝桥杯国赛一等奖，国家奖学金，热爱技术，有京东和百度实习经验"}', '/uploads/resume/resume_45_莫逸涵.pdf', 1),
+
+(46, '潘俊豪的求职简历', '{"name":"潘俊豪","school":"北京化工大学","major":"人工智能","gpa":"3.8/4.0","rank":"前6%","tech":"Python/C++/Java/PyTorch/TensorFlow","intern":"B站测试开发完成6个需求，接口优化降低32%，编写技术文档4篇","project":"在线教育直播平台(QPS 8975, GitHub 69+ Stars)、分布式电商系统(GitHub 172+ Stars, QPS 6190)","cert":"软件设计师、Oracle OCP、AWS SAA","eval":"蓝桥杯国赛一等奖，热爱AI技术，有丰富的B站实习经验"}', '/uploads/resume/resume_46_潘俊豪.pdf', 1),
+
+(47, '苏欣蕾的求职简历', '{"name":"苏欣蕾","school":"北京交通大学","major":"数据科学与大数据技术","gpa":"3.4/4.0","rank":"前19%","tech":"Python/SQL/Java/Spark/Flink","intern":"阿里运维开发完成7个需求，接口优化降低44%，编写技术文档4篇","project":"云原生监控系统(QPS 4964, 代码1.2万行)、分布式电商系统(GitHub 310+ Stars, QPS 5922)","cert":"软件设计师、CKA、系统架构设计师","eval":"国家奖学金，热爱大数据技术，有丰富的阿里实习经验"}', '/uploads/resume/resume_47_苏欣蕾.pdf', 1),
+
+(48, '丁雨轩的求职简历', '{"name":"丁雨轩","school":"北京科技大学","major":"计算机科学与技术","gpa":"3.5/4.0","rank":"前16%","tech":"Java/Go/Python/Spring Boot/React","intern":"字节跳动测试开发解决线上问题20个，接口优化降低34%，编写技术文档7篇","project":"供应链管理系统(GitHub 126+ Stars, QPS 4949)、分布式电商系统(QPS 4282, 代码6415行)","cert":"Oracle OCP、软件设计师、PMP","eval":"热爱技术，有丰富的字节跳动实习经验"}', '/uploads/resume/resume_48_丁雨轩.pdf', 1),
+
+(49, '任晨曦的求职简历', '{"name":"任晨曦","school":"北京工业大学","major":"软件工程","gpa":"3.6/4.0","rank":"前13%","tech":"Java/Go/Python/Spring Boot/Gin","intern":"小红书测试开发解决线上问题14个，京东前端开发完成3个需求迭代","project":"在线教育直播平台(QPS 6770)、物联网平台(GitHub 445+ Stars, 代码1.2万行)","cert":"AWS SAA、CKA、PMP、Oracle OCP","eval":"CET-6 610分，热爱技术，有小红书和京东实习经验"}', '/uploads/resume/resume_49_任晨曦.pdf', 1),
+
+(50, '金子涵的求职简历', '{"name":"金子涵","school":"北京林业大学","major":"人工智能","gpa":"3.7/4.0","rank":"前7%","tech":"Python/C++/Java/PyTorch/TensorFlow","intern":"美团客户端开发完成4个需求，滴滴客户端开发完成3个需求，共解决线上问题17个","project":"分布式电商系统(QPS 8582)、在线教育直播平台(QPS 8769, 代码1.4万行)","cert":"华为HCIP、PMP、系统架构设计师","eval":"ACM-ICPC银牌，国家奖学金，热爱AI技术，有美团和滴滴实习经验"}', '/uploads/resume/resume_50_金子涵.pdf', 1);

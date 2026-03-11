@@ -64,7 +64,9 @@ file:
 #    base-path: C:/Users/杨晓钰/Documents/GitHub/employment-platform/springboot/src/main/resources/static/uploads/
     avatar-sub-path: avatar/
     logo-sub-path: logo/
+    resume-sub-path: resume/
 
     # URL 前缀（前端访问时用的路径）
     avatar-url-prefix: /uploads/avatar/
     logo-url-prefix: /uploads/logo/
+    resume-url-prefix: /uploads/resume/

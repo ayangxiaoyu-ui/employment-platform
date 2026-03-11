@@ -30,6 +30,12 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Value("${file.upload.logo-url-prefix}")
     private String logoUrlPrefix;
 
+    @Value("${file.upload.resume-url-prefix}")
+    private String resumeUrlPrefix;
+
+    @Value("${file.upload.resume-sub-path}")
+    private String resumeSubPath;
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         // 头像静态资源映射
@@ -43,5 +49,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
         System.out.println("静态资源映射已注册：");
         System.out.println("头像: " + avatarUrlPrefix + "** → " + basePath + avatarSubPath);
         System.out.println("Logo:  " + logoUrlPrefix + "** → " + basePath + logoSubPath);
+        System.out.println("简历: " + resumeUrlPrefix + "** → " + basePath + resumeSubPath);
     }
 }

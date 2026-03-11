@@ -1,6 +1,5 @@
-
 <template>
-  <div class="w-[800px]">
+  <div class="w-[800px] mx-auto">
     <SlideShow />
   </div>
 </template>
