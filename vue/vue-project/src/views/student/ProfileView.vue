@@ -90,7 +90,10 @@
         <section v-if="activeTab === 'resume'" class="content-card">
           <div class="card-header">
             <h3>我的简历</h3>
-            <el-button type="primary" :icon="Plus" plain>上传新简历</el-button>
+            <el-upload class="upload-box" action="http://localhost:9999/api/resume/upload" name="file"
+              :data="{ studentId: studentId }" :on-success="handleSuccess" :show-file-list="false">
+              <el-button type="primary">上传简历</el-button>
+            </el-upload>
           </div>
           <div class="resume-list">
             <div v-for="res in resumes" :key="res.id" class="resume-card">
@@ -158,6 +161,7 @@ import { getToken, getUsernameFromToken } from '@/utils/auth'
 const previewVisible = ref(false)
 const currentPreviewUrl = ref('')
 
+
 // 类型定义
 interface StudentProfile {
   id?: number; userId?: number; name: string; gender: string; phone: string;
@@ -181,6 +185,7 @@ const menuItems = [
 
 // 数据
 const form = ref<StudentProfile>({ name: '', gender: '', phone: '', email: '', university: '', major: '', graduationYear: null, avatar: '' })
+const studentId = ref<number | null>(null)
 const formBackup = ref<StudentProfile>({ ...form.value })
 const resumes = ref<any[]>([])
 const avatarPreview = ref('')
@@ -200,14 +205,23 @@ const defaultAvatarText = computed(() => {
 const fetchProfile = async () => {
   loading.value = true
   try {
-    const res = await fetch('/api/student/profile', { headers: { 'Authorization': `Bearer ${getToken()}` } })
+    const res = await fetch('/api/student/profile', {
+      headers: { 'Authorization': `Bearer ${getToken()}` }
+    })
     const result = await res.json()
     if (result.code === '200' && result.data) {
       form.value = { ...result.data, name: result.data.name || usernameFromToken.value }
       avatarPreview.value = result.data.avatar ? `http://localhost:9999${result.data.avatar}` : ''
+
+      // ⭐⭐ 关键：这里同步 studentId ⭐⭐
+      studentId.value = result.data.id
+      console.log("加载到 studentId =", studentId.value)
     }
-  } finally { loading.value = false }
+  } finally {
+    loading.value = false
+  }
 }
+
 
 const fetchResumes = async () => {
   if (!form.value.id) return
@@ -244,6 +258,41 @@ function previewResume(res: any) {
   // 3. 打开弹窗
   previewVisible.value = true
 }
+const handleSuccess = async (res: any) => {
+  if (res.code !== 200) {
+    ElMessage.error(res.msg || '上传失败')
+    return
+  }
+
+  // 后端返回的访问路径，例如：/uploads/resume/resume_12_史奕辰.pdf
+  const fileUrl = res.data
+
+  // 你需要把 fileUrl 存入数据库（新增简历记录）
+  const saveRes = await fetch('/api/resume', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${getToken()}`
+    },
+    body: JSON.stringify({
+      studentId: form.value.id,
+      fileUrl: fileUrl,
+      title: '我的简历',
+      isPublic: 1
+    })
+  })
+
+  const saveResult = await saveRes.json()
+
+  if (saveResult.code === 200) {
+    ElMessage.success('上传成功')
+    fetchResumes()   // 刷新简历列表
+  } else {
+    ElMessage.error('保存简历记录失败')
+  }
+}
+
+
 // 监听 Tab 切换
 watch(activeTab, (newTab) => {
   if (newTab === 'resume') fetchResumes()
