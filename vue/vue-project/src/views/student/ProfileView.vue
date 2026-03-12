@@ -91,24 +91,30 @@
           <div class="card-header">
             <h3>我的简历</h3>
             <el-upload class="upload-box" action="http://localhost:9999/api/resume/upload" name="file"
-              :data="{ studentId: studentId }" :on-success="handleSuccess" :show-file-list="false">
+              :data="{ studentId: studentId }" :headers="{ 'Authorization': `Bearer ${getToken()}` }"
+              :on-success="handleSuccess" :show-file-list="false">
               <el-button type="primary">上传简历</el-button>
             </el-upload>
           </div>
           <div class="resume-list">
             <div v-for="res in resumes" :key="res.id" class="resume-card">
-              <div class="res-icon"><el-icon>
+              <div class="res-icon">
+                <el-icon>
                   <Document />
-                </el-icon></div>
-              <div class="res-info">
-                <h4>{{ res.name || '附件简历' }}</h4>
-                <p>更新时间：{{ res.updateTime || '2024-03-10' }}</p>
+                </el-icon>
               </div>
+
+              <div class="res-info">
+                <h4>{{ res.title || '附件简历' }}</h4>
+                <p>更新时间：{{ res.updateTime }}</p>
+              </div>
+
               <div class="res-actions">
                 <el-button link type="primary" @click="previewResume(res)">预览</el-button>
-                <el-button link type="danger">删除</el-button>
+                <el-button link type="danger" @click="deleteResume(res)">删除</el-button>
               </div>
             </div>
+
             <el-empty v-if="resumes.length === 0" description="暂无简历，请先上传" />
           </div>
         </section>
@@ -154,7 +160,7 @@
 <script setup lang="ts">
 import { ref, onMounted, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import { House, User, Document, Promotion, Star, ChatDotRound, Setting, Plus, Camera } from '@element-plus/icons-vue'
 import { getToken, getUsernameFromToken } from '@/utils/auth'
 // 预览相关的响应式变量
@@ -197,9 +203,10 @@ const deliveryData = ref([
 // 计算属性
 const usernameFromToken = computed(() => getUsernameFromToken(getToken() || '') || '未知用户')
 const defaultAvatarText = computed(() => {
-  const name = (form.value.name || usernameFromToken.value || '匿').trim()
-  return name.match(/^[\u4e00-\u9fa5]/) ? name[0] : name[0].toUpperCase()
+  const name = (form.value?.name || usernameFromToken.value || '匿').trim()
+  return name!.match(/^[\u4e00-\u9fa5]/) ? name![0] : name![0].toUpperCase()
 })
+
 
 // 方法
 const fetchProfile = async () => {
@@ -230,8 +237,8 @@ const fetchResumes = async () => {
   console.log(form.value.id);
 
   if (result.code === '200') {
-    resumes.value = result.data
-    console.log(resumes.value);
+    resumes.value = result.data.filter((r: any) => r.fileUrl)
+    console.log(resumes.value, "加载到简历列表");
 
   }
 }
@@ -241,55 +248,120 @@ const fetchResumes = async () => {
  * @param res 这里的 res 是从 v-for="res in resumes" 传进来的单条简历对象
  */
 function previewResume(res: any) {
-  // 1. 获取文件路径字段（根据你的后端字段名修改，可能是 res.url 或 res.filePath）
-  const path = res.url || res.path || res.fileUrl;
+  const path = res.fileUrl;
 
   if (!path) {
-    ElMessage.warning('该简历没有关联的文件路径')
+    ElMessage.warning('该简历没有文件路径')
     return
   }
 
-  // 2. 拼接完整的后端访问地址
-  // 如果后端存的是绝对路径则不需拼接，如果是相对路径则需要拼接 http://localhost:9999
   const baseUrl = 'http://localhost:9999'
   currentPreviewUrl.value = path.startsWith('http') ? path : `${baseUrl}${path}`
-  console.log(currentPreviewUrl.value);
 
-  // 3. 打开弹窗
   previewVisible.value = true
 }
-const handleSuccess = async (res: any) => {
-  if (res.code !== 200) {
+
+
+
+const handleSuccess = async (res: any, file: any) => {
+  console.log(res.code, "res.code");
+
+  if (res.code === "409") {
+    // 🔥 弹窗询问用户
+    ElMessageBox.confirm(
+      '已存在同名简历，是否替换？',
+      '提示',
+      { confirmButtonText: '替换', cancelButtonText: '取消' }
+    ).then(() => {
+      // 用户选择替换 → 再次上传，带 force=true
+      uploadAgainWithForce(file)
+    })
+    return
+  }
+
+  if (res.code !== "200") {
     ElMessage.error(res.msg || '上传失败')
     return
   }
 
-  // 后端返回的访问路径，例如：/uploads/resume/resume_12_史奕辰.pdf
-  const fileUrl = res.data
+  const { fileUrl, title } = res.data
+  console.log(res, "res");
 
-  // 你需要把 fileUrl 存入数据库（新增简历记录）
-  const saveRes = await fetch('/api/resume', {
+  // 保存简历记录
+  await saveResume(fileUrl, title)
+}
+
+
+const uploadAgainWithForce = (file: any) => {
+  const formData = new FormData()
+  formData.append("file", file.raw)
+  formData.append("studentId", String(studentId.value))
+  formData.append("force", "true")
+
+  fetch("http://localhost:9999/api/resume/upload", {
+    method: "POST",
+    body: formData,
+    headers: { "Authorization": `Bearer ${getToken()}` }
+  })
+    .then(res => res.json())
+    .then(async result => {
+      if (result.code === "200") {
+        await saveResume(result.data.fileUrl, result.data.title)
+        ElMessage.success("替换成功")
+        fetchResumes()
+      }
+    })
+}
+
+async function saveResume(fileUrl: string, title: string) {
+
+  const saveRes = await fetch('http://localhost:9999/api/resume', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${getToken()}`
     },
     body: JSON.stringify({
-      studentId: form.value.id,
-      fileUrl: fileUrl,
-      title: '我的简历',
+      studentId: studentId.value,
+      fileUrl,
+      title,
+      content: '{}',
       isPublic: 1
     })
   })
 
   const saveResult = await saveRes.json()
-
-  if (saveResult.code === 200) {
-    ElMessage.success('上传成功')
-    fetchResumes()   // 刷新简历列表
-  } else {
-    ElMessage.error('保存简历记录失败')
+  if (saveResult.code === "200") {
+    fetchResumes()
   }
+}
+
+
+const deleteResume = async (res: any) => {
+  ElMessageBox.confirm(
+    `确定要删除简历「${res.title}」吗？`,
+    '提示',
+    { confirmButtonText: '删除', cancelButtonText: '取消', type: 'warning' }
+  ).then(async () => {
+    console.log(res);
+
+    const response = await fetch(`http://localhost:9999/api/resume/${res.id}`, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${getToken()}` }
+    })
+
+    const result = await response.json()
+    console.log(result, "result");
+
+
+    if (result.code === "200") {
+      ElMessage.success('删除成功')
+      fetchResumes()  // 刷新列表
+    } else {
+      ElMessage.error(result.msg || '删除失败')
+    }
+
+  }).catch(() => { })
 }
 
 
