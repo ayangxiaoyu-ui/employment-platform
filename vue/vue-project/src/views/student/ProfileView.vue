@@ -13,7 +13,7 @@
 
         <DeliveryStatus v-if="activeTab === 'apply'" :student-id="studentId" />
 
-        <FavoriteList v-if="activeTab === 'favorite'" />
+        <FavoriteList v-if="activeTab === 'favorite'" :student-id="studentId" />
 
         <MessageCenter v-if="activeTab === 'message'" />
       </main>

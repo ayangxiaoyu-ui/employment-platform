@@ -89,7 +89,18 @@
             <div v-if="selectedJob" class="p-2">
                 <div class="flex justify-between items-start mb-6">
                     <div>
-                        <h3 class="text-2xl font-bold text-gray-800 mb-2">{{ selectedJob.title }}</h3>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2 flex items-center gap-3">
+                            {{ selectedJob.title }}
+
+                            <el-tooltip :content="isFavorited ? '取消收藏' : '加入收藏'" placement="top">
+                                <el-icon @click="handleFavoriteToggle(selectedJob.id)"
+                                    class="cursor-pointer transition-all hover:scale-125"
+                                    :class="isFavorited ? 'favorited-icon' : 'unfavorited-icon'">
+                                    <StarFilled v-if="isFavorited" />
+                                    <Star v-else />
+                                </el-icon>
+                            </el-tooltip>
+                        </h3>
                         <p class="text-blue-600 font-medium">📍 {{ selectedJob.location }} | 💰 {{ selectedJob.salaryMin
                         }}k - {{ selectedJob.salaryMax }}k</p>
                     </div>
@@ -162,9 +173,11 @@ import { useRoute, useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
 import { OfficeBuilding, UserFilled, Location, Document } from '@element-plus/icons-vue';
 import { getToken } from '@/utils/auth';
-
+// import { Star, StarFilled } from '@element-plus/icons-vue';
 const route = useRoute();
 const router = useRouter();
+
+
 
 // 数据定义
 const company = ref({});
@@ -172,6 +185,7 @@ const jobs = ref([]);
 const resumes = ref([]);
 const studentId = ref(null);
 const defaultLogo = "/images/default-logo.png";
+const isFavorited = ref(false);
 
 // 控制状态
 const jobDetailVisible = ref(false);
@@ -271,6 +285,33 @@ const submitApplication = async () => {
     }
 };
 
+// 检查收藏状态 (在 showJobDetail 中调用)
+const checkFavoriteStatus = async (jobId) => {
+    if (!studentId.value) return;
+    const res = await axios.get('/api/favorite/status', {
+        params: { studentId: studentId.value, jobId: jobId }
+    });
+    if (res.data.code === "200") {
+        isFavorited.value = res.data.data;
+    }
+};
+
+// 切换收藏
+const handleFavoriteToggle = async (jobId) => {
+    if (!getToken()) {
+        ElMessage.warning("请先登录");
+        return;
+    }
+    const res = await axios.post('/api/favorite/toggle', {
+        studentId: studentId.value,
+        jobId: jobId
+    });
+    if (res.data.code === "200") {
+        isFavorited.value = res.data.data;
+        isFavorited.value ? ElMessage.success("收藏成功") : ElMessage.info("已取消收藏");
+    }
+};
+
 onMounted(() => {
     loadDetail();
     loadJobs();
@@ -320,5 +361,16 @@ onMounted(() => {
     border-bottom: 1px solid #f0f0f0;
     margin-right: 0;
     padding-bottom: 20px;
+}
+
+/* 在 <style scoped> 中添加 */
+.favorited-icon {
+    color: #facc15 !important;
+    /* 强制黄色 */
+}
+
+.unfavorited-icon {
+    color: #d1d5db !important;
+    /* 灰色 */
 }
 </style>
