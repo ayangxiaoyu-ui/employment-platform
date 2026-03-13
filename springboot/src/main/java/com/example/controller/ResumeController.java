@@ -118,9 +118,11 @@ public class ResumeController {
      */
     @DeleteMapping("/{id}")
     public Result deleteResume(@PathVariable Long id) {
-
+        System.out.println("dddddd");
+        System.out.println("delete id = " + id);
         Resume resume = resumeService.getById(id);
         if (resume == null) {
+            System.out.println("delete id = " + id);
             return Result.error("简历不存在");
         }
 
@@ -133,7 +135,7 @@ public class ResumeController {
 
                 // 2. 拼接真实路径
                 String filePath = basePath + resumeSubPath + fileName;
-
+                System.out.println("删除文件路径：" + filePath);
                 File file = new File(filePath);
                 if (file.exists()) {
                     file.delete();
