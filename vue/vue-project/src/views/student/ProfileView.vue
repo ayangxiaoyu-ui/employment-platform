@@ -11,7 +11,7 @@
 
         <ResumeManagement v-if="activeTab === 'resume'" :student-id="studentId" ref="resumeComponent" />
 
-        <DeliveryStatus v-if="activeTab === 'apply'" />
+        <DeliveryStatus v-if="activeTab === 'apply'" :student-id="studentId" />
 
         <FavoriteList v-if="activeTab === 'favorite'" />
 
@@ -102,6 +102,11 @@ watch(activeTab, async (newTab) => {
     if (resumeComponent.value && studentId.value) {
       resumeComponent.value.fetchResumes(studentId.value)
     }
+  }
+  if (newTab === 'apply') {
+    // 切换到投递记录时，刷新投递记录数据
+    await nextTick()
+
   }
 })
 onMounted(() => {

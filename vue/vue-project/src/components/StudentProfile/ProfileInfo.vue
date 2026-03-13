@@ -60,7 +60,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import { Camera } from '@element-plus/icons-vue'
 import { getToken, getUsernameFromToken } from '@/utils/auth'
@@ -162,6 +162,15 @@ const handleSave = async () => {
         emit('update:loading', false)
     }
 }
+
+// 在 ProfileInfo.vue 的 <script setup> 中添加
+watch(() => props.form, (newVal) => {
+    // 只有在非编辑状态下才自动同步，避免覆盖用户正在输入的修改
+    if (!isEditing.value) {
+        formData.value = { ...newVal };
+        formBackup.value = { ...newVal };
+    }
+}, { deep: true, immediate: true });
 </script>
 
 <style scoped>
