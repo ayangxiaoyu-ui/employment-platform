@@ -28,4 +28,21 @@ public class JobController {
 
         return Result.success(jobs);
     }
+
+    @GetMapping("/{id}")
+    public Result<Job> getById(@PathVariable Long id) {
+        // 直接调用 MyBatis-Plus 提供的 getById 方法
+        Job job = jobService.getById(id);
+
+        if (job == null) {
+            return Result.error("该岗位信息不存在");
+        }
+
+        // 如果你需要在这个接口做状态判断（如：下架的职位不能看详情）
+        if (job.getStatus() == 0) {
+            return Result.error("该岗位已停止招聘");
+        }
+
+        return Result.success(job);
+    }
 }

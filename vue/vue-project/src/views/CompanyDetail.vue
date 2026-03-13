@@ -41,7 +41,7 @@
                     <span class="w-2 h-7 bg-blue-600 rounded-full mr-3"></span>企业简介
                 </h3>
                 <p class="text-gray-600 leading-relaxed text-lg bg-gray-50 p-6 rounded-xl">
-                    {{ company.description || "这家企业很神秘，暂无简介。" }}
+                    {{ company.description || "暂无简介" }}
                 </p>
             </div>
 
@@ -57,7 +57,10 @@
                     <div class="flex justify-between items-center">
                         <div class="flex-1">
                             <div class="flex items-center gap-3 mb-2">
-                                <h4 class="text-xl font-bold text-gray-800">{{ job.title }}</h4>
+                                <h4 @click="showJobDetail(job.id)"
+                                    class="text-xl font-bold text-gray-800 cursor-pointer hover:text-blue-600 transition-colors">
+                                    {{ job.title }}
+                                </h4>
                                 <el-tag size="small" effect="plain" type="success">热招</el-tag>
                             </div>
                             <div class="flex gap-6 text-gray-500 mb-3">
@@ -68,48 +71,82 @@
                                     {{ job.salaryMin }}k - {{ job.salaryMax }}k
                                 </span>
                             </div>
-                            <p class="text-gray-400 text-sm line-clamp-2">{{ job.description }}</p>
+                            <p class="text-gray-400 text-sm line-clamp-1">职责简述：{{ job.description }}</p>
                         </div>
-                        <el-button type="primary" size="large" round class="px-8 shadow-lg shadow-blue-200"
-                            @click="handleApplyClick(job.id)">
-                            申请职位
-                        </el-button>
+                        <div class="flex gap-3">
+                            <el-button round @click="showJobDetail(job.id)">查看详情</el-button>
+                            <el-button type="primary" round class="px-6 shadow-md shadow-blue-200"
+                                @click="handleApplyClick(job.id)">
+                                立即申请
+                            </el-button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <el-dialog v-model="resumeDialogVisible" title="选择投递简历" width="480px" class="custom-dialog" align-center>
-            <div v-if="resumes.length > 0" class="px-2">
-                <p class="text-gray-500 text-sm mb-5">系统检测到您有多份简历，请选择最合适的一份：</p>
+        <el-dialog v-model="jobDetailVisible" title="岗位详情" width="650px" align-center class="detail-dialog">
+            <div v-if="selectedJob" class="p-2">
+                <div class="flex justify-between items-start mb-6">
+                    <div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">{{ selectedJob.title }}</h3>
+                        <p class="text-blue-600 font-medium">📍 {{ selectedJob.location }} | 💰 {{ selectedJob.salaryMin
+                        }}k - {{ selectedJob.salaryMax }}k</p>
+                    </div>
+                    <el-tag type="info" plain>{{ formatDateTime(selectedJob.createTime) }} 发布</el-tag>
+                </div>
 
+                <div class="space-y-6">
+                    <section>
+                        <h4 class="font-bold text-gray-700 mb-2 border-l-4 border-blue-500 pl-2">职位描述</h4>
+                        <div class="bg-gray-50 p-4 rounded-lg text-gray-600 leading-relaxed whitespace-pre-line">
+                            {{ selectedJob.description || '暂无详细描述' }}
+                        </div>
+                    </section>
+
+                    <section>
+                        <h4 class="font-bold text-gray-700 mb-2 border-l-4 border-blue-500 pl-2">任职要求</h4>
+                        <div class="bg-gray-50 p-4 rounded-lg text-gray-600 leading-relaxed whitespace-pre-line">
+                            {{ selectedJob.requirements || '暂无要求说明' }}
+                        </div>
+                    </section>
+                </div>
+            </div>
+            <template #footer>
+                <div class="flex justify-end gap-3 px-2 pb-2">
+                    <el-button @click="jobDetailVisible = false" round size="large">关闭</el-button>
+                    <el-button type="primary" round size="large" class="px-8"
+                        @click="goApplyFromDetail">立即投递</el-button>
+                </div>
+            </template>
+        </el-dialog>
+
+        <el-dialog v-model="resumeDialogVisible" title="选择投递简历" width="480px" align-center>
+            <div v-if="resumes.length > 0" class="px-2">
+                <p class="text-gray-500 text-sm mb-5">请选择一份简历完成申请：</p>
                 <el-radio-group v-model="selectedResumeId" class="resume-radio-group">
                     <el-radio v-for="res in resumes" :key="res.id" :label="res.id" border class="resume-card-item">
                         <div class="flex items-center gap-4 py-1">
-                            <div class="bg-blue-50 p-3 rounded-lg">
-                                <el-icon class="text-blue-500 text-xl">
+                            <div class="bg-blue-50 p-3 rounded-lg"><el-icon class="text-blue-500 text-xl">
                                     <Document />
-                                </el-icon>
-                            </div>
+                                </el-icon></div>
                             <div class="flex flex-col">
-                                <span class="font-bold text-gray-700 text-base mb-1">{{ res.title || '附件简历' }}</span>
+                                <span class="font-bold text-gray-700 mb-1">{{ res.title || '我的简历' }}</span>
                                 <span class="text-xs text-gray-400">最后更新：{{ formatDateTime(res.updateTime) }}</span>
                             </div>
                         </div>
                     </el-radio>
                 </el-radio-group>
             </div>
-
             <div v-else class="py-10 text-center">
-                <el-empty description="简历库空空如也" :image-size="120" />
-                <el-button type="primary" plain round @click="$router.push('/student/profile')">前往上传简历</el-button>
+                <el-empty description="简历库为空" :image-size="100" />
+                <el-button type="primary" plain round @click="$router.push('/student/profile')">去上传简历</el-button>
             </div>
-
             <template #footer>
                 <div class="flex justify-center gap-4 pb-4">
-                    <el-button @click="resumeDialogVisible = false" round class="px-6">取消</el-button>
+                    <el-button @click="resumeDialogVisible = false" round>取消</el-button>
                     <el-button type="primary" :disabled="!selectedResumeId" @click="submitApplication"
-                        :loading="submitting" round class="px-8 shadow-md">
+                        :loading="submitting" round class="px-8">
                         确认投递
                     </el-button>
                 </div>
@@ -123,76 +160,85 @@ import { ref, onMounted } from "vue";
 import axios from "axios";
 import { useRoute, useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
+import { OfficeBuilding, UserFilled, Location, Document } from '@element-plus/icons-vue';
 import { getToken } from '@/utils/auth';
 
 const route = useRoute();
 const router = useRouter();
 
-// 基础数据
+// 数据定义
 const company = ref({});
 const jobs = ref([]);
 const resumes = ref([]);
 const studentId = ref(null);
 const defaultLogo = "/images/default-logo.png";
 
-// 交互状态
+// 控制状态
+const jobDetailVisible = ref(false);
+const selectedJob = ref(null); // 当前选中的详情对象
 const resumeDialogVisible = ref(false);
 const selectedResumeId = ref(null);
-const currentJobId = ref(null);
+const currentJobId = ref(null); // 当前准备投递的Job ID
 const submitting = ref(false);
 
-/**
- * 核心逻辑：格式化 ISO 时间字符串
- * 将 2026-03-12T16:49:26.000+00:00 转换为 2026-03-12 16:49
- */
+// 格式化时间
 const formatDateTime = (isoStr) => {
     if (!isoStr) return '—';
     const date = new Date(isoStr);
-    const y = date.getFullYear();
-    const m = String(date.getMonth() + 1).padStart(2, '0');
-    const d = String(date.getDate()).padStart(2, '0');
-    const hh = String(date.getHours()).padStart(2, '0');
-    const mm = String(date.getMinutes()).padStart(2, '0');
-    return `${y}-${m}-${d} ${hh}:${mm}`;
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
 };
 
-// 加载企业详情
+// 1. 获取详情逻辑
+const showJobDetail = (jobId) => {
+    console.log(jobId);
+
+    axios.get(`/api/job/${jobId}`).then(res => {
+        if (res.data.code === "200") {
+            selectedJob.value = res.data.data;
+            jobDetailVisible.value = true;
+        } else {
+            ElMessage.error(res.data.msg);
+        }
+    });
+};
+
+// 从详情弹窗触发投递
+const goApplyFromDetail = () => {
+    const jId = selectedJob.value.id;
+    jobDetailVisible.value = false;
+    handleApplyClick(jId);
+};
+
+// 2. 列表数据加载
 const loadDetail = () => {
     axios.get(`/api/company/${route.params.id}`).then((res) => {
         if (res.data.code === "200") company.value = res.data.data;
     });
 };
 
-// 加载岗位列表
 const loadJobs = () => {
     axios.get(`/api/job/company/${route.params.id}`).then((res) => {
         if (res.data.code === "200") jobs.value = res.data.data;
     });
 };
 
-// 加载动态学生 ID 与简历库
 const loadStudentData = async () => {
     const token = getToken();
     if (!token) return;
     try {
-        const profileRes = await axios.get('/api/student/profile', {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
+        const profileRes = await axios.get('/api/student/profile', { headers: { 'Authorization': `Bearer ${token}` } });
         if (profileRes.data.code === "200") {
             studentId.value = profileRes.data.data.id;
-            const resumeRes = await axios.get(`/api/resume/student/${studentId.value}`, {
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
-            if (resumeRes.data.code === "200") resumes.value = resumeRes.data.data;
+            const res = await axios.get(`/api/resume/student/${studentId.value}`, { headers: { 'Authorization': `Bearer ${token}` } });
+            if (res.data.code === "200") resumes.value = res.data.data;
         }
-    } catch (err) {
-        console.error("学生数据加载异常");
-    }
+    } catch (err) { console.error(err); }
 };
 
+// 3. 投递逻辑
 const handleApplyClick = (jobId) => {
     if (!getToken()) {
-        ElMessage.warning("请登录学生账号后操作");
+        ElMessage.warning("请登录学生账号");
         router.push('/login');
         return;
     }
@@ -201,8 +247,7 @@ const handleApplyClick = (jobId) => {
         selectedResumeId.value = resumes.value[0].id;
         resumeDialogVisible.value = true;
     } else {
-        ElMessage.warning("简历库为空，请先上传简历");
-        router.push('/student/profile');
+        ElMessage.warning("请先上传简历");
     }
 };
 
@@ -213,12 +258,10 @@ const submitApplication = async () => {
             jobId: currentJobId.value,
             studentId: studentId.value,
             resumeId: selectedResumeId.value
-        }, {
-            headers: { 'Authorization': `Bearer ${getToken()}` }
-        });
+        }, { headers: { 'Authorization': `Bearer ${getToken()}` } });
 
         if (res.data.code === "200") {
-            ElMessage.success("投递成功！HR 将尽快查看您的简历");
+            ElMessage.success("投递成功！");
             resumeDialogVisible.value = false;
         } else {
             ElMessage.error(res.data.msg || "投递失败");
@@ -236,7 +279,6 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* 简历列表单选框深度美化 */
 .resume-radio-group {
     width: 100%;
     display: flex;
@@ -250,8 +292,7 @@ onMounted(() => {
     margin-right: 0 !important;
     padding: 12px 16px !important;
     border-radius: 12px !important;
-    transition: all 0.2s ease;
-    border-width: 1.5px !important;
+    transition: all 0.2s;
 }
 
 .resume-card-item:hover {
@@ -265,31 +306,19 @@ onMounted(() => {
     box-shadow: 0 4px 12px rgba(64, 158, 255, 0.15);
 }
 
-/* 隐藏原本的 el-radio 圈圈（可选，如果想用整块点击感） */
-:deep(.el-radio__input) {
-    display: flex;
-    align-items: center;
-}
-
 :deep(.el-radio__label) {
     padding-left: 12px;
     flex: 1;
 }
 
-/* 调整 Dialog 圆角 */
 :deep(.el-dialog) {
     border-radius: 16px !important;
     overflow: hidden;
 }
 
 :deep(.el-dialog__header) {
-    padding-bottom: 20px;
-    margin-right: 0;
     border-bottom: 1px solid #f0f0f0;
-}
-
-:deep(.el-dialog__title) {
-    font-weight: bold;
-    color: #303133;
+    margin-right: 0;
+    padding-bottom: 20px;
 }
 </style>
