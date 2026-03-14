@@ -118,13 +118,8 @@ async function goLogin() {
 
         <label class="field">
           <span class="label">确认密码</span>
-          <input
-            v-model="confirmPassword"
-            class="input"
-            type="password"
-            autocomplete="new-password"
-            placeholder="请再次输入密码"
-          />
+          <input v-model="confirmPassword" class="input" type="password" autocomplete="new-password"
+            placeholder="请再次输入密码" />
         </label>
 
         <div class="field">
@@ -159,16 +154,19 @@ async function goLogin() {
   display: grid;
   place-items: center;
   padding: 24px;
-  background: linear-gradient(135deg, #f0f4ff 0%, #e6f0ff 100%); /* 与登录页一致的浅蓝渐变背景 */
+  background: linear-gradient(135deg, #f0f4ff 0%, #e6f0ff 100%);
+  /* 与登录页一致的浅蓝渐变背景 */
 }
 
 .card {
   width: 100%;
-  max-width: 420px;           /* 与登录页一致，更精致 */
+  max-width: 420px;
+  /* 与登录页一致，更精致 */
   background: white;
   border-radius: 20px;
   padding: 40px 32px;
-  box-shadow: 0 20px 40px rgba(1, 104, 209, 0.15); /* 主色阴影 */
+  box-shadow: 0 20px 40px rgba(1, 104, 209, 0.15);
+  /* 主色阴影 */
   border: 1px solid rgba(1, 104, 209, 0.08);
   transition: all 0.3s ease;
 }
@@ -237,7 +235,8 @@ async function goLogin() {
 .radio input[type="radio"] {
   width: 18px;
   height: 18px;
-  accent-color: #0168d1; /* 选中时蓝色 */
+  accent-color: #0168d1;
+  /* 选中时蓝色 */
 }
 
 .error {
