@@ -190,7 +190,7 @@ defineExpose({
 </script>
 
 <style scoped>
-.content-card {
+/* .content-card {
     background: white;
     border-radius: 12px;
     padding: 24px;
@@ -242,5 +242,5 @@ defineExpose({
 .res-actions {
     display: flex;
     gap: 8px;
-}
+} */
 </style>

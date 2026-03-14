@@ -5,60 +5,55 @@
         :username-from-token="usernameFromToken" @update:active-tab="activeTab = $event" @go-home="goToHome" />
 
       <main class="content-body" v-loading="loading">
+        <!-- 基本信息 -->
         <ProfileInfo v-if="activeTab === 'info'" :form="form" :avatar-preview="avatarPreview"
           :username-from-token="usernameFromToken" :loading="loading" @update:form="form = $event"
           @update:avatar-preview="avatarPreview = $event" @update:loading="loading = $event" />
 
+        <!-- 简历管理 -->
         <ResumeManagement v-if="activeTab === 'resume'" :student-id="studentId" ref="resumeComponent" />
 
+        <!-- 投递记录 -->
         <DeliveryStatus v-if="activeTab === 'apply'" :student-id="studentId" />
 
+        <!-- 收藏列表 -->
         <FavoriteList v-if="activeTab === 'favorite'" :student-id="studentId" />
 
+        <!-- 消息中心 -->
         <MessageCenter v-if="activeTab === 'message'" :user-id="studentId" />
 
+        <!-- ⭐ 我的足迹 -->
+        <FootprintList v-if="activeTab === 'footprint'" :student-id="studentId" @open-detail="openJobDetail" />
 
+        <!-- ⭐ 职位详情弹窗 -->
+        <JobDetailDialog ref="jobDetailRef" :student-id="studentId" :current-job-id="currentJobId" />
       </main>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed, watch } from 'vue'
+import { ref, onMounted, computed, watch, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
-import { ElMessage } from 'element-plus'
 import { getToken, getUsernameFromToken } from '@/utils/auth'
 
-// 导入子组件
+// 子组件
 import ProfileSidebar from '@/components/StudentProfile/ProfileSidebar.vue'
 import ProfileInfo from '@/components/StudentProfile/ProfileInfo.vue'
 import ResumeManagement from '@/components/StudentProfile/ResumeManagement.vue'
 import DeliveryStatus from '@/components/StudentProfile/DeliveryStatus.vue'
 import FavoriteList from '@/components/StudentProfile/FavoriteList.vue'
 import MessageCenter from '@/components/StudentProfile/MessageCenter.vue'
-import { nextTick } from 'vue'
+import FootprintList from '@/components/StudentProfile/FootprintList.vue'
+import JobDetailDialog from '@/components/StudentProfile/JobDetailDialog.vue'
 
-// 类型定义
-interface StudentProfile {
-  id?: number
-  userId?: number
-  name: string
-  gender: string
-  phone: string
-  email: string
-  university: string
-  major: string
-  graduationYear: number | null
-  avatar: string
-}
-
+// ---------------------- 数据 ----------------------
 const router = useRouter()
 const activeTab = ref('info')
 const loading = ref(false)
 const resumeComponent = ref()
 
-// 数据
-const form = ref<StudentProfile>({
+const form = ref({
   name: '',
   gender: '',
   phone: '',
@@ -68,28 +63,32 @@ const form = ref<StudentProfile>({
   graduationYear: null,
   avatar: ''
 })
+
 const studentId = ref<number | null>(null)
 const userId = ref<number | null>(null)
 const avatarPreview = ref('')
 
-// 计算属性
-const usernameFromToken = computed(() => getUsernameFromToken(getToken() || '') || '未知用户')
+// ---------------------- 计算属性 ----------------------
+const usernameFromToken = computed(() =>
+  getUsernameFromToken(getToken() || '') || '未知用户'
+)
 
-// 方法
+// ---------------------- 加载学生信息 ----------------------
 const fetchProfile = async () => {
   loading.value = true
   try {
     const res = await fetch('/api/student/profile', {
-      headers: { 'Authorization': `Bearer ${getToken()}` }
+      headers: { Authorization: `Bearer ${getToken()}` }
     })
     const result = await res.json()
+
     if (result.code === '200' && result.data) {
-      form.value = { ...result.data, name: result.data.name || usernameFromToken.value }
-      avatarPreview.value = result.data.avatar ? `http://localhost:9999${result.data.avatar}` : ''
-      studentId.value = result.data.id ? Number(result.data.id) : null
-      // 你父组件里的这行可能有误
-      userId.value = result.data.userId ? Number(result.data.userId) : null
-      console.log("加载到 studentId =", studentId.value)
+      form.value = { ...result.data }
+      avatarPreview.value = result.data.avatar
+        ? `http://localhost:9999${result.data.avatar}`
+        : ''
+      studentId.value = Number(result.data.id)
+      userId.value = Number(result.data.userId)
     }
   } finally {
     loading.value = false
@@ -98,22 +97,26 @@ const fetchProfile = async () => {
 
 const goToHome = () => router.push({ name: 'student' })
 
-// 监听 Tab 切换 - 当切换到 resume 时加载简历列表
-watch(activeTab, async (newTab) => {
+// ---------------------- Tab 切换逻辑 ----------------------
+watch(activeTab, async newTab => {
   if (newTab === 'resume') {
-    // 等待 Vue 完成 DOM 更新（即 v-if 渲染完成）
     await nextTick()
-
     if (resumeComponent.value && studentId.value) {
       resumeComponent.value.fetchResumes(studentId.value)
     }
   }
-  if (newTab === 'apply') {
-    // 切换到投递记录时，刷新投递记录数据
-    await nextTick()
-
-  }
 })
+
+// ---------------------- 足迹 → 打开职位详情弹窗 ----------------------
+const jobDetailRef = ref(null)
+const currentJobId = ref(null)
+
+const openJobDetail = (jobId: number) => {
+  currentJobId.value = jobId
+  jobDetailRef.value.open(jobId)
+}
+
+// ---------------------- 生命周期 ----------------------
 onMounted(() => {
   if (!getToken()) return router.push({ name: 'login' })
   fetchProfile()
@@ -134,7 +137,6 @@ onMounted(() => {
   gap: 20px;
 }
 
-/* 内容区样式 */
 .content-body {
   flex: 1;
 }

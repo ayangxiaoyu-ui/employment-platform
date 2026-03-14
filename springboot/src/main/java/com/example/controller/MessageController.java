@@ -9,7 +9,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -34,7 +36,20 @@ public class MessageController {
                 .orderByDesc(Message::getCreateTime)
                 .list();
 
-        List<MessageVO> result = list.stream().map(msg -> {
+        // ⭐ 按联系人分组（企业ID 或 学生ID）
+        Map<Long, Message> latestMap = new LinkedHashMap<>();
+
+        for (Message msg : list) {
+            Long targetId = msg.getSenderId().equals(userId)
+                    ? msg.getReceiverId()
+                    : msg.getSenderId();
+
+            // 如果这个联系人还没放进去，则放入（因为 list 已按时间倒序）
+            latestMap.putIfAbsent(targetId, msg);
+        }
+
+        // ⭐ 转成 VO
+        List<MessageVO> result = latestMap.values().stream().map(msg -> {
             MessageVO vo = new MessageVO();
             BeanUtils.copyProperties(msg, vo);
 
@@ -42,12 +57,13 @@ public class MessageController {
                     ? msg.getReceiverId()
                     : msg.getSenderId();
 
-            vo.setTarget(userService.getUserInfo(targetId)); // ⭐ 查企业或学生信息
+            vo.setTarget(userService.getUserInfo(targetId));
             return vo;
         }).collect(Collectors.toList());
 
         return Result.success(result);
     }
+
 
 
 

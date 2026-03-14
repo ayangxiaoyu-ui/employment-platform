@@ -55,7 +55,8 @@
         <ChatDialog ref="chatRef" :self-id="studentId" :target-id="chatTargetId" self-type="student"
             target-type="company" />
 
-        <JobDetailDialog v-if="studentId" ref="jobDetailRef" :student-id="studentId" @apply="handleApplyClick" />
+        <JobDetailDialog v-if="studentId" ref="jobDetailRef" :student-id="studentId" :current-job-id="currentJobId"
+            @apply="handleApplyClick" />
 
         <el-dialog v-model="resumeDialogVisible" title="选择投递简历" width="480px" align-center>
             <div v-if="resumes.length > 0" class="px-2">

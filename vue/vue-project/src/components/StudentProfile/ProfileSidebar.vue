@@ -11,10 +11,10 @@
         <nav class="menu-nav">
             <div v-for="item in menuItems" :key="item.key" class="menu-item" :class="{ active: activeTab === item.key }"
                 @click="handleMenuClick(item.key)">
-                <el-icon>
+                <el-icon class="menu-icon">
                     <component :is="item.icon" />
                 </el-icon>
-                <span>{{ item.label }}</span>
+                <span class="menu-label">{{ item.label }}</span>
             </div>
         </nav>
 
@@ -29,7 +29,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { House, User, Document, Promotion, Star, ChatDotRound } from '@element-plus/icons-vue'
-import { getUsernameFromToken } from '@/utils/auth'
 
 interface StudentProfile {
     id?: number
@@ -66,11 +65,13 @@ const menuItems = [
     { key: 'apply', label: '我的投递', icon: Promotion },
     { key: 'favorite', label: '我的收藏', icon: Star },
     { key: 'message', label: '互动消息', icon: ChatDotRound },
+    { key: 'footprint', label: '访问足迹', icon: House },
 ]
 
+// 计算默认头像显示的文字
 const defaultAvatarText = computed(() => {
     const name = (props.form?.name || props.usernameFromToken || '匿').trim()
-    return name!.match(/^[\u4e00-\u9fa5]/) ? name![0] : name![0].toUpperCase()
+    return /^[\u4e00-\u9fa5]/.test(name) ? name[0] : name[0].toUpperCase()
 })
 
 const handleMenuClick = (key: string) => {
@@ -85,13 +86,15 @@ const goToHome = () => {
 <style scoped>
 .sidebar {
     width: 240px;
-    background: white;
+    background: #ffffff;
     border-radius: 12px;
     display: flex;
     flex-direction: column;
     padding: 24px 0;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     height: fit-content;
+    user-select: none;
+    /* 防止文字被意外选中 */
 }
 
 .user-info-brief {
@@ -108,24 +111,32 @@ const goToHome = () => {
     border-radius: 50%;
     overflow: hidden;
     border: 2px solid #409eff;
+    background: #f5f7fa;
 }
 
-.side-avatar,
-.side-avatar-default {
+.side-avatar {
     width: 100%;
     height: 100%;
     object-fit: cover;
+}
+
+.side-avatar-default {
+    width: 100%;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     background: #e6f0ff;
     color: #409eff;
     font-size: 32px;
+    font-weight: bold;
 }
 
 .nickname {
-    font-weight: bold;
-    color: #333;
+    font-weight: 600;
+    color: #303133;
+    margin: 0;
+    font-size: 16px;
 }
 
 .menu-nav {
@@ -139,21 +150,41 @@ const goToHome = () => {
     gap: 12px;
     cursor: pointer;
     color: #606266;
-    transition: all 0.3s;
+    transition: all 0.25s ease;
+    width: 240px;
+
+    box-sizing: border-box;
+    position: relative;
 }
 
 .menu-item:hover {
-    background-color: #f0f7ff;
+    background-color: #f5f7fa;
     color: #409eff;
 }
 
+/* 核心修复：使用内阴影模拟右侧边框，不占用布局宽度 */
 .menu-item.active {
+    width: 240px;
     background-color: #ecf5ff;
     color: #409eff;
-    border-right: 3px solid #409eff;
+    font-weight: 500;
+    box-shadow: inset -4px 0 0 0 #409eff;
+}
+
+.menu-icon {
+    font-size: 18px;
+}
+
+.menu-label {
+    font-size: 14px;
 }
 
 .sidebar-footer {
     padding: 12px 24px;
+    margin-top: 12px;
+}
+
+.w-full {
+    width: 100%;
 }
 </style>

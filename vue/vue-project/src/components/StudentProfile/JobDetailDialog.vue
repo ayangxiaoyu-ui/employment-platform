@@ -46,14 +46,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import axios from 'axios';
 import { ElMessage } from 'element-plus';
 import { Star, StarFilled } from '@element-plus/icons-vue';
 import { getToken } from '@/utils/auth';
 
 const props = defineProps<{
-    studentId: number | string | null
+    studentId: number | string | null,
+    currentJobId: number | string | null
 }>();
 
 const visible = ref(false);
@@ -65,10 +66,19 @@ const isFavorited = ref(false);
 const open = async (jobId: number) => {
     visible.value = true;
     loading.value = true;
-    isFavorited.value = false; // 重置状态
+    isFavorited.value = false;
+
+    // ⭐ 在这里记录足迹（正确位置）
+    if (props.studentId && jobId) {
+        axios.post("/api/browsing/record", null, {
+            params: {
+                studentId: props.studentId,
+                jobId: jobId
+            }
+        })
+    }
 
     try {
-        // 1. 并发请求：获取详情 + 检查收藏状态
         const [detailRes, statusRes] = await Promise.all([
             axios.get(`/api/job/${jobId}`),
             props.studentId ? axios.get('/api/favorite/status', {
@@ -88,6 +98,7 @@ const open = async (jobId: number) => {
         loading.value = false;
     }
 };
+
 
 // 切换收藏
 const handleFavoriteToggle = async () => {
@@ -117,6 +128,7 @@ const handleApply = () => {
 };
 
 defineExpose({ open });
+
 </script>
 
 <style scoped>
