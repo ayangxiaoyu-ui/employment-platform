@@ -45,4 +45,14 @@ public class JobController {
 
         return Result.success(job);
     }
+    @GetMapping("/latest")
+    public Result<List<Job>> latestJobs() {
+        List<Job> list = jobService.lambdaQuery()
+                .orderByDesc(Job::getCreateTime)
+                .last("LIMIT 10")   // ⭐ 取最新 10 条
+                .list();
+
+        return Result.success(list);
+    }
+
 }
