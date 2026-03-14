@@ -83,7 +83,7 @@ const fetchProfile = async () => {
     if (result.code === '200' && result.data) {
       form.value = { ...result.data, name: result.data.name || usernameFromToken.value }
       avatarPreview.value = result.data.avatar ? `http://localhost:9999${result.data.avatar}` : ''
-      studentId.value = result.data.id
+      studentId.value = result.data.id ? Number(result.data.id) : null
       console.log("加载到 studentId =", studentId.value)
     }
   } finally {

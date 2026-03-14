@@ -98,13 +98,15 @@ const formBackup = ref<StudentProfile>({ ...props.form })
 const formData = ref<StudentProfile>({ ...props.form })
 
 const defaultAvatarText = computed(() => {
-    const name = (formData.value?.name || props.usernameFromToken || '匿').trim()
-    return name!.match(/^[\u4e00-\u9fa5]/) ? name![0] : name![0].toUpperCase()
+  const name = (formData.value?.name || props.usernameFromToken || '匿').trim()
+  if (!name || name.length === 0) return '匿'
+  const isChineseChar = /^[\u4e00-\u9fa5]/.test(name)
+  return isChineseChar ? name[0] : name[0].toUpperCase()
 })
 
 const startEdit = () => {
-    isEditing.value = true
-    formBackup.value = { ...formData.value }
+  isEditing.value = true
+  formBackup.value = { ...formData.value }
 }
 
 const cancelEdit = () => {

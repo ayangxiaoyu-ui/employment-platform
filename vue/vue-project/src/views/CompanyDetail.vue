@@ -77,7 +77,7 @@
                             <el-button round @click="showJobDetail(job.id)">查看详情</el-button>
                             <el-button type="primary" round class="px-6 shadow-md shadow-blue-200"
                                 @click="handleApplyClick(job.id)">
-                                立即申请
+                                立即投递
                             </el-button>
                         </div>
                     </div>
@@ -85,52 +85,7 @@
             </div>
         </div>
 
-        <el-dialog v-model="jobDetailVisible" title="岗位详情" width="650px" align-center class="detail-dialog">
-            <div v-if="selectedJob" class="p-2">
-                <div class="flex justify-between items-start mb-6">
-                    <div>
-                        <h3 class="text-2xl font-bold text-gray-800 mb-2 flex items-center gap-3">
-                            {{ selectedJob.title }}
-
-                            <el-tooltip :content="isFavorited ? '取消收藏' : '加入收藏'" placement="top">
-                                <el-icon @click="handleFavoriteToggle(selectedJob.id)"
-                                    class="cursor-pointer transition-all hover:scale-125"
-                                    :class="isFavorited ? 'favorited-icon' : 'unfavorited-icon'">
-                                    <StarFilled v-if="isFavorited" />
-                                    <Star v-else />
-                                </el-icon>
-                            </el-tooltip>
-                        </h3>
-                        <p class="text-blue-600 font-medium">📍 {{ selectedJob.location }} | 💰 {{ selectedJob.salaryMin
-                        }}k - {{ selectedJob.salaryMax }}k</p>
-                    </div>
-                    <el-tag type="info" plain>{{ formatDateTime(selectedJob.createTime) }} 发布</el-tag>
-                </div>
-
-                <div class="space-y-6">
-                    <section>
-                        <h4 class="font-bold text-gray-700 mb-2 border-l-4 border-blue-500 pl-2">职位描述</h4>
-                        <div class="bg-gray-50 p-4 rounded-lg text-gray-600 leading-relaxed whitespace-pre-line">
-                            {{ selectedJob.description || '暂无详细描述' }}
-                        </div>
-                    </section>
-
-                    <section>
-                        <h4 class="font-bold text-gray-700 mb-2 border-l-4 border-blue-500 pl-2">任职要求</h4>
-                        <div class="bg-gray-50 p-4 rounded-lg text-gray-600 leading-relaxed whitespace-pre-line">
-                            {{ selectedJob.requirements || '暂无要求说明' }}
-                        </div>
-                    </section>
-                </div>
-            </div>
-            <template #footer>
-                <div class="flex justify-end gap-3 px-2 pb-2">
-                    <el-button @click="jobDetailVisible = false" round size="large">关闭</el-button>
-                    <el-button type="primary" round size="large" class="px-8"
-                        @click="goApplyFromDetail">立即投递</el-button>
-                </div>
-            </template>
-        </el-dialog>
+        <JobDetailDialog ref="jobDetailRef" :student-id="studentId" @apply="handleApplyClick" />
 
         <el-dialog v-model="resumeDialogVisible" title="选择投递简历" width="480px" align-center>
             <div v-if="resumes.length > 0" class="px-2">
@@ -173,6 +128,10 @@ import { useRoute, useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
 import { OfficeBuilding, UserFilled, Location, Document } from '@element-plus/icons-vue';
 import { getToken } from '@/utils/auth';
+
+import JobDetailDialog from '@/components/StudentProfile/JobDetailDialog.vue'; // 确保路径正确
+
+const jobDetailRef = ref(null);
 // import { Star, StarFilled } from '@element-plus/icons-vue';
 const route = useRoute();
 const router = useRouter();
@@ -203,17 +162,10 @@ const formatDateTime = (isoStr) => {
 };
 
 // 1. 获取详情逻辑
+// 1. 修改获取详情逻辑
+// 修改后的方法：只需一行
 const showJobDetail = (jobId) => {
-    console.log(jobId);
-
-    axios.get(`/api/job/${jobId}`).then(res => {
-        if (res.data.code === "200") {
-            selectedJob.value = res.data.data;
-            jobDetailVisible.value = true;
-        } else {
-            ElMessage.error(res.data.msg);
-        }
-    });
+    jobDetailRef.value.open(jobId);
 };
 
 // 从详情弹窗触发投递
