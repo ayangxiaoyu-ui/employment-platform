@@ -32,7 +32,8 @@
         <el-empty v-else description="暂无收藏内容" :image-size="100" />
 
         <JobDetailDialog v-if="props.studentId" ref="jobDetailRef" :student-id="props.studentId"
-            @apply="handleApplyFromDialog" @favorite-change="loadFavorites" />
+            :current-job-id="currentJobId" @apply="handleApplyFromDialog" @favorite-change="loadFavorites" />
+
 
         <el-dialog v-model="resumeDialogVisible" title="选择投递简历" width="480px" align-center>
             <div v-if="resumes.length > 0" class="px-2">

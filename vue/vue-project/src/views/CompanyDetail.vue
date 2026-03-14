@@ -143,8 +143,16 @@ const handleChat = async (jobId) => {
 
     chatTargetId.value = job.companyId
 
-    await nextTick()   // ⭐ 等待 props 更新
-    chatRef.value.open()
+    await nextTick()
+
+    chatRef.value.open({
+        selfId: studentId.value,
+        targetId: job.companyId,
+        selfType: "student",
+        targetType: "company",
+        targetName: company.value.name,
+        targetAvatar: company.value.logo
+    })
 }
 
 
