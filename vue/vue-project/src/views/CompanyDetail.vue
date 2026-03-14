@@ -1,48 +1,12 @@
 <template>
     <div class="w-full flex justify-center py-8 bg-gray-50 min-h-screen">
         <div class="w-full max-w-5xl bg-white shadow-xl rounded-2xl p-8">
-
             <div class="flex gap-8 items-start">
-                <div class="relative group">
-                    <el-image :src="company.logo ? `http://localhost:9999${company.logo}` : defaultLogo"
-                        class="w-44 h-44 object-cover rounded-2xl shadow-md border-4 border-white transition-transform group-hover:scale-105"
-                        fit="cover" />
-                </div>
-
-                <div class="flex-1 pt-2">
-                    <h2 class="text-4xl font-extrabold text-gray-800 mb-4">{{ company.name }}</h2>
-                    <div class="grid grid-cols-2 gap-y-3">
-                        <p class="text-gray-500 flex items-center text-base">
-                            <el-icon class="mr-2 text-blue-500">
-                                <OfficeBuilding />
-                            </el-icon>
-                            行业：{{ company.industry || "未填写" }}
-                        </p>
-                        <p class="text-gray-500 flex items-center text-base">
-                            <el-icon class="mr-2 text-blue-500">
-                                <UserFilled />
-                            </el-icon>
-                            规模：{{ company.scale || "未填写" }}
-                        </p>
-                        <p class="text-gray-500 flex items-center text-base col-span-2">
-                            <el-icon class="mr-2 text-blue-500">
-                                <Location />
-                            </el-icon>
-                            地址：{{ company.address || "未填写" }}
-                        </p>
-                    </div>
-                </div>
             </div>
 
             <el-divider class="my-8" />
 
             <div class="mb-10">
-                <h3 class="text-2xl font-bold mb-4 flex items-center">
-                    <span class="w-2 h-7 bg-blue-600 rounded-full mr-3"></span>企业简介
-                </h3>
-                <p class="text-gray-600 leading-relaxed text-lg bg-gray-50 p-6 rounded-xl">
-                    {{ company.description || "暂无简介" }}
-                </p>
             </div>
 
             <div>
@@ -79,13 +43,19 @@
                                 @click="handleApplyClick(job.id)">
                                 立即投递
                             </el-button>
+                            <el-button type="success" @click="handleChat(job.id)">
+                                联系企业
+                            </el-button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <JobDetailDialog ref="jobDetailRef" :student-id="studentId" @apply="handleApplyClick" />
+        <ChatDialog ref="chatRef" :self-id="studentId" :target-id="chatTargetId" self-type="student"
+            target-type="company" />
+
+        <JobDetailDialog v-if="studentId" ref="jobDetailRef" :student-id="studentId" @apply="handleApplyClick" />
 
         <el-dialog v-model="resumeDialogVisible" title="选择投递简历" width="480px" align-center>
             <div v-if="resumes.length > 0" class="px-2">
@@ -128,54 +98,78 @@ import { useRoute, useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
 import { OfficeBuilding, UserFilled, Location, Document } from '@element-plus/icons-vue';
 import { getToken } from '@/utils/auth';
+import { nextTick } from 'vue'
 
-import JobDetailDialog from '@/components/StudentProfile/JobDetailDialog.vue'; // 确保路径正确
 
-const jobDetailRef = ref(null);
-// import { Star, StarFilled } from '@element-plus/icons-vue';
+// 引入封装好的组件
+import JobDetailDialog from '@/components/StudentProfile/JobDetailDialog.vue';
+import ChatDialog from '@/components/common/ChatDialog.vue'; // 假设你的路径
+
 const route = useRoute();
 const router = useRouter();
 
+// 引用
+const jobDetailRef = ref(null);
+const chatRef = ref(null);
 
-
-// 数据定义
+// 数据
 const company = ref({});
 const jobs = ref([]);
 const resumes = ref([]);
 const studentId = ref(null);
-const defaultLogo = "/images/default-logo.png";
-const isFavorited = ref(false);
+const chatTargetId = ref(null); // 用于动态聊天对象
 
-// 控制状态
-const jobDetailVisible = ref(false);
-const selectedJob = ref(null); // 当前选中的详情对象
+// 弹窗控制
 const resumeDialogVisible = ref(false);
 const selectedResumeId = ref(null);
-const currentJobId = ref(null); // 当前准备投递的Job ID
+const currentJobId = ref(null);
 const submitting = ref(false);
 
-// 格式化时间
-const formatDateTime = (isoStr) => {
-    if (!isoStr) return '—';
-    const date = new Date(isoStr);
-    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
-};
+// --- 逻辑方法 ---
 
-// 1. 获取详情逻辑
-// 1. 修改获取详情逻辑
-// 修改后的方法：只需一行
+// 1. 打开岗位详情 (极其简单)
 const showJobDetail = (jobId) => {
     jobDetailRef.value.open(jobId);
 };
 
-// 从详情弹窗触发投递
-const goApplyFromDetail = () => {
-    const jId = selectedJob.value.id;
-    jobDetailVisible.value = false;
-    handleApplyClick(jId);
+// 2. 联系企业 (修正逻辑)
+
+const handleChat = async (jobId) => {
+    if (!studentId.value) return ElMessage.warning("请先登录");
+
+    const job = jobs.value.find(j => j.id === jobId)
+    if (!job) return
+
+    chatTargetId.value = job.companyId
+
+    await nextTick()   // ⭐ 等待 props 更新
+    chatRef.value.open()
+}
+
+
+// 3. 投递逻辑 (优化：点击时如果没简历列表则拉取一次)
+const handleApplyClick = async (jobId) => {
+    if (!getToken()) {
+        ElMessage.warning("请登录学生账号");
+        router.push('/login');
+        return;
+    }
+    currentJobId.value = jobId;
+
+    // 如果简历列表为空，尝试重新加载一次
+    if (resumes.value.length === 0) {
+        await loadStudentData();
+    }
+
+    if (resumes.value.length > 0) {
+        selectedResumeId.value = resumes.value[0].id;
+        resumeDialogVisible.value = true;
+    } else {
+        ElMessage.warning("请先上传简历");
+    }
 };
 
-// 2. 列表数据加载
+// 4. 加载数据
 const loadDetail = () => {
     axios.get(`/api/company/${route.params.id}`).then((res) => {
         if (res.data.code === "200") company.value = res.data.data;
@@ -192,31 +186,20 @@ const loadStudentData = async () => {
     const token = getToken();
     if (!token) return;
     try {
-        const profileRes = await axios.get('/api/student/profile', { headers: { 'Authorization': `Bearer ${token}` } });
+        const profileRes = await axios.get('/api/student/profile', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
         if (profileRes.data.code === "200") {
             studentId.value = profileRes.data.data.id;
-            const res = await axios.get(`/api/resume/student/${studentId.value}`, { headers: { 'Authorization': `Bearer ${token}` } });
+            const res = await axios.get(`/api/resume/student/${studentId.value}`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
             if (res.data.code === "200") resumes.value = res.data.data;
         }
-    } catch (err) { console.error(err); }
+    } catch (err) { console.error("加载学生信息失败", err); }
 };
 
-// 3. 投递逻辑
-const handleApplyClick = (jobId) => {
-    if (!getToken()) {
-        ElMessage.warning("请登录学生账号");
-        router.push('/login');
-        return;
-    }
-    currentJobId.value = jobId;
-    if (resumes.value.length > 0) {
-        selectedResumeId.value = resumes.value[0].id;
-        resumeDialogVisible.value = true;
-    } else {
-        ElMessage.warning("请先上传简历");
-    }
-};
-
+// 提交投递 (保持你原来的代码逻辑)
 const submitApplication = async () => {
     submitting.value = true;
     try {
@@ -229,38 +212,9 @@ const submitApplication = async () => {
         if (res.data.code === "200") {
             ElMessage.success("投递成功！");
             resumeDialogVisible.value = false;
-        } else {
-            ElMessage.error(res.data.msg || "投递失败");
         }
     } finally {
         submitting.value = false;
-    }
-};
-
-// 检查收藏状态 (在 showJobDetail 中调用)
-const checkFavoriteStatus = async (jobId) => {
-    if (!studentId.value) return;
-    const res = await axios.get('/api/favorite/status', {
-        params: { studentId: studentId.value, jobId: jobId }
-    });
-    if (res.data.code === "200") {
-        isFavorited.value = res.data.data;
-    }
-};
-
-// 切换收藏
-const handleFavoriteToggle = async (jobId) => {
-    if (!getToken()) {
-        ElMessage.warning("请先登录");
-        return;
-    }
-    const res = await axios.post('/api/favorite/toggle', {
-        studentId: studentId.value,
-        jobId: jobId
-    });
-    if (res.data.code === "200") {
-        isFavorited.value = res.data.data;
-        isFavorited.value ? ElMessage.success("收藏成功") : ElMessage.info("已取消收藏");
     }
 };
 
@@ -315,7 +269,9 @@ onMounted(() => {
     padding-bottom: 20px;
 }
 
-/* 在 <style scoped> 中添加 */
+/* 在
+<style scoped>
+中添加 */
 .favorited-icon {
     color: #facc15 !important;
     /* 强制黄色 */

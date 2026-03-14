@@ -15,7 +15,9 @@
 
         <FavoriteList v-if="activeTab === 'favorite'" :student-id="studentId" />
 
-        <MessageCenter v-if="activeTab === 'message'" :user-id="userId" />
+        <MessageCenter v-if="activeTab === 'message'" :user-id="studentId" />
+
+
       </main>
     </div>
   </div>
