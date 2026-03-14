@@ -63,7 +63,7 @@
 import { ref, computed, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import { Camera } from '@element-plus/icons-vue'
-import { getToken, getUsernameFromToken } from '@/utils/auth'
+import { getToken, getUsernameFromToken } from '../../utils/auth'
 
 interface StudentProfile {
     id?: number

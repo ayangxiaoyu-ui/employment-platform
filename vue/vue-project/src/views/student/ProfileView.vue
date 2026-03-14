@@ -15,7 +15,7 @@
 
         <FavoriteList v-if="activeTab === 'favorite'" :student-id="studentId" />
 
-        <MessageCenter v-if="activeTab === 'message'" />
+        <MessageCenter v-if="activeTab === 'message'" :user-id="userId" />
       </main>
     </div>
   </div>
@@ -67,6 +67,7 @@ const form = ref<StudentProfile>({
   avatar: ''
 })
 const studentId = ref<number | null>(null)
+const userId = ref<number | null>(null)
 const avatarPreview = ref('')
 
 // 计算属性
@@ -84,6 +85,8 @@ const fetchProfile = async () => {
       form.value = { ...result.data, name: result.data.name || usernameFromToken.value }
       avatarPreview.value = result.data.avatar ? `http://localhost:9999${result.data.avatar}` : ''
       studentId.value = result.data.id ? Number(result.data.id) : null
+      // 你父组件里的这行可能有误
+      userId.value = result.data.userId ? Number(result.data.userId) : null
       console.log("加载到 studentId =", studentId.value)
     }
   } finally {
