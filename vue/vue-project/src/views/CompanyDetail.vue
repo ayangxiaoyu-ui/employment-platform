@@ -1,12 +1,48 @@
 <template>
     <div class="w-full flex justify-center py-8 bg-gray-50 min-h-screen">
         <div class="w-full max-w-5xl bg-white shadow-xl rounded-2xl p-8">
+
             <div class="flex gap-8 items-start">
+                <div class="relative group">
+                    <el-image :src="company.logo ? `http://localhost:9999${company.logo}` : defaultLogo"
+                        class="w-44 h-44 object-cover rounded-2xl shadow-md border-4 border-white transition-transform group-hover:scale-105"
+                        fit="cover" />
+                </div>
+
+                <div class="flex-1 pt-2">
+                    <h2 class="text-4xl font-extrabold text-gray-800 mb-4">{{ company.name }}</h2>
+                    <div class="grid grid-cols-2 gap-y-3">
+                        <p class="text-gray-500 flex items-center text-base">
+                            <el-icon class="mr-2 text-blue-500">
+                                <OfficeBuilding />
+                            </el-icon>
+                            行业：{{ company.industry || "未填写" }}
+                        </p>
+                        <p class="text-gray-500 flex items-center text-base">
+                            <el-icon class="mr-2 text-blue-500">
+                                <UserFilled />
+                            </el-icon>
+                            规模：{{ company.scale || "未填写" }}
+                        </p>
+                        <p class="text-gray-500 flex items-center text-base col-span-2">
+                            <el-icon class="mr-2 text-blue-500">
+                                <Location />
+                            </el-icon>
+                            地址：{{ company.address || "未填写" }}
+                        </p>
+                    </div>
+                </div>
             </div>
 
             <el-divider class="my-8" />
 
             <div class="mb-10">
+                <h3 class="text-2xl font-bold mb-4 flex items-center">
+                    <span class="w-2 h-7 bg-blue-600 rounded-full mr-3"></span>企业简介
+                </h3>
+                <p class="text-gray-600 leading-relaxed text-lg bg-gray-50 p-6 rounded-xl">
+                    {{ company.description || "暂无简介" }}
+                </p>
             </div>
 
             <div>

@@ -24,6 +24,17 @@ public class NewsController {
         );
         return Result.success(list);
     }
+    //获取最新 5 条公告
+    @GetMapping("/latest")
+    public Result<?> latest() {
+        List<News> list = newsService.list(
+                new QueryWrapper<News>()
+                        .orderByDesc("create_time")
+                        .last("LIMIT 5")
+        );
+        return Result.success(list);
+    }
+
 
     /** 公告详情（浏览量 +1） */
     @GetMapping("/{id}")
