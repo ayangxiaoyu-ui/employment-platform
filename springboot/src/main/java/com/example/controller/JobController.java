@@ -25,6 +25,7 @@ public class JobController {
     private JobMapper jobMapper;
 
 
+
     /** 最新岗位 */
     @GetMapping("/latest")
     public Result<List<Job>> latestJobs() {
@@ -32,7 +33,6 @@ public class JobController {
                 .limit(10)
                 .toList());
     }
-
 
     /** 热门岗位 */
     @GetMapping("/hot")
@@ -56,7 +56,6 @@ public class JobController {
 
         return Result.success(jobs);
     }
-
 
     /** 推荐岗位 */
     @GetMapping("/recommend/{studentId}")
@@ -96,13 +95,19 @@ public class JobController {
         return Result.success(recommend);
     }
 
-
-    /** 所有岗位（含公司信息） */
+    /** 所有岗位 */
     @GetMapping("/all")
     public Result<List<Job>> allJobs() {
         return Result.success(jobService.getAllJobsWithCompany());
     }
-
+//统一的筛选接口 /api/job/filter
+    @GetMapping("/filter")
+    public Result<List<Job>> filter(
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) Long categoryId
+    ) {
+        return Result.success(jobService.filterJobs(keyword, categoryId));
+    }
 
     /** 公司岗位 */
     @GetMapping("/company/{companyId}")
@@ -115,19 +120,8 @@ public class JobController {
     }
 
 
-    @GetMapping("/search")
-    public Result<List<Job>> search(@RequestParam String keyword) {
 
-        // 空关键词 → 返回全部岗位
-        if (keyword == null || keyword.trim().isEmpty()) {
-            return Result.success(jobService.getAllJobsWithCompany());
-        }
-
-        List<Job> list = jobService.searchJobs(keyword);
-        return Result.success(list);
-    }
-
-    /** 岗位详情（含公司信息） */
+    /** 岗位详情 */
     @GetMapping("/{id}")
     public Result<Job> getById(@PathVariable Long id) {
         Job job = jobService.getJobDetail(id);
@@ -137,7 +131,4 @@ public class JobController {
 
         return Result.success(job);
     }
-
-
-
 }

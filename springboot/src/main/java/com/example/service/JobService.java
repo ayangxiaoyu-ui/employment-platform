@@ -5,6 +5,7 @@ import com.example.entity.Job;
 
 import java.util.List;
 
+
 public interface JobService extends IService<Job> {
 
     // 查询所有岗位（含公司信息）
@@ -13,6 +14,6 @@ public interface JobService extends IService<Job> {
     // 根据 ID 查询岗位（含公司信息）
     Job getJobDetail(Long id);
 
-    List<Job> searchJobs(String keyword);
-
+    // ⭐ 联合筛选（关键词 + 分类）
+    List<Job> filterJobs(String keyword, Long categoryId);
 }

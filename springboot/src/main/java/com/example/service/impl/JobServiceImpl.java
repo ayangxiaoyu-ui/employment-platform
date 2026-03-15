@@ -11,27 +11,25 @@ import java.util.List;
 
 @Service
 public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobService {
+
     @Autowired
     private JobMapper jobMapper;
 
+    /** 全部岗位（含公司信息） */
     @Override
     public List<Job> getAllJobsWithCompany() {
         return jobMapper.selectAllWithCompany();
     }
 
+    /** 岗位详情（含公司信息） */
     @Override
     public Job getJobDetail(Long id) {
-        List<Job> list = jobMapper.selectAllWithCompany();
-        return list.stream()
-                .filter(j -> j.getId().equals(id))
-                .findFirst()
-                .orElse(null);
+        return jobMapper.selectDetail(id);
     }
 
+    /** ⭐ 统一筛选（关键词 + 分类） */
     @Override
-    public List<Job> searchJobs(String keyword) {
-        keyword = "%" + keyword + "%";
-        return jobMapper.search(keyword);
+    public List<Job> filterJobs(String keyword, Long categoryId) {
+        return jobMapper.filterJobs(keyword, categoryId);
     }
-
 }
