@@ -14,8 +14,7 @@
 
             <div class="tags">
                 <span>{{ job.location }}</span>
-                <span>{{ job.experience || '经验不限' }}</span>
-                <span>{{ job.education || '学历不限' }}</span>
+                <span>{{ job.description || '经验不限' }}</span>
             </div>
 
             <div class="time">{{ formatTime(job.createTime) }}</div>
@@ -30,7 +29,6 @@ const props = defineProps({
         required: true
     }
 })
-// console.log(props.job);
 
 const defaultLogo = "/default-logo.png" // 你可以换成自己的默认图
 

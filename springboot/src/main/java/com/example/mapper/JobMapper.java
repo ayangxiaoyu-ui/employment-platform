@@ -47,4 +47,22 @@ public interface JobMapper extends BaseMapper<Job> {
         LIMIT 10
     """)
     List<Map<String, Object>> selectHotJobIds();
+
+    @Select("""
+    SELECT 
+        j.*, 
+        c.name AS company_name,
+        c.logo AS company_logo
+    FROM job j
+    LEFT JOIN company c ON j.company_id = c.id
+    WHERE j.status = 1
+      AND (
+            j.title LIKE #{keyword}
+         OR c.name LIKE #{keyword}
+         OR j.location LIKE #{keyword}
+      )
+    ORDER BY j.create_time DESC
+""")
+    List<Job> search(String keyword);
+
 }

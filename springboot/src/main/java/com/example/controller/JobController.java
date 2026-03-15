@@ -115,6 +115,18 @@ public class JobController {
     }
 
 
+    @GetMapping("/search")
+    public Result<List<Job>> search(@RequestParam String keyword) {
+
+        // 空关键词 → 返回全部岗位
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return Result.success(jobService.getAllJobsWithCompany());
+        }
+
+        List<Job> list = jobService.searchJobs(keyword);
+        return Result.success(list);
+    }
+
     /** 岗位详情（含公司信息） */
     @GetMapping("/{id}")
     public Result<Job> getById(@PathVariable Long id) {
@@ -125,4 +137,7 @@ public class JobController {
 
         return Result.success(job);
     }
+
+
+
 }

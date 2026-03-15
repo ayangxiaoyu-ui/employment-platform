@@ -27,4 +27,11 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobSe
                 .findFirst()
                 .orElse(null);
     }
+
+    @Override
+    public List<Job> searchJobs(String keyword) {
+        keyword = "%" + keyword + "%";
+        return jobMapper.search(keyword);
+    }
+
 }
