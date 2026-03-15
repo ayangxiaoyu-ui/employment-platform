@@ -50,7 +50,7 @@ onMounted(loadLatestNews)
 
 <style scoped>
 .latest-news-card {
-    background-color: #f8f9fb !important;
+    /* background-color: #f8f9fb !important; */
     /* 柔和浅灰背景 */
     border: none !important;
     /* 去掉边框 */

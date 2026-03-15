@@ -71,7 +71,7 @@ async function handleLogout() {
             <RouterLink class="nav-item" to="/">首页</RouterLink>
             <RouterLink class="nav-item" to="/student/recruit">招聘信息</RouterLink>
             <RouterLink class="nav-item" to="/companies">企业列表</RouterLink>
-            <RouterLink class="nav-item" to="/guidance">就业指导</RouterLink>
+            <RouterLink class="nav-item" to="/guide">就业指导</RouterLink>
             <RouterLink class="nav-item" to="/news">公告通知</RouterLink>
         </nav>
 

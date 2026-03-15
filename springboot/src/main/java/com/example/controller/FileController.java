@@ -32,18 +32,26 @@ public class FileController {
 
     @Value("${file.upload.logo-sub-path}")
     private String logoSubPath;
+    @Value("${file.upload.guide-sub-path}")
+    private String guideSubPath;
+
 
     @Value("${file.upload.avatar-url-prefix}")
     private String avatarUrlPrefix;
 
+
     @Value("${file.upload.logo-url-prefix}")
     private String logoUrlPrefix;
+
 
     @Value("${file.upload.resume-sub-path}")
     private String resumeSubPath;
 
     @Value("${file.upload.resume-url-prefix}")
     private String resumeUrlPrefix;
+
+    @Value("${file.upload.guide-url-prefix}")
+    private String guideUrlPrefix;
 
     private static final long MAX_AVATAR_SIZE = 5 * 1024 * 1024L; // 5MB
     private static final long MAX_LOGO_SIZE   = 3 * 1024 * 1024L; // 3MB
@@ -107,6 +115,25 @@ public class FileController {
         return Result.success(relativePath);
     }
 
+
+
+    @PostMapping("/upload/guide")
+    public Result<String> uploadGuide(@RequestParam("file") MultipartFile file) {
+
+        // 校验图片（大小你可以自己定，这里我用 5MB）
+        Result<String> validateResult = validateImageFile(file, 5 * 1024 * 1024L);
+        if (validateResult != null) return validateResult;
+
+        // 保存文件
+        String relativePath = saveFile(file, guideSubPath, "guide");
+        if (relativePath == null) {
+            return Result.error("文件保存失败");
+        }
+
+        log.info("就业指导封面上传成功: {}", relativePath);
+        return Result.success(relativePath);
+    }
+
     // 通用校验
     private Result<String> validateImageFile(MultipartFile file, long maxSize) {
         if (file == null || file.isEmpty()) return Result.error("请选择文件");
@@ -131,17 +158,26 @@ public class FileController {
         File dest = new File(dir, fileName);
         try {
             file.transferTo(dest);
-            if (!dest.exists() || dest.length() == 0) {
-                log.error("文件写入后为空或不存在: {}", dest.getAbsolutePath());
-                return null;
+
+            // 根据 subPath 返回不同的 URL 前缀
+            if (subPath.equals(avatarSubPath)) {
+                return avatarUrlPrefix + fileName;
+            } else if (subPath.equals(logoSubPath)) {
+                return logoUrlPrefix + fileName;
+            } else if (subPath.equals(guideSubPath)) {
+                return guideUrlPrefix + fileName;
+            } else if (subPath.equals(resumeSubPath)) {
+                return resumeUrlPrefix + fileName;
             }
-            log.info("文件保存成功: {}", dest.getAbsolutePath());
-            return avatarUrlPrefix + fileName;  // 或 logoUrlPrefix，根据 subPath 区分也可
+
+            return "/" + subPath + fileName;
+
         } catch (IOException e) {
             log.error("保存文件异常: {}", dest.getAbsolutePath(), e);
             return null;
         }
     }
+
 
     private void deleteOldFile(String oldPath, String subPath) {
         if (oldPath == null || oldPath.trim().isEmpty()) return;

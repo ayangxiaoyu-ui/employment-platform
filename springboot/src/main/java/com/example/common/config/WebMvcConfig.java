@@ -24,6 +24,11 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Value("${file.upload.logo-sub-path}")
     private String logoSubPath;
 
+    @Value("guide/")
+    private String guideSubPath;
+
+
+
     @Value("${file.upload.resume-sub-path}")
     private String resumeSubPath;
 
@@ -36,6 +41,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Value("${file.upload.resume-url-prefix}")
     private String resumeUrlPrefix;
 
+    @Value("${file.upload.guide-url-prefix}")
+    private String guideUrlPrefix;
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -50,9 +57,14 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addResourceHandler(resumeUrlPrefix + "**")
                 .addResourceLocations("file:" + basePath + resumeSubPath);
 
+        //就业指导
+        registry.addResourceHandler(guideUrlPrefix + "**")
+                .addResourceLocations("file:" + basePath + guideSubPath);
+
         System.out.println("静态资源映射已注册：");
         System.out.println("头像: " + avatarUrlPrefix + "** → " + basePath + avatarSubPath);
         System.out.println("Logo:  " + logoUrlPrefix + "** → " + basePath + logoSubPath);
         System.out.println("简历: " + resumeUrlPrefix + "** → " + basePath + resumeSubPath);
+        System.out.println("就业指导: " + guideUrlPrefix + "** → " + basePath + guideSubPath);
     }
 }

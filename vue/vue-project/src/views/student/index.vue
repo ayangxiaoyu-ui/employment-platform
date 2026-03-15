@@ -46,7 +46,7 @@
 
     </el-tabs>
     <LatestNews />
-
+    <LatestGuide />
 
     <JobDetailDialog ref="jobDetailRef" :student-id="studentId" :current-job-id="currentJobId" />
 
@@ -67,6 +67,7 @@ import RecommendJobs from '@/components/StudentProfile/RecommendJobs.vue'
 import JobDetailDialog from '@/components/StudentProfile/JobDetailDialog.vue'
 import { Clock, HotWater, Star } from '@element-plus/icons-vue'
 import LatestNews from './LatestNews.vue'
+import LatestGuide from '@/components/StudentProfile/LatestGuide.vue'
 
 
 const studentId = ref(null)
