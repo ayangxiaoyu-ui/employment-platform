@@ -3,15 +3,55 @@
 
     <SlideShow />
 
-    <LatestJobs @open-detail="openJobDetail" />
+    <el-tabs v-model="activeTab" class="job-tabs">
 
-    <HotJobs @open-detail="openJobDetail" />
+      <!-- 最新岗位 -->
+      <el-tab-pane name="latest">
+        <template #label>
+          <span class="flex items-center gap-1 pl-4">
+            <el-icon>
+              <Clock />
+            </el-icon>
+            最新岗位
+          </span>
+        </template>
+        <LatestJobs @open-detail="openJobDetail" />
+      </el-tab-pane>
 
-    <RecommendJobs v-if="studentId" :student-id="studentId" @open-detail="openJobDetail" />
+      <!-- 最热门岗位 -->
+      <el-tab-pane name="hot">
+        <template #label>
+          <span class="flex items-center gap-1 ">
+            <el-icon>
+              <HotWater />
+            </el-icon>
+            最热门岗位
+          </span>
+        </template>
+        <HotJobs @open-detail="openJobDetail" />
+      </el-tab-pane>
+
+      <!-- 为你推荐 -->
+      <el-tab-pane v-if="studentId" name="recommend">
+        <template #label>
+          <span class="flex items-center gap-1 ">
+            <el-icon>
+              <Star />
+            </el-icon>
+            为你推荐
+          </span>
+        </template>
+        <RecommendJobs :student-id="studentId" @open-detail="openJobDetail" />
+      </el-tab-pane>
+
+    </el-tabs>
 
     <JobDetailDialog ref="jobDetailRef" :student-id="studentId" :current-job-id="currentJobId" />
+
   </div>
 </template>
+
+
 
 <script setup>
 import { ref, onMounted } from 'vue'
@@ -23,10 +63,13 @@ import LatestJobs from '@/components/StudentProfile/LatestJobs.vue'
 import HotJobs from '@/components/StudentProfile/HotJobs.vue'
 import RecommendJobs from '@/components/StudentProfile/RecommendJobs.vue'
 import JobDetailDialog from '@/components/StudentProfile/JobDetailDialog.vue'
+import { Clock, HotWater, Star } from '@element-plus/icons-vue'
+
 
 const studentId = ref(null)
 const jobDetailRef = ref(null)
 const currentJobId = ref(null)
+const activeTab = ref("latest")   // ⭐ 默认显示最新岗位
 
 const openJobDetail = (jobId) => {
   currentJobId.value = jobId
@@ -44,5 +87,9 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-/* 你可以在这里写样式 */
+.job-tabs {
+  background: white;
+  padding: 10px 0;
+  border-radius: 12px;
+}
 </style>

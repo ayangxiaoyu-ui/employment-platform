@@ -1,9 +1,5 @@
 <template>
     <section class="latest-card">
-        <div class="header">
-            <h3>🆕 最新发布的岗位</h3>
-        </div>
-
         <el-table :data="jobs" style="width: 100%" class="job-table" header-cell-class-name="table-header"
             row-class-name="table-row">
             <!-- 职位 -->
@@ -68,7 +64,7 @@ onMounted(load)
 .latest-card {
     background: #ffffff;
     border-radius: 14px;
-    padding: 22px 26px;
+    padding: 0 26px;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
     transition: 0.3s ease;
 }

@@ -1,9 +1,5 @@
 <template>
     <section class="recommend-card">
-        <div class="header">
-            <h3>🎯 为你推荐的岗位</h3>
-        </div>
-
         <el-table :data="jobs" class="job-table" header-cell-class-name="table-header">
             <!-- 职位 -->
             <el-table-column label="职位" width="320">
@@ -71,7 +67,7 @@ onMounted(load)
 .recommend-card {
     background: #ffffff;
     border-radius: 14px;
-    padding: 22px 26px;
+    padding: 0px 26px;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
     transition: 0.3s ease;
 }
