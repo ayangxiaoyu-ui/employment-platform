@@ -17,7 +17,6 @@ public class JobSqlProvider {
             sql.append(" OR j.location LIKE CONCAT('%', #{keyword}, '%') ");  // ⭐ 必须加
             sql.append(" OR c.name LIKE CONCAT('%', #{keyword}, '%')) ");
         }
-vv          
 
         if (categoryId != null) {
             sql.append(" AND j.category_id = #{categoryId} ");
