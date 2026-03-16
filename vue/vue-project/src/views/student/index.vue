@@ -1,7 +1,8 @@
 <template>
-  <div class="w-[900px] mx-auto py-6 flex flex-col gap-[20px]">
+  <div class="w-[900px] mx-auto  flex flex-col gap-[20px] mb-[20px]">
 
     <SlideShow />
+    <StudentQuickEntry />
 
     <el-tabs v-model="activeTab" class="job-tabs">
 
@@ -68,6 +69,7 @@ import JobDetailDialog from '@/components/StudentProfile/JobDetailDialog.vue'
 import { Clock, HotWater, Star } from '@element-plus/icons-vue'
 import LatestNews from './LatestNews.vue'
 import LatestGuide from '@/components/StudentProfile/LatestGuide.vue'
+import StudentQuickEntry from "./StudentQuickEntry.vue"
 
 
 const studentId = ref(null)
@@ -92,8 +94,10 @@ onMounted(async () => {
 
 <style scoped>
 .job-tabs {
-  background: white;
-  padding: 10px 0;
+  background-color: #ffffff !important;
+
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  padding: 20px 22px;
   border-radius: 12px;
 }
 </style>

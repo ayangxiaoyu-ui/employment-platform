@@ -2,7 +2,7 @@
     <section class="content-card">
         <h3>投递动态</h3>
         <div class="delivery-timeline">
-            <el-table :data="deliveryData" style="width: 100%" v-loading="loading">
+            <el-table :data="deliveryData" style="width: 100%" v-loading="loading" @row-click="openJobDetail">
                 <el-table-column prop="companyName" label="公司" />
                 <el-table-column prop="jobTitle" label="岗位" />
                 <el-table-column label="当前状态">
@@ -18,8 +18,12 @@
                     </template>
                 </el-table-column>
             </el-table>
+
             <el-empty v-if="deliveryData.length === 0 && !loading" description="暂无投递记录" />
         </div>
+
+        <!-- 岗位详情弹窗 -->
+        <JobDetailDialog ref="jobDetailRef" :studentId="props.studentId" :currentJobId="currentJobId" />
     </section>
 </template>
 
@@ -27,14 +31,15 @@
 import { ref, onMounted, watch } from 'vue'
 import axios from 'axios'
 import { getToken } from '@/utils/auth'
+import JobDetailDialog from '@/components/StudentProfile/JobDetailDialog.vue'
 
-// 定义 Props
 interface Props {
     studentId: number | null
 }
 const props = defineProps<Props>()
 
 interface DeliveryRecord {
+    jobId: number
     companyName: string
     jobTitle: string
     status: number
@@ -44,13 +49,17 @@ interface DeliveryRecord {
 const deliveryData = ref<DeliveryRecord[]>([])
 const loading = ref(false)
 
-/**
- * 加载投递记录
- * @param id 学生ID
- */
+const jobDetailRef = ref()
+const currentJobId = ref<number | null>(null)
+
+const openJobDetail = (row: DeliveryRecord) => {
+    if (!row.jobId) return
+    currentJobId.value = row.jobId
+    jobDetailRef.value?.open(row.jobId)
+}
+
 const loadDelivery = async (id: number) => {
     if (!id) return
-
     loading.value = true
     try {
         const res = await axios.get(`/api/application/student/${id}`, {
@@ -59,75 +68,40 @@ const loadDelivery = async (id: number) => {
         if (res.data.code === "200") {
             deliveryData.value = res.data.data || []
         }
-    } catch (error) {
-        console.error("获取投递列表失败:", error)
     } finally {
         loading.value = false
     }
 }
 
-/**
- * 监听 studentId 的变化
- * 应对父组件异步获取 profile 导致子组件挂载时 id 还没到的情况
- */
 watch(() => props.studentId, (newId) => {
-    if (newId) {
-        loadDelivery(newId)
-    }
+    if (newId) loadDelivery(newId)
 }, { immediate: true })
 
-// 格式化日期
 const formatDate = (time: string) => {
     if (!time) return '—'
     const date = new Date(time)
-    const year = date.getFullYear()
-    const month = String(date.getMonth() + 1).padStart(2, '0')
-    const day = String(date.getDate()).padStart(2, '0')
-    const hour = String(date.getHours()).padStart(2, '0')
-    const minute = String(date.getMinutes()).padStart(2, '0')
-    return `${year}-${month}-${day} ${hour}:${minute}`
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`
 }
 
-// 状态数字 → 中文
-const getStatusText = (status: number) => {
-    const statusMap: Record<number, string> = {
-        0: "待查看",
-        1: "已查看",
-        2: "面试邀请",
-        3: "不合适",
-        4: "已录用"
-    }
-    return statusMap[status] || "未知"
-}
+const getStatusText = (status: number) => ({
+    0: "待查看",
+    1: "已查看",
+    2: "面试邀请",
+    3: "不合适",
+    4: "已录用"
+}[status] || "未知")
 
-// 状态数字 → Tag 颜色
 const getStatusType = (status: number) => {
     switch (status) {
-        case 2: return "warning"   // 面试
-        case 4: return "success"   // 录用
-        case 3: return "danger"    // 拒绝
-        case 1: return ""          // 已看
-        default: return "info"     // 待看
+        case 2: return "warning"
+        case 4: return "success"
+        case 3: return "danger"
+        case 1: return ""
+        default: return "info"
     }
 }
 
 onMounted(() => {
-    // 如果挂载时已经有 ID 了，直接加载
-    if (props.studentId) {
-        loadDelivery(props.studentId)
-    }
+    if (props.studentId) loadDelivery(props.studentId)
 })
 </script>
-
-<style scoped>
-.content-card {
-    background: white;
-    border-radius: 12px;
-    padding: 24px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-}
-
-.delivery-timeline {
-    margin-top: 20px;
-}
-</style>

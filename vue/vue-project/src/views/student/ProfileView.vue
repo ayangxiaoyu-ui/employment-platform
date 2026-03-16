@@ -2,7 +2,7 @@
   <div class="student-profile-container">
     <div class="main-layout">
       <ProfileSidebar :active-tab="activeTab" :form="form" :avatar-preview="avatarPreview"
-        :username-from-token="usernameFromToken" @update:active-tab="activeTab = $event" @go-home="goToHome" />
+        :username-from-token="usernameFromToken" @update:active-tab="changeTab" @go-home="goToHome" />
 
       <main class="content-body" v-loading="loading">
         <!-- 基本信息 -->
@@ -22,10 +22,10 @@
         <!-- 消息中心 -->
         <MessageCenter v-if="activeTab === 'message'" :user-id="studentId" />
 
-        <!-- ⭐ 我的足迹 -->
+        <!-- 足迹 -->
         <FootprintList v-if="activeTab === 'footprint'" :student-id="studentId" @open-detail="openJobDetail" />
 
-        <!-- ⭐ 职位详情弹窗 -->
+        <!-- 职位详情弹窗 -->
         <JobDetailDialog ref="jobDetailRef" :student-id="studentId" :current-job-id="currentJobId" />
       </main>
     </div>
@@ -34,7 +34,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, computed, watch, nextTick } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { getToken, getUsernameFromToken } from '@/utils/auth'
 
 // 子组件
@@ -47,9 +47,29 @@ import MessageCenter from '@/components/StudentProfile/MessageCenter.vue'
 import FootprintList from '@/components/StudentProfile/FootprintList.vue'
 import JobDetailDialog from '@/components/StudentProfile/JobDetailDialog.vue'
 
-// ---------------------- 数据 ----------------------
 const router = useRouter()
-const activeTab = ref('info')
+const route = useRoute()
+
+// ⭐ 从 URL 初始化 activeTab
+const activeTab = ref(route.query.tab || 'info')
+
+// ⭐ 监听 URL 变化（从首页快捷入口跳转时触发）
+watch(
+  () => route.query.tab,
+  (newTab) => {
+    if (newTab) activeTab.value = newTab
+  }
+)
+
+// ⭐ 切换 tab 时同步 URL
+const changeTab = (tab: string) => {
+  activeTab.value = tab
+  router.replace({
+    path: '/student/profile',
+    query: { tab }
+  })
+}
+
 const loading = ref(false)
 const resumeComponent = ref()
 
@@ -68,12 +88,12 @@ const studentId = ref<number | null>(null)
 const userId = ref<number | null>(null)
 const avatarPreview = ref('')
 
-// ---------------------- 计算属性 ----------------------
+// 用户名
 const usernameFromToken = computed(() =>
   getUsernameFromToken(getToken() || '') || '未知用户'
 )
 
-// ---------------------- 加载学生信息 ----------------------
+// 加载学生信息
 const fetchProfile = async () => {
   loading.value = true
   try {
@@ -97,7 +117,7 @@ const fetchProfile = async () => {
 
 const goToHome = () => router.push({ name: 'student' })
 
-// ---------------------- Tab 切换逻辑 ----------------------
+// ⭐ 简历 tab：加载简历列表
 watch(activeTab, async newTab => {
   if (newTab === 'resume') {
     await nextTick()
@@ -107,7 +127,7 @@ watch(activeTab, async newTab => {
   }
 })
 
-// ---------------------- 足迹 → 打开职位详情弹窗 ----------------------
+// 足迹 → 打开职位详情
 const jobDetailRef = ref(null)
 const currentJobId = ref(null)
 
@@ -116,7 +136,6 @@ const openJobDetail = (jobId: number) => {
   jobDetailRef.value.open(jobId)
 }
 
-// ---------------------- 生命周期 ----------------------
 onMounted(() => {
   if (!getToken()) return router.push({ name: 'login' })
   fetchProfile()

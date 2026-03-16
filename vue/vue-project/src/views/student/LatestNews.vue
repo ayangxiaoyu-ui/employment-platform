@@ -50,12 +50,9 @@ onMounted(loadLatestNews)
 
 <style scoped>
 .latest-news-card {
-    /* background-color: #f8f9fb !important; */
-    /* 柔和浅灰背景 */
-    border: none !important;
-    /* 去掉边框 */
-    box-shadow: none !important;
-    /* 去掉阴影 */
+    background-color: #ffffff !important;
+
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     padding: 20px 22px;
     border-radius: 12px;
 }

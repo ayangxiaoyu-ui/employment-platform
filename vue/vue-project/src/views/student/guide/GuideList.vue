@@ -1,8 +1,7 @@
 <template>
     <div class="guide-list">
         <el-card>
-            <h2>就业指导</h2>
-
+            <h2 class="text-2xl font-bold mb-4"> 就业指导</h2>
             <el-row :gutter="20">
                 <el-col :span="8" v-for="item in list" :key="item.id">
                     <el-card class="guide-card" @click="goDetail(item.id)">
@@ -64,5 +63,19 @@ const goDetail = (id) => {
 .guide-card {
     cursor: pointer;
     margin-bottom: 20px;
+    transition: box-shadow 0.3s;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+}
+
+.guide-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.guide-list {
+    background-color: #f5f7fa;
+    /* 浅灰背景，和 Element Plus 默认一致 */
+    padding: 30px;
+    border-radius: 12px;
 }
 </style>

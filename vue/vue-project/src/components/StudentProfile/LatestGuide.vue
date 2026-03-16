@@ -54,9 +54,9 @@ onMounted(loadLatest)
 
 <style scoped>
 .latest-guide-card {
-    background-color: #f8f9fb !important;
-    border: none !important;
-    box-shadow: none !important;
+    background-color: #ffffff !important;
+
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     padding: 20px 22px;
     border-radius: 12px;
 }
