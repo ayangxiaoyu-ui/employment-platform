@@ -16,4 +16,8 @@ public interface JobService extends IService<Job> {
 
     // ⭐ 联合筛选（关键词 + 分类）
     List<Job> filterJobs(String keyword, Long categoryId);
+
+    // ⭐ 企业发布岗位
+    boolean createJob(Job job);
 }
+

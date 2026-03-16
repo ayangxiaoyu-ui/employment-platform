@@ -1,14 +1,17 @@
 package com.example.controller;
 
+import cn.hutool.jwt.JWT;
 import com.example.common.Result;
 import com.example.entity.BrowsingHistory;
 import com.example.entity.Job;
 import com.example.mapper.JobMapper;
 import com.example.service.BrowsingHistoryService;
 import com.example.service.JobService;
+import com.example.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 @RestController
@@ -119,6 +122,35 @@ public class JobController {
                 .list());
     }
 
+    @PostMapping("/create")
+    public Result<?> createJob(
+            @RequestBody Job job,
+            @RequestHeader("Authorization") String token
+    ) {
+        // 去掉 Bearer 前缀
+        if (token.startsWith("Bearer ")) {
+            token = token.substring(7);
+        }
+
+        // 解析 token
+        JWT jwt = JwtUtils.parse(token);
+
+        Long companyId = ((Number) jwt.getPayload("userId")).longValue();
+        String role = (String) jwt.getPayload("role");
+
+        if (!"COMPANY".equals(role)) {
+            return Result.error("非企业账号无法发布岗位");
+        }
+
+        job.setCompanyId(companyId);
+        job.setStatus(1);
+        job.setCreateTime(new Date());
+        job.setUpdateTime(new Date());
+
+        boolean ok = jobService.save(job);
+
+        return ok ? Result.success("发布成功") : Result.error("发布失败");
+    }
 
 
     /** 岗位详情 */

@@ -11,6 +11,10 @@ import java.util.List;
 
 @Service
 public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobService {
+    @Override
+    public boolean createJob(Job job) {
+        return this.save(job);
+    }
 
     @Autowired
     private JobMapper jobMapper;
