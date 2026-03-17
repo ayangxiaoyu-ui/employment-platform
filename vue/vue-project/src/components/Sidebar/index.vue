@@ -37,38 +37,28 @@ const toggleCollapse = () => {
 
 <template>
   <div class="sidebar-wrapper" :class="{ collapsed: isCollapsed }">
-    <el-menu
-      :default-active="route.path"
-      class="el-menu-vertical"
-      :collapse="isCollapsed"
-      :collapse-transition="true"
-      router
-      background-color="var(--el-menu-bg-color)"
-      text-color="var(--el-menu-text-color)"
-      active-text-color="var(--el-menu-active-color)"
-    >
+    <el-menu :default-active="route.path" class="el-menu-vertical" :collapse="isCollapsed" :collapse-transition="true"
+      router background-color="var(--el-menu-bg-color)" text-color="var(--el-menu-text-color)"
+      active-text-color="var(--el-menu-active-color)">
       <!-- Logo + 折叠按钮 -->
       <div class="logo-area">
         <div class="logo" :style="{ display: isCollapsed ? 'none' : 'block' }">管理后台</div>
-        <el-button
-          type="primary"
-          :icon="isCollapsed ? Expand : Fold"
-          circle
-          size="small"
-          class="toggle-btn"
-          @click="toggleCollapse"
-          style="color: #0168d1;"
-        />
+        <el-button type="primary" :icon="isCollapsed ? Expand : Fold" circle size="small" class="toggle-btn"
+          @click="toggleCollapse" style="color: #0168d1;" />
       </div>
 
       <!-- ADMIN 菜单 -->
       <template v-if="isAdmin">
         <el-menu-item index="/admin/users">
-          <el-icon><UserFilled /></el-icon>
+          <el-icon>
+            <UserFilled />
+          </el-icon>
           <template #title>用户管理</template>
         </el-menu-item>
         <el-menu-item index="/admin/settings">
-          <el-icon><Setting /></el-icon>
+          <el-icon>
+            <Setting />
+          </el-icon>
           <template #title>系统设置</template>
         </el-menu-item>
       </template>
@@ -76,11 +66,15 @@ const toggleCollapse = () => {
       <!-- COMPANY 菜单 -->
       <template v-if="isCompany">
         <el-menu-item index="/company/jobs">
-          <el-icon><Briefcase /></el-icon>
+          <el-icon>
+            <Briefcase />
+          </el-icon>
           <template #title>职位发布</template>
         </el-menu-item>
         <el-menu-item index="/company/resumes">
-          <el-icon><Document /></el-icon>
+          <el-icon>
+            <Document />
+          </el-icon>
           <template #title>简历收件箱</template>
         </el-menu-item>
       </template>
@@ -98,11 +92,13 @@ const toggleCollapse = () => {
 }
 
 .sidebar-wrapper:not(.collapsed) {
-  width: 220px;  /* 展开宽度，可调 */
+  width: 220px;
+  /* 展开宽度，可调 */
 }
 
 .sidebar-wrapper.collapsed {
-  width: 64px;   /* 收起只剩图标宽度 */
+  width: 64px;
+  /* 收起只剩图标宽度 */
 }
 
 .logo-area {
@@ -139,8 +135,23 @@ const toggleCollapse = () => {
 :deep(.el-menu-item) {
   justify-content: flex-start;
 }
+
 .el-menu-item:hover {
   background-color: #f0f5ff;
   color: #0168d1;
+}
+
+/* 选中菜单项 */
+:deep(.el-menu-item.is-active) {
+  background-color: #e8f3ff !important;
+  color: #0168d1 !important;
+  font-weight: 600;
+  border-right: 3px solid #0168d1;
+}
+
+/* hover 效果 */
+:deep(.el-menu-item:hover) {
+  background-color: #f0f5ff !important;
+  color: #0168d1 !important;
 }
 </style>

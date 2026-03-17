@@ -1,12 +1,11 @@
 package com.example.controller;
 
+import cn.hutool.jwt.JWT;
 import com.example.common.Result;
-import com.example.entity.Application;
-import com.example.entity.Company;
-import com.example.entity.Job;
-import com.example.service.ApplicationService;
-import com.example.service.CompanyService;
-import com.example.service.JobService;
+import com.example.entity.*;
+import com.example.service.*;
+import com.example.vo.ResumeInboxVO;
+import com.example.utils.JwtUtils;
 import com.example.vo.ApplicationVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -24,9 +23,81 @@ public class ApplicationController {
     @Autowired
     private CompanyService companyService;
 
+    @Autowired
+    private StudentService studentService;
+
+    @Autowired
+    private ResumeService resumeService;
+
 
     @Autowired
     private ApplicationService applicationService;
+
+    /** 企业简历收件箱 */
+    @GetMapping("/inbox")
+    public Result<List<ResumeInboxVO>> inbox(@RequestHeader("Authorization") String token) {
+
+        // 去掉 Bearer
+        if (token.startsWith("Bearer ")) {
+            token = token.substring(7);
+        }
+
+        JWT jwt = JwtUtils.parse(token);
+        Long userId = ((Number) jwt.getPayload("userId")).longValue();
+        String role = (String) jwt.getPayload("role");
+
+        if (!"COMPANY".equals(role)) {
+            return Result.error("非企业账号无法查看收件箱");
+        }
+
+        // 关键修复：根据 userId 查 companyId
+        Company company = companyService.lambdaQuery()
+                .eq(Company::getUserId, userId)
+                .one();
+
+        if (company == null) {
+            return Result.error("企业信息不存在");
+        }
+
+        Long companyId = company.getId();
+
+        // 查询该企业所有岗位的投递记录
+        List<Application> apps = applicationService.lambdaQuery()
+                .inSql(Application::getJobId,
+                        "SELECT id FROM job WHERE company_id = " + companyId)
+                .orderByDesc(Application::getCreateTime)
+                .list();
+        // 转换为 VO
+        List<ResumeInboxVO> result = apps.stream().map(app -> {
+            ResumeInboxVO vo = new ResumeInboxVO();
+            vo.setApplicationId(app.getId());
+            vo.setStatus(app.getStatus());
+            vo.setCreateTime(app.getCreateTime().toString());
+
+            // 岗位信息
+            Job job = jobService.getById(app.getJobId());
+            if (job != null) {
+                vo.setJobTitle(job.getTitle());
+            }
+
+            // 学生信息
+            Student stu = studentService.getById(app.getStudentId());
+            if (stu != null) {
+                vo.setStudentName(stu.getName());
+            }
+
+            // 简历信息
+            Resume resume = resumeService.getById(app.getResumeId());
+            if (resume != null) {
+                vo.setResumeUrl(resume.getFileUrl());
+            }
+
+            return vo;
+        }).toList();
+
+        return Result.success(result);
+    }
+
 
     @PostMapping("/apply")
     public Result<Void> apply(@RequestBody Application application) {

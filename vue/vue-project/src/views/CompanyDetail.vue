@@ -98,7 +98,7 @@
             <div v-if="resumes.length > 0" class="px-2">
                 <p class="text-gray-500 text-sm mb-5">请选择一份简历完成申请：</p>
                 <el-radio-group v-model="selectedResumeId" class="resume-radio-group">
-                    <el-radio v-for="res in resumes" :key="res.id" :label="res.id" border class="resume-card-item">
+                    <el-radio v-for="res in resumes" :key="res.id" :value="res.id" border class="resume-card-item">
                         <div class="flex items-center gap-4 py-1">
                             <div class="bg-blue-50 p-3 rounded-lg"><el-icon class="text-blue-500 text-xl">
                                     <Document />
@@ -136,11 +136,13 @@ import { ElMessage } from "element-plus";
 import { OfficeBuilding, UserFilled, Location, Document } from '@element-plus/icons-vue';
 import { getToken } from '@/utils/auth';
 import { nextTick } from 'vue'
-
+import { formatDateTime } from '@/utils/format';
 
 // 引入封装好的组件
 import JobDetailDialog from '@/components/StudentProfile/JobDetailDialog.vue';
 import ChatDialog from '@/components/common/ChatDialog.vue'; // 假设你的路径
+const defaultLogo = "/images/default-logo.png";
+
 
 const route = useRoute();
 const router = useRouter();
