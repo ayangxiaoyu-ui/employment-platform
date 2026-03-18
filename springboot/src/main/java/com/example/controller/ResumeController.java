@@ -2,7 +2,9 @@ package com.example.controller;
 
 import com.example.common.Result;
 import com.example.entity.Resume;
+import com.example.entity.Student;
 import com.example.service.ResumeService;
+import com.example.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +30,42 @@ public class ResumeController {
 
     @Value("${file.upload.resume-url-prefix}")
     private String resumeUrlPrefix;
+
+    @Autowired
+    private StudentService studentService;
+
+
+    /**
+     * 查看简历详情（企业端）
+     */
+    @GetMapping("/{id}")
+    public Result<?> getResumeDetail(@PathVariable Long id) {
+
+        Resume resume = resumeService.getById(id);
+        if (resume == null) {
+            return Result.error("简历不存在");
+        }
+
+        // 查询学生信息
+        Student student = studentService.getById(resume.getStudentId());
+
+        Map<String, Object> data = new HashMap<>();
+        data.put("id", resume.getId());
+        data.put("title", resume.getTitle());
+        data.put("content", resume.getContent());
+        data.put("fileUrl", resume.getFileUrl());
+
+        if (student != null) {
+            data.put("studentName", student.getName());
+            data.put("gender", student.getGender());
+            data.put("phone", student.getPhone());
+            data.put("email", student.getEmail());
+            data.put("university", student.getUniversity());
+            data.put("major", student.getMajor());
+        }
+
+        return Result.success(data);
+    }
 
     /**
      * 上传简历文件

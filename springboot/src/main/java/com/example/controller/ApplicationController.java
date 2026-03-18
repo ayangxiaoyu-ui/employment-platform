@@ -71,6 +71,7 @@ public class ApplicationController {
         List<ResumeInboxVO> result = apps.stream().map(app -> {
             ResumeInboxVO vo = new ResumeInboxVO();
             vo.setApplicationId(app.getId());
+            vo.setResumeId(app.getResumeId());
             vo.setStatus(app.getStatus());
             vo.setCreateTime(app.getCreateTime().toString());
 

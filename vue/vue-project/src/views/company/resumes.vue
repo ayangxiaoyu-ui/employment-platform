@@ -10,6 +10,9 @@
 
                 <el-table-column prop="createTime" label="投递时间" min-width="180" />
 
+                <!-- 调试用：显示 resumeId -->
+                <el-table-column prop="resumeId" label="简历ID" min-width="120" />
+
                 <el-table-column label="状态" min-width="120">
                     <template #default="{ row }">
                         <el-tag type="info" v-if="row.status === 0">未查看</el-tag>
@@ -29,6 +32,7 @@
                     </template>
                 </el-table-column>
             </el-table>
+
         </el-card>
     </div>
 </template>
@@ -37,6 +41,10 @@
 import { ref, onMounted } from "vue";
 import axios from "axios";
 import { ElMessage } from "element-plus";
+import { useRouter } from "vue-router";
+const router = useRouter();
+
+
 
 const list = ref([]);
 
@@ -63,13 +71,14 @@ onMounted(() => {
 
 // 查看简历（打开 PDF）
 const viewResume = (row) => {
-    if (!row.resumeUrl) {
-        ElMessage.warning("该学生未上传简历文件");
+    console.log(row.resumeId, !row.resumeId);
+
+    if (!row.resumeId) {
+        ElMessage.error("该投递记录没有关联简历");
         return;
     }
-    window.open(row.resumeUrl, "_blank");
+    router.push(`/company/resumes/${row.resumeId}`);
 };
-
 // 标记为已查看
 const markRead = async (row) => {
     const token = localStorage.getItem("token");
