@@ -33,6 +33,26 @@ public class ApplicationController {
     @Autowired
     private ApplicationService applicationService;
 
+
+
+    @PostMapping("/mark-read")
+    public Result<Void> markRead(@RequestBody Application application) {
+
+        Long applicationId = application.getId();  // ← 必须用 getId()
+
+        if (applicationId == null) {
+            return Result.error("缺少 applicationId");
+        }
+
+        boolean ok = applicationService.lambdaUpdate()
+                .eq(Application::getId, applicationId)
+                .set(Application::getStatus, 1)
+                .update();
+
+        return ok ? Result.success() : Result.error("标记失败");
+    }
+
+
     /** 企业简历收件箱 */
     @GetMapping("/inbox")
     public Result<List<ResumeInboxVO>> inbox(@RequestHeader("Authorization") String token) {

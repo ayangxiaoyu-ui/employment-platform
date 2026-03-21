@@ -83,9 +83,12 @@ const viewResume = (row) => {
 const markRead = async (row) => {
     const token = localStorage.getItem("token");
 
+    console.log("applicationId =", row.applicationId); // 调试
+    console.log("发送给后端的 JSON =", { id: row.applicationId });
+
     const res = await axios.post(
         "/api/application/mark-read",
-        { applicationId: row.applicationId },
+        { id: row.applicationId },
         {
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -100,6 +103,7 @@ const markRead = async (row) => {
         ElMessage.error(res.data.msg || "操作失败");
     }
 };
+
 </script>
 
 <style scoped>
