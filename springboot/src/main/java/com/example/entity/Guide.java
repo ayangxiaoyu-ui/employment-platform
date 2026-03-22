@@ -14,6 +14,9 @@ public class Guide {
     @TableId(type = IdType.AUTO)
     private Long id;
 
+    /** 发布者 sys_user.id（企业账号 JWT 中的 userId）；平台文章为 null */
+    private Long userId;
+
     private String title;
 
     private String description;

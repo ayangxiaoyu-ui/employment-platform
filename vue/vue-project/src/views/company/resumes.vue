@@ -10,8 +10,22 @@
 
                 <el-table-column prop="createTime" label="投递时间" min-width="180" />
 
-                <!-- 调试用：显示 resumeId -->
-                <el-table-column prop="resumeId" label="简历ID" min-width="120" />
+                <el-table-column prop="resumeTitle" label="简历名称" min-width="140" show-overflow-tooltip />
+
+                <el-table-column label="投递类型" min-width="100">
+                    <template #default="{ row }">
+                        <el-tag v-if="row.resumeType === 2" type="warning" size="small">附件</el-tag>
+                        <el-tag v-else-if="row.resumeType === 1" type="success" size="small">在线</el-tag>
+                        <span v-else class="text-gray-400">—</span>
+                    </template>
+                </el-table-column>
+
+                <el-table-column label="在线简历" min-width="110">
+                    <template #default="{ row }">
+                        <el-tag v-if="row.resumeType === 1 && row.resumeContent" type="info" size="small">本次为在线填写</el-tag>
+                        <span v-else class="text-gray-400 text-xs">详情页可查看学生在线简历</span>
+                    </template>
+                </el-table-column>
 
                 <el-table-column label="状态" min-width="120">
                     <template #default="{ row }">
@@ -71,20 +85,18 @@ onMounted(() => {
 
 // 查看简历（打开 PDF）
 const viewResume = (row) => {
-    console.log(row.resumeId, !row.resumeId);
-
-    if (!row.resumeId) {
-        ElMessage.error("该投递记录没有关联简历");
+    if (!row.resumeId || !row.studentId) {
+        ElMessage.error("该投递记录数据异常");
         return;
     }
-    router.push(`/company/resumes/${row.resumeId}`);
+    // 跳转到学生详情页，并带上投递的 resumeId
+    router.push(`/company/student/${row.studentId}?resumeId=${row.resumeId}`);
 };
+
+
 // 标记为已查看
 const markRead = async (row) => {
     const token = localStorage.getItem("token");
-
-    console.log("applicationId =", row.applicationId); // 调试
-    console.log("发送给后端的 JSON =", { id: row.applicationId });
 
     const res = await axios.post(
         "/api/application/mark-read",

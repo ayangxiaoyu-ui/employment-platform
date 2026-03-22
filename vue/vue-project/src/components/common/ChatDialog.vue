@@ -10,7 +10,7 @@
                 <span class="font-bold text-lg">{{ target.name || '加载中...' }}</span>
             </div>
 
-            <el-button type="success" size="small" @click="openResumeDialog">
+            <el-button v-if="showResumeApply" type="success" size="small" @click="openResumeDialog">
                 投递简历
             </el-button>
         </div>
@@ -36,7 +36,7 @@
             <el-input v-model="content" type="textarea" :rows="2" placeholder="请输入消息..." @keyup.enter.ctrl="send" />
             <el-button type="primary" class="h-auto" @click="send">发送</el-button>
         </div>
-        <el-dialog v-model="resumeVisible" title="投递简历" width="450px">
+        <el-dialog v-if="showResumeApply" v-model="resumeVisible" title="投递简历" width="450px">
 
             <h4 class="font-bold mb-2">选择简历</h4>
             <el-radio-group v-model="selectedResumeId" class="w-full mb-4">
@@ -65,6 +65,11 @@
 import { ref, nextTick } from 'vue'
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
+
+const props = defineProps({
+    /** 学生联系企业时可投递简历；企业主动联系学生时关闭 */
+    showResumeApply: { type: Boolean, default: true },
+})
 
 const visible = ref(false)
 const messages = ref([])
@@ -139,6 +144,7 @@ const send = async () => {
 
 // ⭐ 打开投递简历弹窗
 const openResumeDialog = async () => {
+    if (!props.showResumeApply) return
     resumeVisible.value = true
 
     // 加载学生简历

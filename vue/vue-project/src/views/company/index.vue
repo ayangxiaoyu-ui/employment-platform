@@ -1,453 +1,474 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import axios from 'axios'
 import { ElMessage } from 'element-plus'
 import { getToken } from '@/utils/auth'
-import { House } from '@element-plus/icons-vue'
-
-interface CompanyProfile {
-  id?: number
-  userId?: number
-  name: string
-  description: string
-  logo: string
-  address: string
-  industry: string
-  scale: string
-  contactPerson: string
-  contactPhone: string
-}
+import {
+  DataAnalysis,
+  Document,
+  Briefcase,
+  Calendar,
+  View,
+  ChatDotRound,
+  CircleClose,
+  SuccessFilled,
+  Right,
+  Reading,
+  School,
+} from '@element-plus/icons-vue'
 
 const router = useRouter()
-const isEditing = ref(false)
-const loading = ref(false)
+const loading = ref(true)
 
-const form = ref<CompanyProfile>({
-  name: '',
-  description: '',
-  logo: '',
-  address: '',
-  industry: '',
-  scale: '',
-  contactPerson: '',
-  contactPhone: '',
+interface RecentRow {
+  applicationId: number
+  jobId: number
+  studentId: number
+  resumeId?: number | null
+  jobTitle: string
+  studentName: string
+  status: number
+  createTime: string
+}
+
+interface DashboardData {
+  totalApplications: number
+  last7DaysApplications: number
+  pendingViewCount: number
+  viewedCount: number
+  interviewCount: number
+  rejectedCount: number
+  hiredCount: number
+  openJobCount: number
+  recentApplications: RecentRow[]
+}
+
+const stats = ref<DashboardData>({
+  totalApplications: 0,
+  last7DaysApplications: 0,
+  pendingViewCount: 0,
+  viewedCount: 0,
+  interviewCount: 0,
+  rejectedCount: 0,
+  hiredCount: 0,
+  openJobCount: 0,
+  recentApplications: [],
 })
 
-const formBackup = ref<CompanyProfile>({ ...form.value })
-
-// Logo 预览和上传相关
-const logoPreview = ref<string>('')
-
-onMounted(() => {
+const loadDashboard = async () => {
   if (!getToken()) {
     router.push({ name: 'login' })
     return
   }
-  fetchCompanyProfile()
-})
-
-
-async function fetchCompanyProfile() {
   loading.value = true
   try {
-    const response = await fetch('/api/company/profile', {
-      headers: {
-        'Authorization': `Bearer ${getToken()}`,
-      },
+    const res = await axios.get('/api/application/company/dashboard', {
+      headers: { Authorization: `Bearer ${getToken()}` },
     })
-
-    if (!response.ok) {
-      ElMessage.error('获取企业信息失败')
-      return
-    }
-
-    const result = await response.json()
-    if (result.code === '200' && result.data) {
-      const rawScale = result.data.scale || ''
-      form.value = {
-        id: result.data.id,
-        userId: result.data.userId,
-        name: result.data.name || '',
-        description: result.data.description || '',
-        logo: result.data.logo || '',
-        address: result.data.address || '',
-        industry: result.data.industry || '',
-        scale: result.data.scale || '',
-        contactPerson: result.data.contactPerson || '',
-        contactPhone: result.data.contactPhone || '',
+    if (res.data.code === '200' && res.data.data) {
+      const d = res.data.data
+      stats.value = {
+        totalApplications: Number(d.totalApplications) || 0,
+        last7DaysApplications: Number(d.last7DaysApplications) || 0,
+        pendingViewCount: Number(d.pendingViewCount) || 0,
+        viewedCount: Number(d.viewedCount) || 0,
+        interviewCount: Number(d.interviewCount) || 0,
+        rejectedCount: Number(d.rejectedCount) || 0,
+        hiredCount: Number(d.hiredCount) || 0,
+        openJobCount: Number(d.openJobCount) || 0,
+        recentApplications: d.recentApplications || [],
       }
-      // 设置 Logo 预览
-      logoPreview.value = result.data.logo ? `http://localhost:9999${result.data.logo}` : ''
-      formBackup.value = { ...form.value }
-      console.log(form.value.scale);
-      console.log('原始规模:', rawScale, '→ 标准化后:', form.value.scale)
-
-    }
-  } catch (error) {
-    ElMessage.error('网络错误：' + (error instanceof Error ? error.message : '未知错误'))
-  } finally {
-    loading.value = false
-  }
-}
-
-function startEdit() {
-  isEditing.value = true
-  formBackup.value = { ...form.value }
-}
-
-function cancelEdit() {
-  form.value = { ...formBackup.value }
-  logoPreview.value = form.value.logo ? `http://localhost:9999${form.value.logo}` : ''
-  isEditing.value = false
-}
-
-async function saveProfile() {
-  loading.value = true
-  try {
-    const response = await fetch('/api/company/profile', {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${getToken()}`,
-      },
-      body: JSON.stringify(form.value),
-    })
-
-    if (!response.ok) {
-      ElMessage.error('保存失败')
-      return
-    }
-
-    const result = await response.json()
-    if (result.code === '200') {
-      ElMessage.success('保存成功')
-      isEditing.value = false
-      formBackup.value = { ...form.value }
-      logoPreview.value = form.value.logo ? `http://localhost:9999${form.value.logo}` : ''
     } else {
-      ElMessage.error(result.msg || '保存失败')
+      ElMessage.error(res.data.msg || '加载看板失败')
     }
-  } catch (error) {
-    ElMessage.error('网络错误：' + (error instanceof Error ? error.message : '未知错误'))
+  } catch {
+    ElMessage.error('加载看板失败')
   } finally {
     loading.value = false
   }
 }
 
-// 返回主页
-function goToHome() {
-  router.push('/')
-}
+const statusText = (s: number) =>
+  (
+    {
+      0: '待查看',
+      1: '已查看',
+      2: '面试邀请',
+      3: '不合适',
+      4: '已录用',
+    } as Record<number, string>
+  )[s] || '未知'
 
-// 触发 Logo 文件选择
-function triggerLogoInput() {
-  const input = document.getElementById('logo-upload') as HTMLInputElement
-  if (input) input.click()
-}
-
-// 处理 Logo 文件上传
-async function handleLogoChange(e: Event) {
-  const target = e.target as HTMLInputElement
-  const file = target.files?.[0]
-
-  if (!file) return
-
-  // 校验
-  if (!file.type.startsWith('image')) {
-    ElMessage.error('只允许上传图片文件')
-    return
-  }
-  if (file.size > 3 * 1024 * 1024) {
-    ElMessage.error('文件大小不能超过 3MB')
-    return
-  }
-
-  // 本地预览
-  const reader = new FileReader()
-  reader.onload = (ev) => {
-    logoPreview.value = ev.target?.result as string
-  }
-  reader.readAsDataURL(file)
-
-  // 立即上传到后端
-  loading.value = true
-  try {
-    const formData = new FormData()
-    formData.append('file', file)
-    formData.append('userId', form.value.userId?.toString() || '1') // 替换为真实 userId 来源
-
-    const response = await fetch('http://localhost:9999/file/upload/logo', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${getToken()}`,
-      },
-      body: formData,
-    })
-
-    if (!response.ok) {
-      throw new Error('上传失败')
-    }
-
-    const result = await response.json()
-    if (result.code === '200') {
-      ElMessage.success('Logo 上传成功')
-      // 更新 form.logo 为相对路径（存数据库用）
-      form.value.logo = result.data.replace('http://localhost:9999', '')
-    } else {
-      ElMessage.error(result.msg || '上传失败')
-      logoPreview.value = '' // 上传失败，清除预览
-    }
-  } catch (error) {
-    ElMessage.error('上传出错：' + (error instanceof Error ? error.message : '未知错误'))
-    logoPreview.value = '' // 出错清除预览
-  } finally {
-    loading.value = false
-    target.value = '' // 清空 input
+const statusTagType = (s: number) => {
+  switch (s) {
+    case 2:
+      return 'warning'
+    case 4:
+      return 'success'
+    case 3:
+      return 'danger'
+    case 1:
+      return 'primary'
+    default:
+      return 'info'
   }
 }
+
+const formatTime = (t: string) => {
+  if (!t) return '—'
+  return String(t).replace('T', ' ').slice(0, 16)
+}
+
+const goInbox = () => router.push('/company/resumes')
+const goJobs = () => router.push('/company/jobs')
+const goProfile = () => router.push('/company/profile')
+const goMessages = () => router.push('/company/messages')
+const goGuide = () => router.push('/company/guide')
+const goStudents = () => router.push('/company/students')
+
+const openResume = (row: RecentRow) => {
+  if (row.resumeId) {
+    router.push(`/company/student/${row.studentId}?resumeId=${row.resumeId}`)
+  } else {
+    router.push(`/company/student/${row.studentId}`)
+  }
+}
+
+onMounted(() => {
+  loadDashboard()
+})
 </script>
 
 <template>
-  <div class="company-profile">
-    <div class="container">
-      <h1 class="title">企业个人中心</h1>
-
-      <div v-loading="loading" class="profile-card">
-        <div class="header">
-          <h2>企业信息</h2>
-          <div class="actions">
-            <el-button type="info" plain :icon="House" @click="goToHome">
-              返回主页
-            </el-button>
-
-            <el-button v-if="!isEditing" type="primary" @click="startEdit">编辑</el-button>
-            <template v-else>
-              <el-button type="primary" @click="saveProfile">保存</el-button>
-              <el-button @click="cancelEdit">取消</el-button>
-            </template>
-          </div>
-        </div>
-
-        <div class="form-container">
-          <!-- Logo 上传区域 -->
-          <div class="form-item avatar-item">
-            <span class="label">企业 Logo</span>
-            <div class="avatar-preview">
-              <img v-if="logoPreview" :src="logoPreview" alt="Logo 预览" class="avatar-img" />
-              <div v-else class="avatar-placeholder">暂无 Logo</div>
-            </div>
-
-            <input id="logo-upload" type="file" accept="image/*" style="display: none" @change="handleLogoChange" />
-
-            <el-button v-if="isEditing" type="primary" plain size="small" @click="triggerLogoInput">
-              上传 Logo
-            </el-button>
-          </div>
-
-          <!-- 企业名称 -->
-          <div class="form-item">
-            <span class="label">企业名称</span>
-            <input v-model="form.name" :disabled="!isEditing" class="input" :class="{ 'input-edit': isEditing }"
-              placeholder="请输入企业名称" />
-          </div>
-
-          <!-- 企业简介 -->
-          <div class="form-item">
-            <span class="label">企业简介</span>
-            <textarea v-model="form.description" :disabled="!isEditing" class="input textarea"
-              :class="{ 'input-edit': isEditing }" placeholder="请输入企业简介" rows="4"></textarea>
-          </div>
-
-          <!-- 详细地址 -->
-          <div class="form-item">
-            <span class="label">详细地址</span>
-            <input v-model="form.address" :disabled="!isEditing" class="input" :class="{ 'input-edit': isEditing }"
-              placeholder="请输入详细地址" />
-          </div>
-
-          <!-- 所属行业 -->
-          <div class="form-item">
-            <span class="label">所属行业</span>
-            <input v-model="form.industry" :disabled="!isEditing" class="input" :class="{ 'input-edit': isEditing }"
-              placeholder="请输入所属行业" />
-          </div>
-
-          <!-- 人员规模 -->
-          <div class="form-item">
-            <span class="label">人员规模</span>
-            <select v-model="form.scale" :disabled="!isEditing" class="input select"
-              :class="{ 'input-edit': isEditing }">
-              <option value="">请选择人员规模</option>
-              <option value="5000人以下">5000人以下</option>
-              <option value="5000-9999人">5000-9999人</option>
-              <option value="1-5万人">1-5万人</option>
-              <option value="5-10万人">5-10万人</option>
-              <option value="10-30万人">10-30万人</option>
-              <option value="30-50万人">30-50万人</option>
-              <option value="50万人以上">50万人以上</option>
-            </select>
-          </div>
-
-          <!-- 联系人 -->
-          <div class="form-item">
-            <span class="label">联系人</span>
-            <input v-model="form.contactPerson" :disabled="!isEditing" class="input"
-              :class="{ 'input-edit': isEditing }" placeholder="请输入联系人" />
-          </div>
-
-          <!-- 联系电话 -->
-          <div class="form-item">
-            <span class="label">联系电话</span>
-            <input v-model="form.contactPhone" :disabled="!isEditing" type="tel" class="input"
-              :class="{ 'input-edit': isEditing }" placeholder="请输入联系电话" />
-          </div>
-        </div>
+  <div class="company-home" v-loading="loading">
+    <div class="page-head">
+      <div>
+        <h1 class="page-title">企业工作台</h1>
+        <p class="page-sub">投递与岗位数据总览，快捷进入常用功能</p>
       </div>
+      <el-button type="primary" :icon="Right" @click="goInbox">简历收件箱</el-button>
     </div>
+
+    <!-- 核心指标 -->
+    <el-row :gutter="16" class="stat-row">
+      <el-col :xs="24" :sm="12" :lg="6">
+        <el-card class="stat-card" shadow="hover">
+          <div class="stat-inner">
+            <el-icon class="stat-icon primary"><DataAnalysis /></el-icon>
+            <div>
+              <div class="stat-value">{{ stats.totalApplications }}</div>
+              <div class="stat-label">投递总数</div>
+            </div>
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :xs="24" :sm="12" :lg="6">
+        <el-card class="stat-card warn" shadow="hover">
+          <div class="stat-inner">
+            <el-icon class="stat-icon warning"><Document /></el-icon>
+            <div>
+              <div class="stat-value">{{ stats.pendingViewCount }}</div>
+              <div class="stat-label">待查看简历</div>
+            </div>
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :xs="24" :sm="12" :lg="6">
+        <el-card class="stat-card" shadow="hover">
+          <div class="stat-inner">
+            <el-icon class="stat-icon success"><Briefcase /></el-icon>
+            <div>
+              <div class="stat-value">{{ stats.openJobCount }}</div>
+              <div class="stat-label">在招岗位数</div>
+            </div>
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :xs="24" :sm="12" :lg="6">
+        <el-card class="stat-card" shadow="hover">
+          <div class="stat-inner">
+            <el-icon class="stat-icon info"><Calendar /></el-icon>
+            <div>
+              <div class="stat-value">{{ stats.last7DaysApplications }}</div>
+              <div class="stat-label">近 7 日新增投递</div>
+            </div>
+          </div>
+        </el-card>
+      </el-col>
+    </el-row>
+
+    <!-- 投递状态分布 -->
+    <el-card class="section-card" shadow="never">
+      <template #header>
+        <span class="section-title">投递状态分布</span>
+      </template>
+      <el-row :gutter="12">
+        <el-col :xs="12" :sm="8" :md="4">
+          <div class="mini-stat">
+            <el-icon class="mini-ic"><View /></el-icon>
+            <span class="mini-val">{{ stats.viewedCount }}</span>
+            <span class="mini-lab">已查看</span>
+          </div>
+        </el-col>
+        <el-col :xs="12" :sm="8" :md="4">
+          <div class="mini-stat">
+            <el-icon class="mini-ic warn"><ChatDotRound /></el-icon>
+            <span class="mini-val">{{ stats.interviewCount }}</span>
+            <span class="mini-lab">面试邀请</span>
+          </div>
+        </el-col>
+        <el-col :xs="12" :sm="8" :md="4">
+          <div class="mini-stat">
+            <el-icon class="mini-ic danger"><CircleClose /></el-icon>
+            <span class="mini-val">{{ stats.rejectedCount }}</span>
+            <span class="mini-lab">不合适</span>
+          </div>
+        </el-col>
+        <el-col :xs="12" :sm="8" :md="4">
+          <div class="mini-stat">
+            <el-icon class="mini-ic ok"><SuccessFilled /></el-icon>
+            <span class="mini-val">{{ stats.hiredCount }}</span>
+            <span class="mini-lab">已录用</span>
+          </div>
+        </el-col>
+      </el-row>
+    </el-card>
+
+    <el-row :gutter="16">
+      <el-col :xs="24" :lg="16">
+        <el-card class="section-card" shadow="never">
+          <template #header>
+            <div class="card-head-flex">
+              <span class="section-title">最近投递</span>
+              <el-button type="primary" link @click="goInbox">查看全部</el-button>
+            </div>
+          </template>
+          <el-table :data="stats.recentApplications" stripe style="width: 100%" empty-text="暂无投递记录">
+            <el-table-column prop="studentName" label="学生" min-width="100" />
+            <el-table-column prop="jobTitle" label="应聘岗位" min-width="140" show-overflow-tooltip />
+            <el-table-column label="状态" width="110">
+              <template #default="{ row }">
+                <el-tag :type="statusTagType(row.status)" size="small">{{ statusText(row.status) }}</el-tag>
+              </template>
+            </el-table-column>
+            <el-table-column label="投递时间" width="170">
+              <template #default="{ row }">
+                {{ formatTime(row.createTime) }}
+              </template>
+            </el-table-column>
+            <el-table-column label="操作" width="100" fixed="right">
+              <template #default="{ row }">
+                <el-button type="primary" link @click="openResume(row)">查看</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-card>
+      </el-col>
+      <el-col :xs="24" :lg="8">
+        <el-card class="section-card shortcuts" shadow="never">
+          <template #header>
+            <span class="section-title">快捷入口</span>
+          </template>
+          <div class="shortcut-list">
+            <div class="shortcut-item" @click="goInbox">
+              <el-icon><Document /></el-icon>
+              <span>简历收件箱</span>
+              <el-icon class="arrow"><Right /></el-icon>
+            </div>
+            <div class="shortcut-item" @click="goStudents">
+              <el-icon><School /></el-icon>
+              <span>学生库</span>
+              <el-icon class="arrow"><Right /></el-icon>
+            </div>
+            <div class="shortcut-item" @click="goJobs">
+              <el-icon><Briefcase /></el-icon>
+              <span>发布与管理职位</span>
+              <el-icon class="arrow"><Right /></el-icon>
+            </div>
+            <div class="shortcut-item" @click="goMessages">
+              <el-icon><ChatDotRound /></el-icon>
+              <span>互动消息</span>
+              <el-icon class="arrow"><Right /></el-icon>
+            </div>
+            <div class="shortcut-item" @click="goProfile">
+              <el-icon><View /></el-icon>
+              <span>企业资料 / 个人中心</span>
+              <el-icon class="arrow"><Right /></el-icon>
+            </div>
+            <div class="shortcut-item" @click="goGuide">
+              <el-icon><Reading /></el-icon>
+              <span>就业指导</span>
+              <el-icon class="arrow"><Right /></el-icon>
+            </div>
+          </div>
+        </el-card>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
 <style scoped>
-/* 与学生版完全一致的样式 */
-.company-profile {
-  min-height: calc(100vh - 80px);
-  padding: 32px 16px;
-  background: linear-gradient(135deg, #f0f4ff 0%, #e6f0ff 100%);
-  display: flex;
-  justify-content: center;
-}
-
-.container {
+.company-home {
   width: 100%;
-  max-width: 600px;
+  box-sizing: border-box;
 }
 
-.title {
-  margin: 0 0 32px;
-  font-size: 28px;
+.page-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.page-title {
+  margin: 0 0 6px;
+  font-size: 22px;
+  font-weight: 600;
+  color: #303133;
+}
+
+.page-sub {
+  margin: 0;
+  font-size: 13px;
+  color: #909399;
+}
+
+.stat-row {
+  margin-bottom: 16px;
+}
+
+.stat-card {
+  margin-bottom: 16px;
+  border-radius: 8px;
+}
+
+.stat-inner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.stat-icon {
+  font-size: 40px;
+  color: #409eff;
+}
+
+.stat-icon.warning {
+  color: #e6a23c;
+}
+
+.stat-icon.success {
+  color: #67c23a;
+}
+
+.stat-icon.info {
+  color: #909399;
+}
+
+.stat-value {
+  font-size: 26px;
   font-weight: 700;
-  color: #0168d1;
-  text-align: center;
+  color: #303133;
+  line-height: 1.2;
 }
 
-.profile-card {
-  background: white;
-  border-radius: 16px;
-  padding: 32px 24px;
-  box-shadow: 0 10px 30px rgba(1, 104, 209, 0.12);
-  border: 1px solid rgba(1, 104, 209, 0.06);
+.stat-label {
+  font-size: 13px;
+  color: #909399;
+  margin-top: 4px;
 }
 
-.header {
+.section-card {
+  margin-bottom: 16px;
+  border-radius: 8px;
+}
+
+.section-title {
+  font-weight: 600;
+  color: #303133;
+}
+
+.card-head-flex {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 32px;
 }
 
-.header h2 {
-  margin: 0;
-  font-size: 24px;
-  color: #2c3e50;
-}
-
-.actions {
+.mini-stat {
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 8px;
+  background: #f8f9fc;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.mini-ic {
+  font-size: 22px;
+  color: #409eff;
+  margin-bottom: 6px;
+}
+
+.mini-ic.warn {
+  color: #e6a23c;
+}
+
+.mini-ic.danger {
+  color: #f56c6c;
+}
+
+.mini-ic.ok {
+  color: #67c23a;
+}
+
+.mini-val {
+  font-size: 20px;
+  font-weight: 700;
+  color: #303133;
+}
+
+.mini-lab {
+  font-size: 12px;
+  color: #909399;
+  margin-top: 4px;
+}
+
+.shortcut-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.shortcut-item {
+  display: flex;
+  align-items: center;
   gap: 12px;
-  align-items: center;
+  padding: 14px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
 }
 
-.form-container {
-  display: flex;
-  flex-direction: column;
-  gap: 28px;
+.shortcut-item:hover {
+  background: #f0f5ff;
 }
 
-.form-item {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+.shortcut-item .el-icon:first-child {
+  font-size: 20px;
+  color: #409eff;
 }
 
-.avatar-item {
-  align-items: center;
-}
-
-.avatar-preview {
-  width: 120px;
-  height: 120px;
-  border-radius: 12px;
-  overflow: hidden;
-  background: #f0f4ff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 12px;
-  border: 2px dashed #0168d1;
-}
-
-.avatar-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.avatar-placeholder {
-  color: #a0c4ff;
+.shortcut-item span {
+  flex: 1;
   font-size: 14px;
-  text-align: center;
+  color: #606266;
 }
 
-.label {
-  font-size: 15px;
-  font-weight: 500;
-  color: #34495e;
-}
-
-.input,
-.select,
-.textarea {
-  padding: 0 16px;
-  border-radius: 10px;
-  border: 1px solid #d1d9e6;
-  background: #f9fcff;
-  color: #2c3e50;
-  font-size: 15px;
-  transition: all 0.3s ease;
-  font-family: inherit;
-}
-
-.input,
-.select {
-  height: 50px;
-}
-
-.textarea {
-  min-height: 100px;
-  resize: vertical;
-  padding: 12px 16px;
-}
-
-.input:focus,
-.select:focus,
-.textarea:focus {
-  border-color: #0168d1;
-  box-shadow: 0 0 0 3px rgba(1, 104, 209, 0.12);
-  outline: none;
-  background: white;
-}
-
-.input-edit,
-.textarea.input-edit {
-  background: white;
-  border-color: #0168d1;
-}
-
-.select {
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%230168d1' d='M6 9L2 5h8z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 16px center;
-  padding-right: 40px;
+.shortcut-item .arrow {
+  color: #c0c4cc;
 }
 </style>

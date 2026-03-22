@@ -16,4 +16,6 @@ public class Resume {
     private Integer isPublic;
     private Date createTime;
     private Date updateTime;
+    private Integer type;  // 1=在线简历  2=附件简历
+
 }

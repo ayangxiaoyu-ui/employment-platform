@@ -208,25 +208,27 @@ async function handleLogoChange(e: Event) {
 </script>
 
 <template>
-  <div class="company-profile">
-    <div class="container">
-      <h1 class="title">企业个人中心</h1>
-
-      <div v-loading="loading" class="profile-card">
-        <div class="header">
-          <h2>企业信息</h2>
+  <div class="company-profile-page">
+    <el-card class="card" shadow="never">
+      <div v-loading="loading" class="card-inner">
+        <div class="page-head">
+          <div>
+            <h1 class="page-title">个人中心</h1>
+            <p class="page-sub">维护企业资料，将在学生端企业详情等页面展示</p>
+          </div>
           <div class="actions">
             <el-button type="info" plain :icon="House" @click="goToHome">
-              返回主页
+              返回首页
             </el-button>
-
-            <el-button v-if="!isEditing" type="primary" @click="startEdit">编辑</el-button>
+            <el-button v-if="!isEditing" type="primary" @click="startEdit">编辑资料</el-button>
             <template v-else>
               <el-button type="primary" @click="saveProfile">保存</el-button>
               <el-button @click="cancelEdit">取消</el-button>
             </template>
           </div>
         </div>
+
+        <h2 class="section-title">企业信息</h2>
 
         <div class="form-container">
           <!-- Logo 上传区域 -->
@@ -303,58 +305,63 @@ async function handleLogoChange(e: Event) {
           </div>
         </div>
       </div>
-    </div>
+    </el-card>
   </div>
 </template>
 
 <style scoped>
-/* 与学生版完全一致的样式 */
-.company-profile {
-  min-height: calc(100vh - 80px);
-  padding: 32px 16px;
-  background: linear-gradient(135deg, #f0f4ff 0%, #e6f0ff 100%);
-  display: flex;
-  justify-content: center;
-}
-
-.container {
+.company-profile-page {
+  padding: 20px;
   width: 100%;
-  max-width: 600px;
+  box-sizing: border-box;
 }
 
-.title {
-  margin: 0 0 32px;
-  font-size: 28px;
-  font-weight: 700;
-  color: #0168d1;
-  text-align: center;
+.card {
+  border-radius: 8px;
 }
 
-.profile-card {
-  background: white;
-  border-radius: 16px;
-  padding: 32px 24px;
-  box-shadow: 0 10px 30px rgba(1, 104, 209, 0.12);
-  border: 1px solid rgba(1, 104, 209, 0.06);
+.card-inner {
+  min-height: 120px;
 }
 
-.header {
+.page-head {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 32px;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
 }
 
-.header h2 {
+.page-title {
+  margin: 0 0 8px;
+  font-size: 22px;
+  font-weight: 600;
+  color: #333;
+}
+
+.page-sub {
   margin: 0;
-  font-size: 24px;
-  color: #2c3e50;
+  font-size: 13px;
+  color: #909399;
+  max-width: 420px;
+  line-height: 1.5;
+}
+
+.section-title {
+  margin: 0 0 20px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #303133;
+  padding-left: 10px;
+  border-left: 4px solid #409eff;
 }
 
 .actions {
   display: flex;
   gap: 12px;
   align-items: center;
+  flex-shrink: 0;
 }
 
 .form-container {

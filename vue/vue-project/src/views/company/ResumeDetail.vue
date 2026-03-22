@@ -1,41 +1,55 @@
 <template>
-    <div class="resume-detail-page">
+    <div class="student-detail-page">
         <el-card class="card">
+            <div class="title">学生信息</div>
 
-            <div class="page-title">简历详情</div>
-
-            <!-- 学生基本信息 -->
-            <el-descriptions title="学生信息" border :column="2">
-                <el-descriptions-item label="姓名">{{ resume.studentName }}</el-descriptions-item>
-                <el-descriptions-item label="性别">{{ resume.gender }}</el-descriptions-item>
-                <el-descriptions-item label="电话">{{ resume.phone }}</el-descriptions-item>
-                <el-descriptions-item label="邮箱">{{ resume.email }}</el-descriptions-item>
-                <el-descriptions-item label="学校">{{ resume.university }}</el-descriptions-item>
-                <el-descriptions-item label="专业">{{ resume.major }}</el-descriptions-item>
+            <el-descriptions :column="2" border>
+                <el-descriptions-item label="姓名">{{ student.name }}</el-descriptions-item>
+                <el-descriptions-item label="性别">{{ student.gender }}</el-descriptions-item>
+                <el-descriptions-item label="电话">{{ student.phone }}</el-descriptions-item>
+                <el-descriptions-item label="邮箱">{{ student.email }}</el-descriptions-item>
+                <el-descriptions-item label="学校">{{ student.university }}</el-descriptions-item>
+                <el-descriptions-item label="专业">{{ student.major }}</el-descriptions-item>
             </el-descriptions>
+        </el-card>
 
-            <el-divider />
+        <!-- ⭐ 在线简历 -->
+        <el-card class="card" style="margin-top: 20px">
+            <div class="title">{{ student.name }}的在线简历</div>
 
-            <!-- 简历内容 -->
-            <div v-if="resume.content && resume.content !== '{}'">
-                <h3>{{ resume.title }}</h3>
-                <div v-html="resume.content" class="resume-content"></div>
+            <div v-if="onlineResumeData">
+                <div class="resume-json">
+                    <div class="item"><strong>姓名：</strong>{{ onlineResumeData.name }}</div>
+                    <div class="item"><strong>学校：</strong>{{ onlineResumeData.school }}</div>
+                    <div class="item"><strong>专业：</strong>{{ onlineResumeData.major }}</div>
+                    <div class="item"><strong>GPA：</strong>{{ onlineResumeData.gpa }}</div>
+                    <div class="item"><strong>排名：</strong>{{ onlineResumeData.rank }}</div>
+                    <div class="item"><strong>技术栈：</strong>{{ onlineResumeData.tech }}</div>
+                    <div class="item"><strong>实习经历：</strong>{{ onlineResumeData.intern }}</div>
+                    <div class="item"><strong>项目经历：</strong>{{ onlineResumeData.project }}</div>
+                    <div class="item"><strong>证书：</strong>{{ onlineResumeData.cert }}</div>
+                    <div class="item"><strong>自我评价：</strong>{{ onlineResumeData.eval }}</div>
+                </div>
             </div>
 
             <div v-else>
                 <el-tag type="info">该学生未填写在线简历内容</el-tag>
             </div>
+        </el-card>
 
-            <el-divider />
+        <!-- ⭐ 附件简历（PDF） -->
+        <el-card class="card" style="margin-top: 20px">
+            <div class="title">{{ student.name }}的附件简历</div>
 
-            <!-- 附件简历 -->
-            <div v-if="resume.fileUrl">
-                <el-button type="primary" @click="openPdf">查看附件简历 PDF</el-button>
+            <div v-if="pdfResume">
+                <el-button type="primary" @click="openPdf(pdfResume.fileUrl)">
+                    查看 PDF 简历
+                </el-button>
             </div>
+
             <div v-else>
                 <el-tag type="info">该学生未上传附件简历</el-tag>
             </div>
-
         </el-card>
     </div>
 </template>
@@ -44,42 +58,69 @@
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import axios from "axios";
-import { ElMessage } from "element-plus";
 
 const route = useRoute();
-const resumeId = route.params.id;
+const studentId = route.params.id;
 
-const resume = ref({});
+const student = ref({});
+const onlineResumeData = ref(null);
+const pdfResume = ref(null);
 
-const loadResume = async () => {
+// 加载学生信息
+const loadStudent = async () => {
     const token = localStorage.getItem("token");
-
-    const res = await axios.get(`/api/resume/${resumeId}`, {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
+    const res = await axios.get(`/api/student/${studentId}`, {
+        headers: { Authorization: `Bearer ${token}` },
     });
 
     if (res.data.code === "200") {
-        resume.value = res.data.data;
-    } else {
-        ElMessage.error(res.data.msg || "加载失败");
+        student.value = res.data.data;
     }
 };
 
-onMounted(() => {
-    loadResume();
-});
+// 加载学生所有简历，并按 type 分类
+const loadResume = async () => {
+    const token = localStorage.getItem("token");
+    const res = await axios.get(`/api/resume/student/${studentId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+    });
 
-const openPdf = () => {
-    const base = "http://localhost:9999";  // ← 你的后端地址
-    window.open(base + resume.value.fileUrl, "_blank");
+    if (res.data.code === "200") {
+        const list = res.data.data;
+
+        // ⭐ 在线简历（type=1）
+        const online = list.find(r => r.type === 1);
+        console.log(list);
+
+        if (online && online.content) {
+            try {
+
+                onlineResumeData.value = JSON.parse(online.content);
+                console.log(onlineResumeData.value);
+
+            } catch {
+                onlineResumeData.value = null;
+            }
+        }
+
+        // ⭐ 附件简历（type=2）
+        pdfResume.value = list.find(r => r.type === 2);
+    }
 };
 
+const openPdf = (url) => {
+    const base = "http://localhost:9999";  // ← 你的后端地址
+    window.open(base + url, "_blank");
+};
+
+onMounted(() => {
+    loadStudent();
+    loadResume();
+});
 </script>
 
 <style scoped>
-.resume-detail-page {
+.student-detail-page {
     padding: 20px;
 }
 
@@ -87,14 +128,13 @@ const openPdf = () => {
     padding: 20px;
 }
 
-.page-title {
-    font-size: 22px;
+.title {
+    font-size: 20px;
     font-weight: 600;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
 }
 
-.resume-content {
-    padding: 10px 0;
-    line-height: 1.8;
+.resume-json .item {
+    margin-bottom: 8px;
 }
 </style>

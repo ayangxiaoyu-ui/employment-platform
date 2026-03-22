@@ -37,6 +37,20 @@ public class CompanyController {
         return Result.success(company);
     }
 
+
+    @GetMapping("/user/{userId}")
+    public Result<Company> getByUserId(@PathVariable Long userId) {
+        Company company = companyService.lambdaQuery()
+                .eq(Company::getUserId, userId)
+                .one();
+
+        if (company == null) {
+            return Result.error("企业不存在");
+        }
+
+        return Result.success(company);
+    }
+
     @PutMapping("/profile")
     public Result<Void> updateProfile(@RequestBody Company company) {
         Long userId = getCurrentUserId();

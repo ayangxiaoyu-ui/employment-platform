@@ -132,7 +132,7 @@
 import { ref, onMounted } from "vue";
 import axios from "axios";
 import { useRoute, useRouter } from "vue-router";
-import { ElMessage } from "element-plus";
+import { ElMessage, ElMessageBox } from "element-plus";
 import { OfficeBuilding, UserFilled, Location, Document } from '@element-plus/icons-vue';
 import { getToken } from '@/utils/auth';
 import { nextTick } from 'vue'
@@ -246,7 +246,25 @@ const loadStudentData = async () => {
     } catch (err) { console.error("加载学生信息失败", err); }
 };
 
-// 提交投递 (保持你原来的代码逻辑)
+// 与 ChatDialog 一致：统一处理投递接口返回（含重复投递）
+const handleApplyResponse = (data) => {
+    if (data.msg && data.msg.includes("投递过")) {
+        ElMessageBox.alert(
+            "你已经投递过该职位，请选择其他职位或更换简历后再尝试。",
+            "重复投递提示",
+            {
+                confirmButtonText: "我知道了",
+                type: "warning",
+            }
+        );
+    } else if (data.code === "200") {
+        ElMessage.success("投递成功！");
+        resumeDialogVisible.value = false;
+    } else {
+        ElMessage.error(data.msg || "投递失败，请重试");
+    }
+};
+
 const submitApplication = async () => {
     submitting.value = true;
     try {
@@ -256,9 +274,13 @@ const submitApplication = async () => {
             resumeId: selectedResumeId.value
         }, { headers: { 'Authorization': `Bearer ${getToken()}` } });
 
-        if (res.data.code === "200") {
-            ElMessage.success("投递成功！");
-            resumeDialogVisible.value = false;
+        handleApplyResponse(res.data);
+    } catch (e) {
+        const errorData = e.response?.data;
+        if (errorData) {
+            handleApplyResponse(errorData);
+        } else {
+            ElMessage.error("网络异常，请稍后再试");
         }
     } finally {
         submitting.value = false;

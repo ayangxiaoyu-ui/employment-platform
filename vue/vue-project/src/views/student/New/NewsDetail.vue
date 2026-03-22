@@ -2,6 +2,9 @@
     <div class="w-[1000px] mx-auto py-6">
 
         <el-card>
+            <div class="mb-4">
+                <el-button :icon="ArrowLeft" @click="goBack">返回</el-button>
+            </div>
 
             <!-- 标题 -->
             <h2 class="text-2xl font-bold mb-2">{{ news.title }}</h2>
@@ -22,10 +25,24 @@
 <script setup>
 import { ref, onMounted } from "vue"
 import axios from "axios"
-import { useRoute } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
+import { ArrowLeft } from "@element-plus/icons-vue"
 
 const route = useRoute()
+const router = useRouter()
 const news = ref({})
+
+const goBack = () => {
+    if (route.query.from === "admin") {
+        router.push("/admin/news")
+        return
+    }
+    if (typeof window !== "undefined" && window.history.length > 1) {
+        router.back()
+    } else {
+        router.push("/news")
+    }
+}
 
 const loadDetail = async () => {
     const res = await axios.get(`/api/news/${route.params.id}`)

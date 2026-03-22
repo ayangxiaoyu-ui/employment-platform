@@ -1,8 +1,12 @@
 package com.example.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.common.Result;
 import com.example.entity.Student;
 import com.example.service.StudentService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,10 +74,47 @@ public class StudentController {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         if (attributes != null) {
             Object userId = attributes.getRequest().getAttribute("userId");
-            if (userId instanceof Long) {
-                return (Long) userId;
+            if (userId instanceof Number) {
+                return ((Number) userId).longValue();
             }
         }
         return null;
     }
+
+    /**
+     * 企业端：分页浏览学生（姓名/学校/专业关键词），便于主动联系
+     */
+    @GetMapping("/company/browse")
+    public Result<IPage<Student>> browseForCompany(
+            HttpServletRequest request,
+            @RequestParam(defaultValue = "1") Integer pageNum,
+            @RequestParam(defaultValue = "12") Integer pageSize,
+            @RequestParam(required = false) String keyword) {
+
+        if (!"COMPANY".equals(request.getAttribute("role"))) {
+            return Result.error("仅限企业用户访问");
+        }
+
+        Page<Student> page = new Page<>(pageNum, pageSize);
+        LambdaQueryWrapper<Student> qw = new LambdaQueryWrapper<>();
+        if (keyword != null && !keyword.isBlank()) {
+            String k = keyword.trim();
+            qw.and(w -> w.like(Student::getName, k)
+                    .or().like(Student::getUniversity, k)
+                    .or().like(Student::getMajor, k));
+        }
+        qw.orderByDesc(Student::getId);
+        IPage<Student> result = studentService.page(page, qw);
+        return Result.success(result);
+    }
+
+    @GetMapping("/{id}")
+    public Result<Student> getById(@PathVariable Long id) {
+        Student stu = studentService.getById(id);
+        if (stu == null) {
+            return Result.error("学生不存在");
+        }
+        return Result.success(stu);
+    }
+
 }

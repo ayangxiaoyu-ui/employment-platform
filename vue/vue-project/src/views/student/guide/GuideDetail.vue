@@ -1,5 +1,8 @@
 <template>
     <div class="guide-detail">
+        <div class="back-row">
+            <el-button :icon="ArrowLeft" @click="goBack">返回</el-button>
+        </div>
         <div class="header">
             <h1 class="title">{{ detail.title }}</h1>
             <p class="meta">发布时间：{{ format(detail.createTime) }} · 阅读 {{ detail.viewCount }}</p>
@@ -14,10 +17,24 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import axios from "axios";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
+import { ArrowLeft } from "@element-plus/icons-vue";
 
 const route = useRoute();
+const router = useRouter();
 const detail = ref({});
+
+const goBack = () => {
+    if (route.query.from === "admin") {
+        router.push("/admin/guide");
+        return;
+    }
+    if (typeof window !== "undefined" && window.history.length > 1) {
+        router.back();
+    } else {
+        router.push("/guide");
+    }
+};
 
 const format = (t) => t?.slice(0, 10);
 
@@ -32,6 +49,10 @@ onMounted(async () => {
     width: 900px;
     margin: 0 auto;
     padding: 30px 0;
+}
+
+.back-row {
+    margin-bottom: 16px;
 }
 
 /* 标题区域 */

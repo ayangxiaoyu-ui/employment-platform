@@ -4,7 +4,7 @@
       <ProfileSidebar :active-tab="activeTab" :form="form" :avatar-preview="avatarPreview"
         :username-from-token="usernameFromToken" @update:active-tab="changeTab" @go-home="goToHome" />
 
-      <main class="content-body" v-loading="loading">
+      <main class="content-body pb-[40px]" v-loading="loading">
         <!-- 基本信息 -->
         <ProfileInfo v-if="activeTab === 'info'" :form="form" :avatar-preview="avatarPreview"
           :username-from-token="usernameFromToken" :loading="loading" @update:form="form = $event"

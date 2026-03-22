@@ -1,5 +1,13 @@
+<script setup lang="ts">
+import { onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+onMounted(() => {
+  router.replace('/admin/dashboard')
+})
+</script>
+
 <template>
-  <div>
-    <h1>管理员页面</h1>
-  </div>
+  <div />
 </template>

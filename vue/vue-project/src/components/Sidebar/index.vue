@@ -2,21 +2,39 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { getToken, getRoleFromToken } from '@/utils/auth'
+import { ElMessageBox } from 'element-plus'
+import { getToken, getRoleFromToken, clearToken } from '@/utils/auth'
 
 import {
   Menu as IconMenu,
-  UserFilled,
   OfficeBuilding,
   Briefcase,
   Document,
-  Setting,
-  Fold,       // 收起图标
-  Expand      // 展开图标
+  Message,
+  Fold,
+  Expand,
+  Reading,
+  Odometer,
+  School,
+  SwitchButton,
+  Bell,
 } from '@element-plus/icons-vue'
 
 const router = useRouter()
 const route = useRoute()
+
+const handleLogout = () => {
+  ElMessageBox.confirm('确定退出当前企业账号？', '退出登录', {
+    confirmButtonText: '退出',
+    cancelButtonText: '取消',
+    type: 'warning',
+  })
+    .then(() => {
+      clearToken()
+      router.push({ name: 'login' })
+    })
+    .catch(() => {})
+}
 
 const role = computed(() => {
   const token = getToken()
@@ -26,10 +44,8 @@ const role = computed(() => {
 const isAdmin = computed(() => role.value === 'ADMIN')
 const isCompany = computed(() => role.value === 'COMPANY')
 
-// 核心：控制收起/展开状态
+// 控制折叠
 const isCollapsed = ref(false)
-
-// 可选：点击 logo 或某个按钮收起/展开
 const toggleCollapse = () => {
   isCollapsed.value = !isCollapsed.value
 }
@@ -37,8 +53,8 @@ const toggleCollapse = () => {
 
 <template>
   <div class="sidebar-wrapper" :class="{ collapsed: isCollapsed }">
-    <el-menu :default-active="route.path" class="el-menu-vertical" :collapse="isCollapsed" :collapse-transition="true"
-      router background-color="var(--el-menu-bg-color)" text-color="var(--el-menu-text-color)"
+    <el-menu :default-active="route.path" class="el-menu-vertical menu-scroll" :collapse="isCollapsed" router
+      background-color="var(--el-menu-bg-color)" text-color="var(--el-menu-text-color)"
       active-text-color="var(--el-menu-active-color)">
       <!-- Logo + 折叠按钮 -->
       <div class="logo-area">
@@ -49,36 +65,89 @@ const toggleCollapse = () => {
 
       <!-- ADMIN 菜单 -->
       <template v-if="isAdmin">
-        <el-menu-item index="/admin/users">
+        <el-menu-item index="/admin/dashboard">
           <el-icon>
-            <UserFilled />
+            <Odometer />
           </el-icon>
-          <template #title>用户管理</template>
+          <template #title>数据看板</template>
         </el-menu-item>
-        <el-menu-item index="/admin/settings">
+
+        <el-menu-item index="/admin/news">
           <el-icon>
-            <Setting />
+            <Bell />
           </el-icon>
-          <template #title>系统设置</template>
+          <template #title>公告通知</template>
         </el-menu-item>
+
+        <el-menu-item index="/admin/guide">
+          <el-icon>
+            <Reading />
+          </el-icon>
+          <template #title>就业指导</template>
+        </el-menu-item>
+
       </template>
 
       <!-- COMPANY 菜单 -->
       <template v-if="isCompany">
+        <el-menu-item index="/company">
+          <el-icon>
+            <Odometer />
+          </el-icon>
+          <template #title>工作台</template>
+        </el-menu-item>
+
+        <el-menu-item index="/company/profile">
+          <el-icon>
+            <OfficeBuilding />
+          </el-icon>
+          <template #title>个人中心</template>
+        </el-menu-item>
+
         <el-menu-item index="/company/jobs">
           <el-icon>
             <Briefcase />
           </el-icon>
           <template #title>职位发布</template>
         </el-menu-item>
+
         <el-menu-item index="/company/resumes">
           <el-icon>
             <Document />
           </el-icon>
           <template #title>简历收件箱</template>
         </el-menu-item>
+
+        <el-menu-item index="/company/students">
+          <el-icon>
+            <School />
+          </el-icon>
+          <template #title>学生库</template>
+        </el-menu-item>
+
+        <!-- ⭐ 新增：互动消息 -->
+        <el-menu-item index="/company/messages">
+          <el-icon>
+            <Message />
+          </el-icon>
+          <template #title>互动消息</template>
+        </el-menu-item>
+
+        <el-menu-item index="/company/guide">
+          <el-icon>
+            <Reading />
+          </el-icon>
+          <template #title>就业指导</template>
+        </el-menu-item>
       </template>
     </el-menu>
+
+    <div v-if="isCompany" class="sidebar-footer">
+      <el-button class="logout-btn" :class="{ 'is-collapsed': isCollapsed }" plain @click="handleLogout">
+        <el-icon><SwitchButton /></el-icon>
+        <span v-show="!isCollapsed" class="logout-text">退出登录</span>
+      </el-button>
+    </div>
   </div>
 </template>
 
@@ -89,16 +158,53 @@ const toggleCollapse = () => {
   overflow: hidden;
   background: #ffffff;
   border-right: 1px solid #e6e9ef;
+  display: flex;
+  flex-direction: column;
+}
+
+.menu-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  border-right: none !important;
+}
+
+.sidebar-footer {
+  flex-shrink: 0;
+  padding: 12px;
+  border-top: 1px solid #e6e9ef;
+  background: #fafbfc;
+}
+
+.logout-btn {
+  width: 100%;
+  justify-content: flex-start;
+  color: #606266;
+  border-color: #dcdfe6;
+}
+
+.logout-btn:hover {
+  color: #f56c6c;
+  border-color: #fbc4c4;
+  background: #fef0f0;
+}
+
+.logout-btn.is-collapsed {
+  width: 100%;
+  padding: 8px;
+  justify-content: center;
+}
+
+.logout-text {
+  margin-left: 8px;
 }
 
 .sidebar-wrapper:not(.collapsed) {
   width: 220px;
-  /* 展开宽度，可调 */
 }
 
 .sidebar-wrapper.collapsed {
   width: 64px;
-  /* 收起只剩图标宽度 */
 }
 
 .logo-area {
@@ -127,7 +233,6 @@ const toggleCollapse = () => {
   right: 12px;
 }
 
-/* 收起时隐藏文字，只显示图标 */
 :deep(.el-menu--collapse) .el-menu-item__title {
   display: none;
 }
@@ -141,17 +246,10 @@ const toggleCollapse = () => {
   color: #0168d1;
 }
 
-/* 选中菜单项 */
 :deep(.el-menu-item.is-active) {
   background-color: #e8f3ff !important;
   color: #0168d1 !important;
   font-weight: 600;
   border-right: 3px solid #0168d1;
-}
-
-/* hover 效果 */
-:deep(.el-menu-item:hover) {
-  background-color: #f0f5ff !important;
-  color: #0168d1 !important;
 }
 </style>

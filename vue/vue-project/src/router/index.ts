@@ -33,17 +33,71 @@ const router = createRouter({
       path: "/company/resumes/:id",
       name: "ResumeDetail",
       component: () => import("@/views/company/ResumeDetail.vue")
+    },
+    {
+      path: "/company/messages",
+      name: "CompanyMessages",
+      component: () => import("@/views/company/CompanyMessage.vue")
+    },
+    {
+      path: '/company/guide',
+      name: 'companyGuide',
+      component: () => import('@/views/company/GuideManage.vue'),
+      meta: { requiresAuth: true, role: 'COMPANY' },
+    },
+    {
+      path: '/company/guide/create',
+      name: 'companyGuideCreate',
+      component: () => import('@/views/company/CompanyGuideCreate.vue'),
+      meta: { requiresAuth: true, role: 'COMPANY' },
+    },
+    {
+      path: '/company/guide/edit/:id',
+      name: 'companyGuideEdit',
+      component: () => import('@/views/company/CompanyGuideCreate.vue'),
+      meta: { requiresAuth: true, role: 'COMPANY' },
+    },
+    {
+      path: '/company/students',
+      name: 'companyStudentBrowse',
+      component: () => import('@/views/company/StudentBrowse.vue'),
+      meta: { requiresAuth: true, role: 'COMPANY' },
+    },
+    {
+      path: "/company/student/:id",
+      name: "CompanyStudentDetail",
+      component: () => import("@/views/company/StudentDetail.vue")
     }
     ,
     {
-      path: '/admin/users',
-      name: 'adminUsers',
-      component: () => import('../views/admin/users.vue'),
+      path: '/admin/dashboard',
+      name: 'adminDashboard',
+      component: () => import('../views/admin/AdminDashboard.vue'),
+      meta: { requiresAuth: true, role: 'ADMIN' },
     },
     {
-      path: '/admin/settings',
-      name: 'adminSettings',
-      component: () => import('../views/admin/settings.vue'),
+      path: '/admin/news',
+      name: 'adminNews',
+      component: () => import('../views/admin/NewsManage.vue'),
+      meta: { requiresAuth: true, role: 'ADMIN' },
+    },
+    {
+      path: '/admin/guide',
+      name: 'adminGuide',
+      component: () => import('../views/admin/AdminGuideManage.vue'),
+      meta: { requiresAuth: true, role: 'ADMIN' },
+    },
+    {
+      path: '/admin/guide/create',
+      name: 'adminGuideCreate',
+      component: () => import('../views/admin/AdminGuideCreate.vue'),
+      meta: { requiresAuth: true, role: 'ADMIN' },
+    },
+    {
+      path: '/admin/guide/edit/:id',
+      name: 'adminGuideEdit',
+      component: () => import('../views/admin/AdminGuideCreate.vue'),
+      meta: { requiresAuth: true, role: 'ADMIN' },
     },
     {
       path: '/login',

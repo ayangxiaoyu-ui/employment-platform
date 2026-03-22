@@ -1,7 +1,10 @@
 <template>
-    <section class="content-card">
+    <div class="resume-management-wrap">
+        <OnlineResumeSection :student-id="studentId" ref="onlineRef" />
+
+        <section class="content-card">
         <div class="card-header">
-            <h3>我的简历</h3>
+            <h3>附件简历（PDF）</h3>
             <el-upload class="upload-box" action="http://localhost:9999/api/resume/upload" name="file"
                 :data="{ studentId: studentId }" :headers="{ 'Authorization': `Bearer ${getToken()}` }"
                 :on-success="handleSuccess" :show-file-list="false">
@@ -35,7 +38,8 @@
             <iframe v-if="currentPreviewUrl" :src="currentPreviewUrl" width="100%" height="600px" frameborder="0" />
             <div v-else style="text-align: center; padding: 20px;">加载中或无预览内容...</div>
         </el-dialog>
-    </section>
+        </section>
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -43,6 +47,7 @@ import { ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Document } from '@element-plus/icons-vue'
 import { getToken } from '@/utils/auth'
+import OnlineResumeSection from '@/components/StudentProfile/OnlineResumeSection.vue'
 
 interface Props {
     studentId: number | null
@@ -50,6 +55,7 @@ interface Props {
 
 const props = defineProps<Props>()
 
+const onlineRef = ref<InstanceType<typeof OnlineResumeSection> | null>(null)
 const resumes = ref<any[]>([])
 const previewVisible = ref(false)
 const currentPreviewUrl = ref('')
@@ -121,7 +127,10 @@ const uploadAgainWithForce = async (file: any) => {
             headers: { "Authorization": `Bearer ${getToken()}` }
         })
         const result = await res.json()
+        console.log(result, "result")
         if (result.code === "200") {
+            console.log(result.data, "result.data");
+
             await saveResume(result.data.fileUrl, result.data.title)
             ElMessage.success("替换成功")
             if (props.studentId) fetchResumes(props.studentId)
@@ -143,9 +152,11 @@ const saveResume = async (fileUrl: string, title: string) => {
                 studentId: props.studentId,
                 fileUrl,
                 title,
-                content: '{}',
+                content: null,   // ⭐ PDF 不需要 content
+                type: 2,         // ⭐ 附件简历
                 isPublic: 1
             })
+
         })
 
         const saveResult = await saveRes.json()
@@ -185,11 +196,18 @@ const deleteResume = async (res: any) => {
 }
 
 defineExpose({
-    fetchResumes
+    fetchResumes,
+    refreshOnline: () => onlineRef.value?.loadOnlineResume()
 })
 </script>
 
 <style scoped>
+.resume-management-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
 .content-card {
     background: white;
     border-radius: 12px;

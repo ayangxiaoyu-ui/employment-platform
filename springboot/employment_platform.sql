@@ -206,6 +206,7 @@ DROP TABLE IF EXISTS guide;
 
 CREATE TABLE guide (
   id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  user_id BIGINT NULL COMMENT '发布者sys_user.id（企业文章）；平台文章为NULL',
   title VARCHAR(200) NOT NULL COMMENT '标题',
   description VARCHAR(500) COMMENT '简介',
   cover VARCHAR(300) DEFAULT '/uploads/guide/default.jpg' COMMENT '封面图',
@@ -1194,8 +1195,8 @@ INSERT INTO news (title, content, author_id, view_count, create_time) VALUES
 ('【实习招聘】科大讯飞2026届AI实习生招聘', '各位同学：\n\n科大讯飞2026届AI实习生招聘启动！语音合成、语音识别、认知智能、多模态等核心技术团队等你来。\n\n【岗位名称】AI算法实习生/软件开发实习生\n【工作地点】合肥、北京、上海、广州、西安、苏州\n【实习时长】3个月及以上，优先6个月\n\n【研究方向】\n- 语音合成：个性化语音、情感语音、歌声合成\n- 语音识别：远场识别、方言识别、多语种识别\n- 认知智能：自然语言理解、知识图谱、大模型\n- 多模态：图文理解、虚拟人、智能驾驶\n- 智医助理：医疗AI、辅助诊断\n- 智慧教育：自适应学习、智能评测\n\n【岗位要求】\n【AI算法】\n- 计算机、人工智能、数学等相关专业\n- 熟悉深度学习框架（PyTorch/TensorFlow）\n- 有语音/NLP/CV相关项目经验\n- 顶会论文或竞赛获奖优先\n\n【软件开发】\n- 扎实的编程基础，熟悉C++/Python/Java\n- 熟悉Linux开发环境\n- 了解AI算法部署与优化\n\n【实习福利】\n• 薪资：本科350元/天，硕士450元/天，博士600元/天\n• 异地房补：合肥1000元/月，北京/上海1500元/月\n• 免费三餐，健身房，年度体检\n• 参与国家级AI项目机会\n• 转正率超80%，AI顶尖人才计划\n\n【投递方式】iflytek.com/campus\n【截止时间】2026年5月15日\n\n科大讯飞招聘组\n2026年3月15日', 1, 0, NOW());
 
 
-INSERT INTO guide (title, description, cover, content, view_count, create_time) VALUES
-(
+INSERT INTO guide (user_id，title, description, cover, content, view_count, create_time) VALUES
+(1，
 '2026届校招全攻略：从简历到Offer的时间线规划',
 '详解2026届校园招聘完整时间线，包含寒假实习、暑期实习、秋招提前批等关键节点，助你把握每个求职机会。',
 '/uploads/guide/timeline.jpg',
@@ -1245,8 +1246,8 @@ INSERT INTO guide (title, description, cover, content, view_count, create_time) 
 NOW()
 );
 
-INSERT INTO guide (title, description, cover, content, view_count, create_time) VALUES
-(
+INSERT INTO guide (user_id，title, description, cover, content, view_count, create_time) VALUES
+(1，
 '简历优化六大技巧：让你的简历通过ATS筛选',
 '掌握JD关键词匹配、经历量化、STAR法则等六大专业技巧，实测可提升简历通过率50%以上。',
 '/uploads/guide/resume.jpg',
@@ -1306,8 +1307,8 @@ INSERT INTO guide (title, description, cover, content, view_count, create_time) 
 2560,
 NOW()
 );
-INSERT INTO guide (title, description, cover, content, view_count, create_time) VALUES
-(
+INSERT INTO guide(user_id，title, description, cover, content, view_count, create_time) VALUES
+(1，
 '技术面试通关全攻略：算法+八股文+项目经验',
 '针对计算机专业学生的技术面试指南，涵盖算法刷题策略、系统设计、八股文知识及项目经验阐述技巧。',
 '/uploads/guide/tech_interview.jpg',
@@ -1368,8 +1369,8 @@ INSERT INTO guide (title, description, cover, content, view_count, create_time) 
 1890,
 NOW()
 );
-INSERT INTO guide (title, description, cover, content, view_count, create_time) VALUES
-(
+INSERT INTO guide(user_id，title, description, cover, content, view_count, create_time) VALUES
+(1，
 '无领导小组讨论（群面）通关秘籍',
 '详解群面流程、角色分工、评分标准，提供话术模板和常见题型解析，助你在群面中脱颖而出。',
 '/uploads/guide/group_interview.jpg',
@@ -1418,8 +1419,8 @@ INSERT INTO guide (title, description, cover, content, view_count, create_time) 
 1450,
 NOW()
 );
-INSERT INTO guide (title, description, cover, content, view_count, create_time) VALUES
-(
+INSERT INTO guide(user_id，title, description, cover, content, view_count, create_time) VALUES
+(1，
 '面试礼仪与形象管理：从着装到言谈举止',
 '首因效应决定面试成败。详解不同行业的着装要求、肢体语言、言谈礼仪，助你打造专业职业形象。',
 '/uploads/guide/etiquette.jpg',
@@ -1479,8 +1480,8 @@ INSERT INTO guide (title, description, cover, content, view_count, create_time) 
 980,
 NOW()
 );
-INSERT INTO guide (title, description, cover, content, view_count, create_time) VALUES
-(
+INSERT INTO guide (user_id，title, description, cover, content, view_count, create_time) VALUES
+(1，
 '薪资谈判技巧：如何优雅地谈钱不伤感情',
 '拿到Offer后如何争取更高薪资？详解薪资构成、谈判时机、话术策略，助你获得理想薪酬。',
 '/uploads/guide/salary.jpg',
@@ -1533,8 +1534,8 @@ INSERT INTO guide (title, description, cover, content, view_count, create_time) 
 NOW()
 );
 
-INSERT INTO guide (title, description, cover, content, view_count, create_time) VALUES
-(
+INSERT INTO guide (user_id，title, description, cover, content, view_count, create_time) VALUES
+(1，
 '应届生求职心理调适：应对焦虑与挫折',
 '求职压力大、屡遭拒绝？专业心理师教你识别焦虑源头、调节情绪、重建自信，保持最佳求职状态。',
 '/uploads/guide/psychology.jpg',
@@ -1609,8 +1610,8 @@ INSERT INTO guide (title, description, cover, content, view_count, create_time) 
 890,
 NOW()
 );
-INSERT INTO guide (title, description, cover, content, view_count, create_time) VALUES
-(
+INSERT INTO guide(user_id，title, description, cover, content, view_count, create_time) VALUES
+(1，
 '网申技巧与ATS系统通关指南',
 '90%的简历在网申阶段就被机器筛选掉。详解网申填写技巧、关键词优化、开放性问题回答策略。',
 '/uploads/guide/application.jpg',
@@ -1679,8 +1680,8 @@ INSERT INTO guide (title, description, cover, content, view_count, create_time) 
 </table>',
 1340,
 NOW()
-);INSERT INTO guide (title, description, cover, content, view_count, create_time) VALUES
-(
+);INSERT INTO guide (user_id，title, description, cover, content, view_count, create_time) VALUES
+(1，
 '求职陷阱识别与权益保护指南',
 '虚假招聘、培训贷、试用期陷阱等问题频发。详解常见求职骗局识别方法、劳动合同审查要点与维权渠道。',
 '/uploads/guide/safety.jpg',
@@ -1761,3 +1762,8 @@ NOW()
 1050,
 NOW()
 );
+
+-- ----------------------------
+-- 升级：若线上 guide 表无 user_id 列，在业务库执行一次：
+-- ALTER TABLE guide ADD COLUMN user_id BIGINT NULL COMMENT '发布者sys_user.id' AFTER id;
+-- ----------------------------

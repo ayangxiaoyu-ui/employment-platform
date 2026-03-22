@@ -35,7 +35,7 @@ export function getUsernameFromToken(token: string): string | null {
 export function getDefaultRouteLocation(token: string | null): { name: string } {
   if (!token) return { name: 'login' }
   const role = getRoleFromToken(token)
-  if (role === 'ADMIN') return { name: 'admin' }
+  if (role === 'ADMIN') return { name: 'adminDashboard' }
   if (role === 'COMPANY') return { name: 'company' }
   if (role === 'STUDENT') return { name: 'student' }
   return { name: 'login' }
