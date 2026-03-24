@@ -1,5 +1,9 @@
 <template>
     <div class="student-detail-page">
+        <div class="back-row">
+            <el-button @click="goBack">返回列表</el-button>
+        </div>
+
         <el-card class="card">
             <div class="title">学生信息</div>
 
@@ -51,15 +55,20 @@
                 <el-tag type="info">该学生未上传附件简历</el-tag>
             </div>
         </el-card>
+
+        <div class="bottom-back-row">
+            <el-button @click="goBack">返回列表</el-button>
+        </div>
     </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import axios from "axios";
 
 const route = useRoute();
+const router = useRouter();
 const studentId = route.params.id;
 
 const student = ref({});
@@ -113,6 +122,14 @@ const openPdf = (url) => {
     window.open(base + url, "_blank");
 };
 
+const goBack = () => {
+    if (typeof window !== "undefined" && window.history.length > 1) {
+        router.back();
+        return;
+    }
+    router.push("/company/resumes");
+};
+
 onMounted(() => {
     loadStudent();
     loadResume();
@@ -122,6 +139,16 @@ onMounted(() => {
 <style scoped>
 .student-detail-page {
     padding: 20px;
+}
+
+.back-row {
+    margin-bottom: 12px;
+}
+
+.bottom-back-row {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
 }
 
 .card {

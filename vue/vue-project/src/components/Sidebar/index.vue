@@ -24,7 +24,7 @@ const router = useRouter()
 const route = useRoute()
 
 const handleLogout = () => {
-  ElMessageBox.confirm('确定退出当前企业账号？', '退出登录', {
+  ElMessageBox.confirm(getLogoutConfirmMessage(), '退出登录', {
     confirmButtonText: '退出',
     cancelButtonText: '取消',
     type: 'warning',
@@ -43,11 +43,17 @@ const role = computed(() => {
 
 const isAdmin = computed(() => role.value === 'ADMIN')
 const isCompany = computed(() => role.value === 'COMPANY')
+const canLogout = computed(() => isAdmin.value || isCompany.value)
 
 // 控制折叠
 const isCollapsed = ref(false)
 const toggleCollapse = () => {
   isCollapsed.value = !isCollapsed.value
+}
+
+const getLogoutConfirmMessage = () => {
+  if (isAdmin.value) return '确定退出当前管理员账号？'
+  return '确定退出当前企业账号？'
 }
 </script>
 
@@ -142,7 +148,7 @@ const toggleCollapse = () => {
       </template>
     </el-menu>
 
-    <div v-if="isCompany" class="sidebar-footer">
+    <div v-if="canLogout" class="sidebar-footer">
       <el-button class="logout-btn" :class="{ 'is-collapsed': isCollapsed }" plain @click="handleLogout">
         <el-icon><SwitchButton /></el-icon>
         <span v-show="!isCollapsed" class="logout-text">退出登录</span>
